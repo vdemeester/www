@@ -1,0 +1,93 @@
+section > div > p {
+    width: 65%;
+}
+/* ========================================= */
+/* Horizontal Rules (Ornamental) */
+/* ========================================= */
+
+/* Style HR lines as ornamental asterisks */
+hr {
+    border: none;
+    margin: 3rem auto;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    display: block;
+    overflow: visible;
+    position: relative;
+}
+
+hr::before {
+    content: "⁂";
+    display: inline-block;
+    font-size: 1.4em;
+    color: #999;
+    line-height: 1;
+    position: relative;
+}
+
+/* Default hr styling - match paragraph width */
+main hr {
+    margin: 3rem auto;
+    width: 65%;
+    max-width: 65%;
+}
+
+/* Article hr (posts) should use full article width */
+article hr {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Post content hr should match paragraph width */
+.post-content hr {
+    width: 65%;
+    max-width: 65%;
+}
+
+/* Index pages and general hr elements */
+section hr, 
+main hr {
+    width: 65%;
+    max-width: 65%;
+    margin: 3rem 0;
+    margin-left: 0;
+}
+
+@media (max-width: 760px) {
+    main hr,
+    .post-content hr {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+
+.drawer {
+    border-left: 3px solid;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+}
+.drawer h6 {
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin: 0.1rem;
+};
+.drawer p {
+    font-size: 1.3rem;
+}
+
+.drawer.generic { border-color: #95a5a6; }
+.drawer.generic h6 { color: #95a5a6; }
+.drawer.update { border-color: #9a6700; }
+.drawer.update h6 { color: #9a6700; }
+.drawer.note { border-color: #0969da; }
+.drawer.note h6 { color: #0969da; }
+.drawer.info { border-color: #1a7f37; }
+.drawer.info h6 { color: #1a7f37; }
+.drawer.warning { border-color: #e74c3c; }
+.drawer.warning h6 { color: #e74c3c; }
+.drawer.tip { border-color: #9b59b6; }
+.drawer.tip h6 { color: #9b59b6; }
+.drawer.critique { border-color: #95a5a6; }
