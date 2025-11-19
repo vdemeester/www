@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Golang testing — gotest.tools icmd</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Golang testing — gotest.tools icmd</h1>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#Create%20and%20run%20a%20command">Create and run a command</a></li>
+<li><a href="#Assertions">Assertions</a></li>
+<li><a href="#Conclusion%E2%80%A6">Conclusion…</a></li>
+</ul>
+</div>
+</nav>
+<section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Let&rsquo;s continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>icmd</code> package.
+</p>
+
+<blockquote>
+<p>
+Package icmd executes binaries and provides convenient assertions for testing the results.
+</p>
+</blockquote>
+
+<p>
+After file-system operations (seen in <a href="file:///posts/2018-09-14-gotest-tools-fs/"><code>fs</code></a>), another common use-case in tests is to
+<b>execute a command</b>. The reasons can be you&rsquo;re testing the <code>cli</code> you&rsquo;re currently writing
+or you need to setup something using a command line. A classic execution in a test might
+lookup like the following.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">cmd := exec.Command("echo", "foo")
+cmd.Stout = &amp;stdout
+cmd.Env = env
+if err := cmd.Run(); err != nil {
+        t.Fatal(err)
+}
+if string(stdout) != "foo" {
+        t.Fatalf("expected: foo, got %s", string(stdout))
+}
+</pre>
+</div>
+
+<p>
+The package <code>icmd</code> is there to ease your pain (as usual 😉) — we used <i>the name <code>icmd</code></i>
+instead of <code>cmd</code> because it&rsquo;s a pretty common identifier in Go source code, thus would be
+really easy to <i>shadow</i> — and have some really weird problems going on.
+</p>
+
+<p>
+The usual <code>icmd</code> workflow is the following:
+</p>
+
+<ol class="org-ol">
+<li>Describe the command you want to execute using : type <code>Cmd</code>, function <code>Command</code> and
+<code>CmdOp</code> operators.</li>
+<li>Run it using : function <code>RunCmd</code> or <code>RunCommand</code> (that does 1. for you). You can also
+use <code>StartCmd</code> and <code>WaitOnCmd</code> if you want more control on the execution workflow.</li>
+<li>Check the result using the <code>Assert</code>, <code>Equal</code> or <code>Compare</code> methods attached to the
+<code>Result</code> struct that the command execution return.</li>
+</ol>
+</div>
+</section>
+<section id="outline-container-Create%20and%20run%20a%20command" class="outline-2">
+<h2 id="Create%20and%20run%20a%20command">Create and run a command</h2>
+<div class="outline-text-2" id="text-Create%20and%20run%20a%20command">
+<p>
+Let&rsquo;s first dig how to create commands. In this part, the assumption here is that the
+command is successful, so we&rsquo;ll have <code>.Assert(t, icmd.Success)</code> for now — we&rsquo;ll learn more
+about <code>Assert</code> in the next section 👼.
+</p>
+
+<p>
+The simplest way to create and run a command is using <code>RunCommand</code>, it has the same
+signature as <code>os/exec.Command</code>. A simple command execution goes as below.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">icmd.RunCommand("echo", "foo").Assert(t, icmd.Sucess)
+</pre>
+</div>
+
+<p>
+Sometimes, you need to customize the command a bit more, like adding some environment
+variable. In those case, you are going to use <code>RunCmd</code>, it takes a <code>Cmd</code> and operators.
+Let&rsquo;s look at those functions.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">func RunCmd(cmd Cmd, cmdOperators ...CmdOp) *Result
+
+func Command(command string, args ...string) Cmd
+
+type Cmd struct {
+        Command []string
+        Timeout time.Duration
+        Stdin   io.Reader
+        Stdout  io.Writer
+        Dir     string
+        Env     []string
+}
+</pre>
+</div>
+
+<p>
+As we&rsquo;ve seen <a href="file:///posts/2017-01-01-go-testing-functionnal-builders/">multiple</a> <a href="file:///posts/2018-08-16-gotest-tools-assertions/">times</a> <a href="file:///posts/2018-09-14-gotest-tools-fs/">before</a>, it uses the <i>powerful</i> functional arguments. At the
+time I wrote this post, the <code>icmd</code> package doesn&rsquo;t contains too much <code>CmdOp</code> <sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, so I&rsquo;ll
+propose two version for each example : one with <code>CmdOpt</code> present in <a href="https://github.com/gotestyourself/gotest.tools/pull/122">this PR</a> and one
+without them.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">// With
+icmd.RunCmd(icmd.Command("sh", "-c", "echo $FOO"),
+        icmd.WithEnv("FOO=bar", "BAR=baz"), icmd.Dir("/tmp"),
+        icmd.WithTimeout(10*time.Second),
+).Assert(t, icmd.Success)
+
+// Without
+icmd.RunCmd(icmd.Cmd{
+        Command: []string{"sh", "-c", "echo $FOO"},
+        Env: []string{"FOO=bar", "BAR=baz"},
+        Dir: "/tmp",
+        Timeout: 10*time.Second,
+}).Assert(t, icmd.Success)
+</pre>
+</div>
+
+<p>
+As usual, the intent is clear, it&rsquo;s simple to read and composable (with <code>CmdOp</code>&rsquo;s).
+</p>
+</div>
+</section>
+<section id="outline-container-Assertions" class="outline-2">
+<h2 id="Assertions">Assertions</h2>
+<div class="outline-text-2" id="text-Assertions">
+<p>
+Let&rsquo;s dig into the assertion part of <code>icmd</code>. Running a command returns a struct
+<code>Result</code>. It has the following methods :
+</p>
+
+<ul class="org-ul">
+<li><code>Assert</code> compares the Result against the Expected struct, and fails the test if any of
+the expectations are not met.</li>
+<li><code>Compare</code> compares the result to Expected and return an error if they do not match.</li>
+<li><code>Equal</code> compares the result to Expected. If the result doesn&rsquo;t match expected
+returns a formatted failure message with the command, stdout, stderr, exit code, and any
+failed expectations. It returns an <code>assert.Comparison</code> struct, that can be used by other
+<code>gotest.tools</code>.</li>
+<li><code>Combined</code> returns the stdout and stderr combined into a single string.</li>
+<li><code>Stderr</code> returns the stderr of the process as a string.</li>
+<li><code>Stdout</code> returns the stdout of the process as a string.</li>
+</ul>
+
+<p>
+When you have a result, you, most likely want to do two things :
+</p>
+
+<ul class="org-ul">
+<li><i>assert</i> that the command succeed or failed with some specific values (exit code,
+stderr, stdout)</li>
+<li>use the output — most likely <code>stdout</code> but maybe <code>stderr</code> — in the rest of the test.</li>
+</ul>
+
+<p>
+As seen above, <i>asserting</i> the command result is using the <code>Expected</code> struct.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">type Expected struct {
+        ExitCode int    // the exit code the command returned
+        Timeout  bool   // did it timeout ?
+        Error    string // error returned by the execution (os/exe)
+        Out      string // content of stdout
+        Err      string // content of stderr
+}
+</pre>
+</div>
+
+<p>
+<code>Success</code> is a constant that defines a success — it&rsquo;s an exit code of <code>0</code>, didn&rsquo;t timeout,
+no error. There is also the <code>None</code> constant, that should be used for <code>Out</code> or <code>Err</code>, to
+specify that we don&rsquo;t want any content for those standard outputs.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">icmd.RunCmd(icmd.Command("cat", "/does/not/exist")).Assert(t, icmd.Expected{
+        ExitCode: 1,
+        Err:      "cat: /does/not/exist: No such file or directory",
+})
+
+// In case of success, we may want to do something with the result
+result := icmd.RunCommand("cat", "/does/exist")
+result.Assert(t, icmd.Success)
+// Read the output line by line
+scanner := bufio.NewScanner(strings.NewReader(result.Stdout()))
+for scanner.Scan() {
+        // Do something with it
+}
+</pre>
+</div>
+
+<p>
+If the <code>Result</code> doesn&rsquo;t map the <code>Expected</code>, a test failure will happen with a useful
+message that will contains the executed command and what differs between the result and
+the expectation.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">result := icmd.RunCommand(…)
+result.Assert(t, icmd.Expected{
+                ExitCode: 101,
+                Out:      "Something else",
+                Err:      None,
+})
+// Command:  binary arg1
+// ExitCode: 99 (timeout)
+// Error:    exit code 99
+// Stdout:   the output
+// Stderr:   the stderr
+//
+// Failures:
+// ExitCode was 99 expected 101
+// Expected command to finish, but it hit the timeout
+// Expected stdout to contain "Something else"
+// Expected stderr to contain "[NOTHING]"
+…
+</pre>
+</div>
+
+<p>
+Finally, we listed <code>Equal</code> above, that returns a <code>Comparison</code> struct. This means we can
+use it easily with the <code>assert</code> package. As written in a <a href="file:///posts/2018-08-16-gotest-tools-assertions/">previous post (about the <code>assert</code>
+package)</a>, I tend prefer to use <code>cmp.Comparison</code>. Let&rsquo;s convert the above examples using
+<code>assert</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">result := icmd.RunCmd(icmd.Command("cat", "/does/not/exist"))
+assert.Check(t, result.Equal(icmd.Expected{
+        ExitCode: 1,
+        Err:      "cat: /does/not/exist: No such file or directory",
+}))
+
+// In case of success, we may want to do something with the result
+result := icmd.RunCommand("cat", "/does/exist")
+assert.Assert(t, result.Equal(icmd.Success))
+// Read the output line by line
+scanner := bufio.NewScanner(strings.NewReader(result.Stdout()))
+for scanner.Scan() {
+        // Do something with it
+}
+</pre>
+</div>
+</div>
+</section>
+<section id="outline-container-Conclusion%E2%80%A6" class="outline-2">
+<h2 id="Conclusion%E2%80%A6">Conclusion…</h2>
+<div class="outline-text-2" id="text-Conclusion%E2%80%A6">
+<p>
+… that&rsquo;s a wrap. The <code>icmd</code> package allows to easily run command and describe what result
+are expected of the execution, with the least noise possible. We <b>use this package heavily</b>
+on several <code>docker/*</code> projects (the engine, the cli)…
+</p>
+</div>
+</section>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+The <code>icmd</code> package is one of the oldest <code>gotest.tools</code> package, that comes from the
+<a href="https://github.com/docker/docker"><code>docker/docker</code></a> initially. We introduced these <code>CmdOp</code> but implementations were in
+<code>docker/docker</code> at first and we never really updated them.
+</p></div></div>
+
+
+</div>
+</div></main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

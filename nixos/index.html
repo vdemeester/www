@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NixOS</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="post" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/css/2022.css" />
+<link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">NixOS</h1>
+<p class="subtitle" role="doc-subtitle">A reproductible, declarative and reliable Linux operating system.</p>
+</header><p>
+<a href="https://nixos.org/">NixOS</a> is a Linux distribution with a unique approach to package and configuration
+management. Built on top of the <a href="nix.html">Nix</a> package manager, it is completely declarative, makes
+upgrading systems reliable, and has many other <a href="https://nixos.org/features.html">advantages</a>.
+</p>
+
+<p>
+Most of my infrastructure is on NixOS.
+</p>
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fshen.hong.io%2Finstalling-nixos-with-encrypted-root-partition-and-seperate-boot-partition%2F%5D%5BHow%20to%20Install%20NixOS%20With%20Full%20Disk%20Encryption%20%28FDE%29%20using%20LUKS2%2C%20Detached%20LUKS%20Header%2C%20and%20A%20Separate%20Boot%20Partition%20on%20an%20USB%2FMicroSD%20Card%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fshen.hong.io%2Finstalling-nixos-with-encrypted-root-partition-and-seperate-boot-partition%2F%5D%5BHow%20to%20Install%20NixOS%20With%20Full%20Disk%20Encryption%20%28FDE%29%20using%20LUKS2%2C%20Detached%20LUKS%20Header%2C%20and%20A%20Separate%20Boot%20Partition%20on%20an%20USB%2FMicroSD%20Card%5D%5D"><a href="https://shen.hong.io/installing-nixos-with-encrypted-root-partition-and-seperate-boot-partition/">How to Install NixOS With Full Disk Encryption (FDE) using LUKS2, Detached LUKS Header, and A Separate Boot Partition on an USB/MicroSD Card</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fshen.hong.io%2Finstalling-nixos-with-encrypted-root-partition-and-seperate-boot-partition%2F%5D%5BHow%20to%20Install%20NixOS%20With%20Full%20Disk%20Encryption%20%28FDE%29%20using%20LUKS2%2C%20Detached%20LUKS%20Header%2C%20and%20A%20Separate%20Boot%20Partition%20on%20an%20USB%2FMicroSD%20Card%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-06-27 Mon 13:25]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.thedroneely.com%2Fposts%2Frunning-nixos-linux-containers%2F%5D%5BRunning%20NixOS%20in%20a%20Linux%20Container%20-%20Thedro%20Neely%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.thedroneely.com%2Fposts%2Frunning-nixos-linux-containers%2F%5D%5BRunning%20NixOS%20in%20a%20Linux%20Container%20-%20Thedro%20Neely%5D%5D"><a href="https://www.thedroneely.com/posts/running-nixos-linux-containers/">Running NixOS in a Linux Container - Thedro Neely</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.thedroneely.com%2Fposts%2Frunning-nixos-linux-containers%2F%5D%5BRunning%20NixOS%20in%20a%20Linux%20Container%20-%20Thedro%20Neely%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-06-29 Wed 13:42]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fsrid.ca%2Flxc-nixos%5D%5BLightweight%20Linux%20VMs%20on%20NixOS%20%E2%80%93%20Sridhar%20Ratnakumar%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fsrid.ca%2Flxc-nixos%5D%5BLightweight%20Linux%20VMs%20on%20NixOS%20%E2%80%93%20Sridhar%20Ratnakumar%5D%5D"><a href="https://srid.ca/lxc-nixos">Lightweight Linux VMs on NixOS – Sridhar Ratnakumar</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fsrid.ca%2Flxc-nixos%5D%5BLightweight%20Linux%20VMs%20on%20NixOS%20%E2%80%93%20Sridhar%20Ratnakumar%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-06-29 Wed 13:42]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttp%3A%2F%2Ftrofi.github.io%2Fposts%2F229-a-month-on-nixos.html%5D%5Btrofi%27s%20blog%3A%20A%20month%20on%20NixOS%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttp%3A%2F%2Ftrofi.github.io%2Fposts%2F229-a-month-on-nixos.html%5D%5Btrofi%27s%20blog%3A%20A%20month%20on%20NixOS%5D%5D"><a href="http://trofi.github.io/posts/229-a-month-on-nixos.html">trofi&rsquo;s blog: A month on NixOS</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttp%3A%2F%2Ftrofi.github.io%2Fposts%2F229-a-month-on-nixos.html%5D%5Btrofi%27s%20blog%3A%20A%20month%20on%20NixOS%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-06-29 Wed 15:53]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2Frailwayapp%2Fnixpacks%5D%5Brailwayapp%2Fnixpacks%3A%20App%20source%20%2B%20Nix%20packages%20%2B%20Docker%20%3D%20Image%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2Frailwayapp%2Fnixpacks%5D%5Brailwayapp%2Fnixpacks%3A%20App%20source%20%2B%20Nix%20packages%20%2B%20Docker%20%3D%20Image%5D%5D"><a href="https://github.com/railwayapp/nixpacks">railwayapp/nixpacks: App source + Nix packages + Docker = Image</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2Frailwayapp%2Fnixpacks%5D%5Brailwayapp%2Fnixpacks%3A%20App%20source%20%2B%20Nix%20packages%20%2B%20Docker%20%3D%20Image%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-07-07 Thu 18:09]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2FNixOS%2Fcomments%2Fkn3kts%2Fnixos_container_systemdnspawn_in_nix_way%2F%5D%5BNixOS%20Container%20%28systemd-nspawn%20in%20Nix%20way%29%20%3A%20NixOS%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2FNixOS%2Fcomments%2Fkn3kts%2Fnixos_container_systemdnspawn_in_nix_way%2F%5D%5BNixOS%20Container%20%28systemd-nspawn%20in%20Nix%20way%29%20%3A%20NixOS%5D%5D"><a href="https://www.reddit.com/r/NixOS/comments/kn3kts/nixos_container_systemdnspawn_in_nix_way/">NixOS Container (systemd-nspawn in Nix way) : NixOS</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2FNixOS%2Fcomments%2Fkn3kts%2Fnixos_container_systemdnspawn_in_nix_way%2F%5D%5BNixOS%20Container%20%28systemd-nspawn%20in%20Nix%20way%29%20%3A%20NixOS%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-30 Tue 07:32]</span></span>
+</p>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwiki.archlinux.org%2Ftitle%2Fsystemd-nspawn%5D%5Bsystemd-nspawn%20-%20ArchWiki%5D%5D" class="outline-4">
+<h4 id="%5B%5Bhttps%3A%2F%2Fwiki.archlinux.org%2Ftitle%2Fsystemd-nspawn%5D%5Bsystemd-nspawn%20-%20ArchWiki%5D%5D"><a href="https://wiki.archlinux.org/title/systemd-nspawn">systemd-nspawn - ArchWiki</a></h4>
+<div class="outline-text-4" id="text-%5B%5Bhttps%3A%2F%2Fwiki.archlinux.org%2Ftitle%2Fsystemd-nspawn%5D%5Bsystemd-nspawn%20-%20ArchWiki%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-30 Tue 07:26]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fhipporoll.net%2Fblog%2F2015%2F07%2F31%2Frunning-containers-using-systemd-nspawn%2F%5D%5BRunning%20containers%20using%20systemd-nspawn%5D%5D" class="outline-4">
+<h4 id="%5B%5Bhttps%3A%2F%2Fhipporoll.net%2Fblog%2F2015%2F07%2F31%2Frunning-containers-using-systemd-nspawn%2F%5D%5BRunning%20containers%20using%20systemd-nspawn%5D%5D"><a href="https://hipporoll.net/blog/2015/07/31/running-containers-using-systemd-nspawn/">Running containers using systemd-nspawn</a></h4>
+<div class="outline-text-4" id="text-%5B%5Bhttps%3A%2F%2Fhipporoll.net%2Fblog%2F2015%2F07%2F31%2Frunning-containers-using-systemd-nspawn%2F%5D%5BRunning%20containers%20using%20systemd-nspawn%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-30 Tue 07:26]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Ftimklampe.cool%2Fdocs%2Fexample%2Fsystemd%2Fsystemd_nspawn%2F%5D%5BSystemd%20Nspawn%20%7C%20Tim%27s%20docs%5D%5D" class="outline-4">
+<h4 id="%5B%5Bhttps%3A%2F%2Ftimklampe.cool%2Fdocs%2Fexample%2Fsystemd%2Fsystemd_nspawn%2F%5D%5BSystemd%20Nspawn%20%7C%20Tim%27s%20docs%5D%5D"><a href="https://timklampe.cool/docs/example/systemd/systemd_nspawn/">Systemd Nspawn | Tim&rsquo;s docs</a></h4>
+<div class="outline-text-4" id="text-%5B%5Bhttps%3A%2F%2Ftimklampe.cool%2Fdocs%2Fexample%2Fsystemd%2Fsystemd_nspawn%2F%5D%5BSystemd%20Nspawn%20%7C%20Tim%27s%20docs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-30 Tue 07:26]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fnspawn.org%2F%5D%5BHub%20for%20systemd-nspawn%20containers%20and%20images%5D%5D" class="outline-4">
+<h4 id="%5B%5Bhttps%3A%2F%2Fnspawn.org%2F%5D%5BHub%20for%20systemd-nspawn%20containers%20and%20images%5D%5D"><a href="https://nspawn.org/">Hub for systemd-nspawn containers and images</a></h4>
+<div class="outline-text-4" id="text-%5B%5Bhttps%3A%2F%2Fnspawn.org%2F%5D%5BHub%20for%20systemd-nspawn%20containers%20and%20images%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-24 Wed 18:13]</span></span>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D"><a href="https://blog.beardhatcode.be/2020/12/Declarative-Nixos-Containers.html">Declarative NixOS containers</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-30 Tue 07:31]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-Links--%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D" class="outline-3">
+<h3 id="Links--%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D"><a href="https://blog.beardhatcode.be/2020/12/Declarative-Nixos-Containers.html">Declarative NixOS containers</a></h3>
+<div class="outline-text-3" id="text-Links--%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-24 Wed 18:11]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fnotes.abhinavsarkar.net%2F2022%2FDO-nixos-image%5D%5BCreating%20NixOS%20custom%20image%20for%20Digital%20Ocean%20VPS%20%7C%20Abhinav%27s%20Notes%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fnotes.abhinavsarkar.net%2F2022%2FDO-nixos-image%5D%5BCreating%20NixOS%20custom%20image%20for%20Digital%20Ocean%20VPS%20%7C%20Abhinav%27s%20Notes%5D%5D"><a href="https://notes.abhinavsarkar.net/2022/DO-nixos-image">Creating NixOS custom image for Digital Ocean VPS | Abhinav&rsquo;s Notes</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fnotes.abhinavsarkar.net%2F2022%2FDO-nixos-image%5D%5BCreating%20NixOS%20custom%20image%20for%20Digital%20Ocean%20VPS%20%7C%20Abhinav%27s%20Notes%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-30 Tue 06:46]</span></span>
+</p>
+
+<p>
+digitalOceanImage
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.ysndr.de%2Fposts%2Fguides%2F2021-12-01-nix-shells%2F%5D%5By%7Csndr%20-%20One%20too%20many%20shell%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.ysndr.de%2Fposts%2Fguides%2F2021-12-01-nix-shells%2F%5D%5By%7Csndr%20-%20One%20too%20many%20shell%5D%5D"><a href="https://blog.ysndr.de/posts/guides/2021-12-01-nix-shells/">y|sndr - One too many shell</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.ysndr.de%2Fposts%2Fguides%2F2021-12-01-nix-shells%2F%5D%5By%7Csndr%20-%20One%20too%20many%20shell%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-08-24 Wed 05:48]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fnlewo%2Fnix2container%5D%5Bnlewo%2Fnix2container%3A%20An%20archive-less%20dockerTools.buildImage%20implementation%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2Fnlewo%2Fnix2container%5D%5Bnlewo%2Fnix2container%3A%20An%20archive-less%20dockerTools.buildImage%20implementation%5D%5D"><a href="https://github.com/nlewo/nix2container">nlewo/nix2container: An archive-less dockerTools.buildImage implementation</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fnlewo%2Fnix2container%5D%5Bnlewo%2Fnix2container%3A%20An%20archive-less%20dockerTools.buildImage%20implementation%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-09-08 Thu 17:58]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container---Links--%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D" class="outline-3">
+<h3 id="--Links--%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D"><a href="https://blog.beardhatcode.be/2020/12/Declarative-Nixos-Containers.html">Declarative NixOS containers</a></h3>
+<div class="outline-text-3" id="text---Links--%5B%5Bhttps%3A%2F%2Fblog.beardhatcode.be%2F2020%2F12%2FDeclarative-Nixos-Containers.html%5D%5BDeclarative%20NixOS%20containers%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-09-13 Tue 20:27]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.ysndr.de%2Fposts%2Finternals%2F2021-01-01-flake-ification%2F%5D%5By%7Csndr%20-%20Building%20with%20Nix%20Flakes%20for%2C%20eh%20..%20reasons%21%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.ysndr.de%2Fposts%2Finternals%2F2021-01-01-flake-ification%2F%5D%5By%7Csndr%20-%20Building%20with%20Nix%20Flakes%20for%2C%20eh%20..%20reasons%21%5D%5D"><a href="https://blog.ysndr.de/posts/internals/2021-01-01-flake-ification/">y|sndr - Building with Nix Flakes for, eh .. reasons!</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.ysndr.de%2Fposts%2Finternals%2F2021-01-01-flake-ification%2F%5D%5By%7Csndr%20-%20Building%20with%20Nix%20Flakes%20for%2C%20eh%20..%20reasons%21%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-09-13 Tue 20:27]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fyuanwang.ca%2Fposts%2Fgetting-started-with-flakes.html%5D%5BGetting%20started%20with%20Nix%20Flakes%20and%20devshell%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fyuanwang.ca%2Fposts%2Fgetting-started-with-flakes.html%5D%5BGetting%20started%20with%20Nix%20Flakes%20and%20devshell%5D%5D"><a href="https://yuanwang.ca/posts/getting-started-with-flakes.html">Getting started with Nix Flakes and devshell</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fyuanwang.ca%2Fposts%2Fgetting-started-with-flakes.html%5D%5BGetting%20started%20with%20Nix%20Flakes%20and%20devshell%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-09-13 Tue 20:29]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.haskellforall.com%2F2022%2F08%2Fstop-calling-everything-nix.html%5D%5BHaskell%20for%20all%3A%20Stop%20calling%20everything%20%22Nix%22%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.haskellforall.com%2F2022%2F08%2Fstop-calling-everything-nix.html%5D%5BHaskell%20for%20all%3A%20Stop%20calling%20everything%20%22Nix%22%5D%5D"><a href="https://www.haskellforall.com/2022/08/stop-calling-everything-nix.html">Haskell for all: Stop calling everything &ldquo;Nix&rdquo;</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.haskellforall.com%2F2022%2F08%2Fstop-calling-everything-nix.html%5D%5BHaskell%20for%20all%3A%20Stop%20calling%20everything%20%22Nix%22%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-09-13 Tue 21:46]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgitlab.com%2Fkevincox%2Fnixos-auto-install%5D%5BKevin%20Cox%20%2F%20nixos-auto-install%20%C2%B7%20GitLab%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgitlab.com%2Fkevincox%2Fnixos-auto-install%5D%5BKevin%20Cox%20%2F%20nixos-auto-install%20%C2%B7%20GitLab%5D%5D"><a href="https://gitlab.com/kevincox/nixos-auto-install">Kevin Cox / nixos-auto-install · GitLab</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgitlab.com%2Fkevincox%2Fnixos-auto-install%5D%5BKevin%20Cox%20%2F%20nixos-auto-install%20%C2%B7%20GitLab%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-07-28 Thu 18:00]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-Nixos%20article" class="outline-3">
+<h3 id="Nixos%20article">Nixos article</h3>
+<div class="outline-text-3" id="text-Nixos%20article">
+</div>
+<div id="outline-container-Why%20using%20NixOS%20%3F" class="outline-4">
+<h4 id="Why%20using%20NixOS%20%3F">Why using NixOS ?</h4>
+</div>
+
+<div id="outline-container-The%20~nix-shell~%20case" class="outline-4">
+<h4 id="The%20~nix-shell~%20case">The <code>nix-shell</code> case</h4>
+<div class="outline-text-4" id="text-The%20~nix-shell~%20case">
+<p>
+Let&rsquo;s dig into <code>nix-shell</code> (<code>nix run</code>)
+</p>
+
+<ul class="org-ul">
+<li>usage</li>
+<li>simple example (make package available)</li>
+<li>complex example (create a package, run commands, drops a shell)</li>
+<li>automate <code>nix-shell</code> with <code>direnv</code> (in and out of emacs 🎉)</li>
+</ul>
+
+<p>
+Additionally, look into <code>shell.nix</code> vs <code>default.nix</code> vs …
+</p>
+<ul class="org-ul">
+<li><a href="https://stackoverflow.com/questions/44088192/when-and-how-should-default-nix-shell-nix-and-release-nix-be-used">When and how should default, shell and release be used ?</a></li>
+</ul>
+</div>
+<ul class="org-ul">
+<li><a id="Experiment%20with%20%3DmkShell%3D"></a>Experiment with <code>mkShell</code><br>
+<ul class="org-ul">
+<li><a id="Sources"></a>Sources<br>
+<div class="outline-text-6" id="text-Sources">
+<ul class="org-ul">
+<li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/mkshell/default.nix">https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/mkshell/default.nix</a></li>
+<li><a href="https://github.com/NixOS/nixpkgs/pull/30975">https://github.com/NixOS/nixpkgs/pull/30975</a></li>
+</ul>
+</div>
+</li>
+</ul>
+</li>
+<li><a id="%3Dnix-shell%3D%20shellhook%20tips%20%26%20tricks"></a><code>nix-shell</code> shellhook tips &amp; tricks<br></li>
+</ul>
+</div>
+<div id="outline-container-Developing%20with%20Nix" class="outline-4">
+<h4 id="Developing%20with%20Nix">Developing with Nix</h4>
+<div class="outline-text-4" id="text-Developing%20with%20Nix">
+<p>
+Ref:
+</p>
+<ul class="org-ul">
+<li><a href="https://matrix.ai/2018/03/24/developing-with-nix/">Developing with Nix (C, JavaScript, Python, Haskell, Emscripten, PHP)</a></li>
+<li><a href="https://compiletoi.net/share-scripts-that-have-dependencies-with-nix/">Share scripts that have dependencies with Nix</a></li>
+<li><a href="https://ariya.io/2016/06/isolated-development-environment-using-nix">Isolated Development Environment using Nix · ariya.io</a></li>
+<li><a href="https://matrix.ai/2017/03/13/intro-to-nix-channels-and-reproducible-nixos-environment/">Intro to Nix Channels and Reproducible NixOS Environment</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-~nixos-container~%20usage" class="outline-4">
+<h4 id="~nixos-container~%20usage"><code>nixos-container</code> usage</h4>
+<div class="outline-text-4" id="text-~nixos-container~%20usage">
+<div class='drawer properties'>
+<h6>Properties</h6>
+<p>
+:CREATED:<span class="timestamp-wrapper"><span class="timestamp">[2019-04-17 Wed 18:54]</span></span>
+</p>
+</div>
+
+<p>
+I want to use that ! on the okinawa, carthage mainly.
+</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

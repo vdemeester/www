@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cache in tekton pipelines</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/css/2022.css" />
+<link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+<link rel="stylesheet" type="text/css" href="/css/tekton.css" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Cache in tekton pipelines</h1>
+</header><p>
+The idea of this article is to explore the different ways to &ldquo;handle&rdquo; cache when using
+<a href="https://github.com/tektoncd/pipeline"><code>tektoncd/pipeline</code></a> or openshift-pipelines. This should evolve as time passes as it will
+explore what is possible today and what could be done built-in. If someday
+<a href="https://github.com/tektoncd/pipeline"><code>tektoncd/pipeline</code></a> or any tektoncd component provides this features, this article would
+be either adapted or <span class="underline">marked as deprecated</span>.
+</p>
+<section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Cache and <i>caching</i> are very abstract, wide concept. In the context of a CI pipeline, it
+can take several forms depending on what the pipeline and tasks are doing. If we are
+building an image, the cache is most likely related to the &ldquo;base image&rdquo; and layers re-used
+accross multiple builds. If we are building a go project, it could be around <i>fetching</i>
+the dependencies (if no <code>vendor</code> folder) or around build cache (the go compiler cache, to
+speed the next compilation).
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

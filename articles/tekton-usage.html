@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tektoncd usage and examples</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Tektoncd usage and examples</h1>
+<p class="subtitle" role="doc-subtitle">Playing with the cat&rsquo;s project 🐱</p>
+</header><div class="abstract" id="org91af7d5">
+<p>
+Let&rsquo;s dig into some use case and examples of <code>tektoncd/pipeline</code>. From secrets and
+services accounts to real-life example, let&rsquo;s document <code>pipeline</code> usage, tips and tricks.
+</p>
+
+</div>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h:7b3bca36-78c1-44b4-96fe-b26332e195ed">What is Tektoncd ?</a></li>
+<li><a href="#h:dc6c7476-6df0-467b-a2fb-1512d300ef4c">Secrets</a>
+<ul>
+<li><a href="#h:8eb369c9-1987-4119-9b24-d3b1204dab15">Git credentials</a></li>
+<li><a href="#h:f590bf9c-464d-4d31-a176-b7c9b7b9e168">Registry credentials</a></li>
+</ul>
+</li>
+<li><a href="#h:b0f52c83-e465-4733-9ba8-51d4c915fb25">Service account</a></li>
+<li><a href="#h:d81a3f84-c608-4345-8cf0-44c8ed15ea2a">Using <code>kaniko</code></a>
+<ul>
+<li><a href="#h:8c8cd49e-5dda-47cf-a3d8-caff9a1bf833">Volume for <code>kaniko</code>&rsquo;s cache</a></li>
+<li><a href="#h:7da25768-794e-48c1-b92a-603e1c0572b2">Resources</a></li>
+<li><a href="#h:4d50a5ad-2748-4f28-b545-6bf1e6872463"><code>Task</code></a></li>
+<li><a href="#h:f00592b2-a81b-43c4-a4fa-36959f515553"><code>Pipeline</code></a></li>
+<li><a href="#h:9caacd24-1667-4268-9716-d967cab7c6f1"><code>PipelineRun</code></a></li>
+</ul>
+</li>
+<li><a href="#h:eadc5b7a-797b-4da4-a543-3116612dfb4a"><span class="todo TODO">TODO</span> Deploy to a cluster</a>
+<ul>
+<li><a href="#h:90600634-74c2-4e04-b25c-b6665baac4d5"><span class="todo TODO">TODO</span> Same one, on another cluster</a></li>
+<li><a href="#h:7aaedc77-4319-4223-9790-31353447ad48"><span class="todo TODO">TODO</span> Another one, thanks to cluster resources</a></li>
+</ul>
+</li>
+<li><a href="#h:6fc85dd7-034c-4170-9b69-b84df9c976eb"><span class="todo TODO">TODO</span> Using <code>buildah</code></a></li>
+<li><a href="#h:6c165f41-d642-480c-b841-541a89f95875"><span class="todo TODO">TODO</span> Using <code>helm</code></a></li>
+</ul>
+</div>
+</nav>
+<section id="outline-container-h:7b3bca36-78c1-44b4-96fe-b26332e195ed" class="outline-2">
+<h2 id="h:7b3bca36-78c1-44b4-96fe-b26332e195ed">What is Tektoncd ?</h2>
+<div class="outline-text-2" id="text-h:7b3bca36-78c1-44b4-96fe-b26332e195ed">
+
+<figure id="org75958c2">
+<img src="images/tekton/tekton-horizontal-color.png" alt="tekton-horizontal-color.png" width="400/600px">
+
+</figure>
+
+<blockquote>
+<p>
+The Tekton Pipelines project provides Kubernetes-style resources for declaring CI/CD-style pipelines.
+</p>
+</blockquote>
+
+<ul class="org-ul">
+<li>Started as an experiment from <a href="https://github.com/knative">Knative</a> to define more advance build use cases that
+<a href="https://github.com/knative/build/"><code>knative/build</code></a> was able to.</li>
+<li>Is now it&rsquo;s own project and GitHub organization.</li>
+</ul>
+</div>
+</section>
+<section id="outline-container-h:dc6c7476-6df0-467b-a2fb-1512d300ef4c" class="outline-2">
+<h2 id="h:dc6c7476-6df0-467b-a2fb-1512d300ef4c">Secrets</h2>
+<div class="outline-text-2" id="text-h:dc6c7476-6df0-467b-a2fb-1512d300ef4c">
+<p>
+Most of the time, you&rsquo;re gonna need to access private resources like git repositories,
+image registries, ssh server and clusters. We&rsquo;ll dig into each of them but the gist is always the
+same :
+</p>
+
+<ul class="org-ul">
+<li>Create secrets that holds the credentials</li>
+<li>Create service accounts that uses those secrets</li>
+<li>Attach those service accounts to the <code>PipelineRun~/~TaskRun</code></li>
+</ul>
+
+<div class='drawer note'>
+<h6>Note</h6>
+<p>
+Those are working <b>exactly</b> the same as <code>knative/build</code>. The docs are <a href="https://github.com/knative/docs/blob/master/docs/build/auth.md">here</a>.
+</p>
+</div>
+</div>
+<div id="outline-container-h:8eb369c9-1987-4119-9b24-d3b1204dab15" class="outline-3">
+<h3 id="h:8eb369c9-1987-4119-9b24-d3b1204dab15">Git credentials</h3>
+<div class="outline-text-3" id="text-h:8eb369c9-1987-4119-9b24-d3b1204dab15">
+</div>
+<div id="outline-container-h:c08a3856-f230-4c0d-a8ee-2f5ee8c85313" class="outline-4">
+<h4 id="h:c08a3856-f230-4c0d-a8ee-2f5ee8c85313">Using ssh</h4>
+<div class="outline-text-4" id="text-h:c08a3856-f230-4c0d-a8ee-2f5ee8c85313">
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: ssh-key
+  annotations:
+    tekton.dev/git-0: github.com
+    tekton.dev/git-1: gitlab.com
+    tekton.dev/git-2: sr.ht
+type: kubernetes.io/ssh-auth
+data:
+  # cat ~/.id_rs | base64 -w 0
+  ssh-privatekey: &lt;base64 encoded&gt;
+  # This is non-standard, but its use is encouraged to make this more secure.
+  # ssh-keyscan github.com | base64 -w 0
+  known_hosts: &lt;base64 encoded&gt;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h:e54bf2cb-7ac1-449e-b7cb-25a036248b83" class="outline-4">
+<h4 id="h:e54bf2cb-7ac1-449e-b7cb-25a036248b83">Using basic authentication</h4>
+<div class="outline-text-4" id="text-h:e54bf2cb-7ac1-449e-b7cb-25a036248b83">
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: basic-user-pass
+  annotations:
+    tekton.dev/git-0: https://github.com
+    tekton.dev/git-1: https://gitlab.com
+    tekton.dev/git-0: https://sr.ht
+type: kubernetes.io/basic-auth
+stringData:
+  username: &lt;username&gt;
+  password: &lt;password&gt;
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-h:f590bf9c-464d-4d31-a176-b7c9b7b9e168" class="outline-3">
+<h3 id="h:f590bf9c-464d-4d31-a176-b7c9b7b9e168">Registry credentials</h3>
+<div class="outline-text-3" id="text-h:f590bf9c-464d-4d31-a176-b7c9b7b9e168">
+</div>
+<div id="outline-container-h:2813551c-f51a-4873-8d1d-7608d67e9711" class="outline-4">
+<h4 id="h:2813551c-f51a-4873-8d1d-7608d67e9711">Using basic authentication</h4>
+<div class="outline-text-4" id="text-h:2813551c-f51a-4873-8d1d-7608d67e9711">
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: basic-user-pass
+  annotations:
+    tekton.dev/docker-0: https://index.docker.io
+    tekton.dev/docker-1: https://gcr.io
+type: kubernetes.io/basic-auth
+stringData:
+  username: &lt;username&gt;
+  password: &lt;password&gt;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h:b81a4552-743f-4c5d-80be-c1a896ba7ec7" class="outline-4">
+<h4 id="h:b81a4552-743f-4c5d-80be-c1a896ba7ec7">Using kubernetes secret types</h4>
+<div class="outline-text-4" id="text-h:b81a4552-743f-4c5d-80be-c1a896ba7ec7">
+<p>
+There is two secret specific secret types related to docker authentication, or more
+accurately to docker configuration files (that holds auth).
+</p>
+
+<ul class="org-ul">
+<li><code>kubernetes.io/dockerconfigjson</code> (<code>$HOME/.docker/config.json</code>)</li>
+<li><code>kubernetes.io/dockercfg</code> (<code>$HOME/.dockercfg</code>)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">kubectl create secret generic regcred \
+    --from-file=.dockerconfigjson=&lt;path/to/.docker/config.json&gt; \
+    --type=kubernetes.io/dockerconfigjson
+# kubectl create secret generic regcred --from-file=.dockerconfigjson=$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: v1
+data:
+  .dockerconfigjson: eyJodHRwczovL2luZGV4L ... J0QUl6RTIifX0=
+kind: Secret
+metadata:
+  ...
+  name: regcred
+  ...
+type: kubernetes.io/dockerconfigjson
+</pre>
+</div>
+
+<p>
+Kubernetes documentation : <a href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">Pull an Image from a Private Registry - Kubernetes</a>
+</p>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-h:b0f52c83-e465-4733-9ba8-51d4c915fb25" class="outline-2">
+<h2 id="h:b0f52c83-e465-4733-9ba8-51d4c915fb25">Service account</h2>
+<div class="outline-text-2" id="text-h:b0f52c83-e465-4733-9ba8-51d4c915fb25">
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: build-bot
+secrets:
+  - name: regcred
+  - name: ssh-key
+</pre>
+</div>
+</div>
+</section>
+<section id="outline-container-h:d81a3f84-c608-4345-8cf0-44c8ed15ea2a" class="outline-2">
+<h2 id="h:d81a3f84-c608-4345-8cf0-44c8ed15ea2a">Using <code>kaniko</code></h2>
+<div class="outline-text-2" id="text-h:d81a3f84-c608-4345-8cf0-44c8ed15ea2a">
+</div>
+<div id="outline-container-h:8c8cd49e-5dda-47cf-a3d8-caff9a1bf833" class="outline-3">
+<h3 id="h:8c8cd49e-5dda-47cf-a3d8-caff9a1bf833">Volume for <code>kaniko</code>&rsquo;s cache</h3>
+<div class="outline-text-3" id="text-h:8c8cd49e-5dda-47cf-a3d8-caff9a1bf833">
+<div class="org-src-container">
+<pre class="src src-yaml">kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: kaniko-cache-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h:7da25768-794e-48c1-b92a-603e1c0572b2" class="outline-3">
+<h3 id="h:7da25768-794e-48c1-b92a-603e1c0572b2">Resources</h3>
+<div class="outline-text-3" id="text-h:7da25768-794e-48c1-b92a-603e1c0572b2">
+<ul class="org-ul">
+<li><p>
+the <code>git</code> repository
+</p>
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: private-go-hello
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master
+    - name: url
+      value: git@github.com:vdemeester/go-hello.git
+</pre>
+</div></li>
+
+<li><p>
+the <code>image</code> (s)
+</p>
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: hello-image-res
+spec:
+  type: image
+  params:
+    - name: url
+      description: The target URL
+      value: docker.io/vdemeester/go-hello
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: bye-image-res
+spec:
+  type: image
+  params:
+    - name: url
+      description: The target URL
+      value: quay.io/rhdevelopers/vdemeest-go-bye
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h:4d50a5ad-2748-4f28-b545-6bf1e6872463" class="outline-3">
+<h3 id="h:4d50a5ad-2748-4f28-b545-6bf1e6872463"><code>Task</code></h3>
+<div class="outline-text-3" id="text-h:4d50a5ad-2748-4f28-b545-6bf1e6872463">
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: kaniko-build-push
+spec:
+  inputs:
+    resources:
+    - name: src
+      type: git
+    params:
+    - name: pathToDockerFile
+      description: The path to the dockerfile to build (relative to the context)
+      default: Dockerfile
+    - name: pathToContext
+      description:
+        The path to the build context, used by Kaniko - within the workspace
+        (https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts).
+        The git clone directory is set by the GIT init container which setup
+        the git input resource - see https://github.com/knative/build-pipeline/blob/master/pkg/reconciler/v1alpha1/taskrun/resources/pod.go#L107
+      default: .
+  outputs:
+    resources:
+      - name: builtImage
+        type: image
+  steps:
+  - name: build-and-push
+    image: gcr.io/kaniko-project/executor:debug
+    command: ["/kaniko/executor"]
+    args:
+    - --dockerfile=${inputs.params.pathToDockerFile}
+    - --destination=${outputs.resources.builtImage.url}
+    - --context=/workspace/src/${inputs.params.pathToContext}
+    volumeMounts:
+    - name: kaniko-cache
+      mountPath: /cache
+  volumes:
+  - name: kaniko-cache
+    persistentVolumeClaim:
+      claimName: kaniko-cache-pvc
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h:f00592b2-a81b-43c4-a4fa-36959f515553" class="outline-3">
+<h3 id="h:f00592b2-a81b-43c4-a4fa-36959f515553"><code>Pipeline</code></h3>
+<div class="outline-text-3" id="text-h:f00592b2-a81b-43c4-a4fa-36959f515553">
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: kaniko
+spec:
+  resources:
+    - name: src
+      type: git
+    - name: hello-image
+      type: image
+    - name: bye-image
+      type: image
+  tasks:
+  - name: go-hello-image
+    taskRef:
+      name: kaniko-build-push
+    params:
+      - name: pathToContext
+        value: hello
+    resources:
+      inputs:
+        - name: src
+          resource: src
+      outputs:
+        - name: builtImage
+          resource: hello-image
+  - name: go-bye-image
+    taskRef:
+      name: kaniko-build-push
+    params:
+      - name: pathToContext
+        value: bye
+    resources:
+      inputs:
+        - name: src
+          resource: src
+      outputs:
+        - name: builtImage
+          resource: bye-image
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h:9caacd24-1667-4268-9716-d967cab7c6f1" class="outline-3">
+<h3 id="h:9caacd24-1667-4268-9716-d967cab7c6f1"><code>PipelineRun</code></h3>
+<div class="outline-text-3" id="text-h:9caacd24-1667-4268-9716-d967cab7c6f1">
+<div class="org-src-container">
+<pre class="src src-yaml">apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: kaniko-run
+spec:
+  pipelineRef:
+    name: kaniko
+  trigger:
+    type: manual
+  serviceAccount: build-bot
+  resources:
+    - name: src
+      resourceRef:
+        name: private-go-hello
+    - name: hello-image
+      resourceRef:
+        name: hello-image-res
+    - name: bye-image
+      resourceRef:
+        name: bye-image-res
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-h:eadc5b7a-797b-4da4-a543-3116612dfb4a" class="outline-2">
+<h2 id="h:eadc5b7a-797b-4da4-a543-3116612dfb4a"><span class="todo TODO">TODO</span> Deploy to a cluster</h2>
+<div class="outline-text-2" id="text-h:eadc5b7a-797b-4da4-a543-3116612dfb4a">
+</div>
+<div id="outline-container-h:90600634-74c2-4e04-b25c-b6665baac4d5" class="outline-3">
+<h3 id="h:90600634-74c2-4e04-b25c-b6665baac4d5"><span class="todo TODO">TODO</span> Same one, on another cluster</h3>
+<div class="outline-text-3" id="text-h:90600634-74c2-4e04-b25c-b6665baac4d5">
+</div>
+</div>
+<div id="outline-container-h:7aaedc77-4319-4223-9790-31353447ad48" class="outline-3">
+<h3 id="h:7aaedc77-4319-4223-9790-31353447ad48"><span class="todo TODO">TODO</span> Another one, thanks to cluster resources</h3>
+<div class="outline-text-3" id="text-h:7aaedc77-4319-4223-9790-31353447ad48">
+</div>
+</div>
+</section>
+<section id="outline-container-h:6fc85dd7-034c-4170-9b69-b84df9c976eb" class="outline-2">
+<h2 id="h:6fc85dd7-034c-4170-9b69-b84df9c976eb"><span class="todo TODO">TODO</span> Using <code>buildah</code></h2>
+<div class="outline-text-2" id="text-h:6fc85dd7-034c-4170-9b69-b84df9c976eb">
+</div>
+</section>
+<section id="outline-container-h:6c165f41-d642-480c-b841-541a89f95875" class="outline-2">
+<h2 id="h:6c165f41-d642-480c-b841-541a89f95875"><span class="todo TODO">TODO</span> Using <code>helm</code></h2>
+<div class="outline-text-2" id="text-h:6c165f41-d642-480c-b841-541a89f95875">
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

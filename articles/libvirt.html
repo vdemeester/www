@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>libvirt</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">libvirt</h1>
+</header>
+<section id="outline-container-h:348103fa-e9a6-49b0-a7f8-7b212d647940" class="outline-2">
+<h2 id="h:348103fa-e9a6-49b0-a7f8-7b212d647940">Remote setup with NixOS</h2>
+<div class="outline-text-2" id="text-h:348103fa-e9a6-49b0-a7f8-7b212d647940">
+<p>
+Usually, you connect to <code>libvirt</code> using <code>qmeu:///system</code> or <code>qemu+ssh://…</code>. This works in
+most case but sometimes you want to expose libvirt on tcp (with or without TLS). One such
+example is for <a href="https://github.com/openshift/installer/"><code>openshift/installer</code></a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix"><span class="org-nix-attribute">boot.kernel.sysctl</span> = { <span class="org-string">"net.ipv4.ip_forward"</span> = 1 ; };
+<span class="org-nix-attribute">virtualisation.libvirtd</span> = {
+  <span class="org-nix-attribute">extraConfig</span> = <span class="org-string">''</span>
+<span class="org-string">  listen_tls = 0</span>
+<span class="org-string">  listen_tcp = 1</span>
+<span class="org-string">  auth_tcp="none"</span>
+<span class="org-string">  tcp_port = "16509"</span>
+<span class="org-string">  ''</span>;
+  <span class="org-nix-attribute">extraOptions</span> = [ <span class="org-string">"--listen"</span> ]
+};
+<span class="org-nix-attribute">networking.firewall.allowedTCPPorts</span> = [ 16509 ];
+</pre>
+</div>
+
+<p>
+For <code>openshift</code> purpose we may want dns entry like <code>echo
+server=/tt.testing/192.168.126.1 | sudo tee /etc/NetworkManager/dnsmasq.d/openshift.conf</code>.
+</p>
+</div>
+
+<div id="outline-container-h:6b85c514-d810-4441-89f1-133158f17761" class="outline-3">
+<h3 id="h:6b85c514-d810-4441-89f1-133158f17761">Sources</h3>
+<div class="outline-text-3" id="text-h:6b85c514-d810-4441-89f1-133158f17761">
+<ul class="org-ul">
+<li><a href="https://github.com/openshift/installer/blob/master/docs/dev/libvirt-howto.md"><code>openshift/installer</code> libvirt HOWTO</a></li>
+<li><a href="https://libvirt.org/remote.html">libvirt: Remote support</a></li>
+<li><a href="https://libvirt.org/auth.html">libvirt: Connection authentication</a></li>
+<li><a href="https://libvirt.org/remote.html">libvirt: Remote support</a></li>
+</ul>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

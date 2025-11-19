@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Golang testing — gotest.tools assertions</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Golang testing — gotest.tools assertions</h1>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#%3DAssert%3D%20and%20%3DCheck%3D"><code>Assert</code> and <code>Check</code></a></li>
+<li><a href="#More%20%3Dassert%3D%20helpers">More <code>assert</code> helpers</a></li>
+<li><a href="#%3Dcmp.Comparison%3D"><code>cmp.Comparison</code></a>
+<ul>
+<li><a href="#Equality%20with%20%3DEqual%3D%20and%20%3DDeepEqual%3D">Equality with <code>Equal</code> and <code>DeepEqual</code></a></li>
+<li><a href="#Errors%20with%20%3DError%3D%2C%20%3DErrorContains%3D%20and%20%3DErrorType%3D">Errors with <code>Error</code>, <code>ErrorContains</code> and <code>ErrorType</code></a></li>
+<li><a href="#Bonus%20with%20%3DPanics%3D">Bonus with <code>Panics</code></a></li>
+<li><a href="#Miscellaneous%20with%20%3DContains%3D%2C%20%3DLen%3D%20and%20%3DNil%3D">Miscellaneous with <code>Contains</code>, <code>Len</code> and <code>Nil</code></a></li>
+<li><a href="#Write%20your%20own%20%3DComparison%3D">Write your own <code>Comparison</code></a></li>
+</ul>
+</li>
+<li><a href="#Conclusion%E2%80%A6">Conclusion…</a></li>
+</ul>
+</div>
+</nav>
+<section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Let&rsquo;s take a closer look at <a href="https://gotest.tools"><code>gotest.tools</code></a> assertions packages. This is mainly about <code>assert</code>, <code>assert/cmp</code> and
+<code>assert/opt</code>.
+</p>
+
+<blockquote>
+<p>
+Package assert provides assertions for comparing expected values to actual values. When assertion fails a helpful error
+message is printed.
+</p>
+</blockquote>
+
+<p>
+There is two main functions (<code>Assert</code> and <code>Check</code>) and some helpers (like <code>NilError</code>, …). They all take a <code>*testing.T</code> as
+a first argument, pretty common across testing Go libraries. Let&rsquo;s dive into those !
+</p>
+</div>
+</section>
+<section id="outline-container-%3DAssert%3D%20and%20%3DCheck%3D" class="outline-2">
+<h2 id="%3DAssert%3D%20and%20%3DCheck%3D"><code>Assert</code> and <code>Check</code></h2>
+<div class="outline-text-2" id="text-%3DAssert%3D%20and%20%3DCheck%3D">
+<p>
+Both those functions accept a <code>Comparison</code> (we&rsquo;ll check what it is later on) and fail the test when that comparison
+fails. The one difference is that <code>Assert</code> will end the test execution at immediately whereas <code>Check</code> will fail the test
+and proceed with the rest of the test case. This is similar to <code>FailNow</code> and <code>Fail</code> from the standard library
+<code>testing</code>. Both have their use cases.
+</p>
+
+<p>
+We&rsquo;ll Use <code>Assert</code> for the rest of the section but any example here would work with <code>Check</code> too. When we said
+<code>Comparison</code> above, it&rsquo;s mainly the <a href="https://godoc.org/gotest.tools/assert#BoolOrComparison">BoolOrComparison</a> interface — it can either be a boolean expression, or a
+<a href="https://godoc.org/gotest.tools/assert/cmp#Comparison">cmp.Comparison</a> type. <code>Assert</code> and <code>Check</code> code will be <i>smart</i> enough to detect which one it is.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">assert.Assert(t, ok)
+assert.Assert(t, err != nil)
+assert.Assert(t, foo.IsBar())
+</pre>
+</div>
+
+<p>
+So far not anything extra-ordinary. Let&rsquo;s first look at some more <i>helper</i> functions in the <code>assert</code> package and quickly
+dive a bit deeper with <code>Comparison</code>.
+</p>
+</div>
+</section>
+<section id="outline-container-More%20%3Dassert%3D%20helpers" class="outline-2">
+<h2 id="More%20%3Dassert%3D%20helpers">More <code>assert</code> helpers</h2>
+<div class="outline-text-2" id="text-More%20%3Dassert%3D%20helpers">
+<p>
+The additional helper functions are the following
+</p>
+
+<ul class="org-ul">
+<li><code>Equal</code> uses the <code>==</code> operator to assert two values are equal.</li>
+<li><code>DeepEqual</code> uses <code>google/go-cmp</code> to assert two values are equal (it&rsquo;s <i>close</i> to <code>reflect.DeepEqual</code> but not
+quite). We&rsquo;ll detail a bit more the <i>options</i> part of this function with <code>cmp.DeepEqual</code>.</li>
+<li><code>Error</code> fails if the error is <code>nil</code> <b>or</b> the error message is not the expected one.</li>
+<li><code>ErrorContains</code> fails if the error is <code>nil</code> <b>or</b> the error message does not contain the expected substring.</li>
+<li><code>ErrorType</code> fails if the error is <code>nil</code> <b>or</b> the error type is not the expected type.</li>
+<li><code>NilError</code> fails if the error is not <code>nil</code>.</li>
+</ul>
+
+<p>
+All those helper functions have a equivalent function in the <code>cmp</code> package that returns a <code>Comparison</code>. I, personally,
+prefer to use <code>assert.Check</code> or <code>assert.Assert</code> in combination with <code>cmp.Comparison</code> as it allows me to write all my
+assertions the same way, with built-ins comparison or with my own — i.e. <code>assert.Assert(t, is.Equal(…), "message"</code> or
+<code>assert.Assert(t, stackIsUp(c, time…), "another message")</code>.
+</p>
+</div>
+</section>
+<section id="outline-container-%3Dcmp.Comparison%3D" class="outline-2">
+<h2 id="%3Dcmp.Comparison%3D"><code>cmp.Comparison</code></h2>
+<div class="outline-text-2" id="text-%3Dcmp.Comparison%3D">
+<p>
+This is where it get really interesting, <code>gotest.tools</code> tries to make it as easy as possible for you to create
+appropriate comparison — making you test readable as much as possible.
+</p>
+
+<p>
+Let&rsquo;s look a bit at the <code>cmp.Comparison</code> type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">type Comparison func() Result
+</pre>
+</div>
+
+<p>
+It&rsquo;s just a function that returns a <code>cmp.Result</code>, so let&rsquo;s look at <code>cmp.Result</code> definition.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">type Result interface {
+        Success() bool
+}
+</pre>
+</div>
+
+<p>
+Result is an <code>interface</code>, thus any <i>struct</i> that provide a function <code>Success</code> that returns a <code>bool</code> can be used as a
+comparison result, making it really easy to use in your code. There is also existing type of result to make it even
+quicker to write your own comparison.
+</p>
+
+<ul class="org-ul">
+<li><code>ResultSuccess</code> is a constant which is returned to indicate success.</li>
+<li><code>ResultFailure</code> and <code>ResultFailureTemplate</code> return a failed Result with a failure message.</li>
+<li><code>ResultFromError</code> returns <code>ResultSuccess</code> if <code>err</code> is nil. Otherwise <code>ResultFailure</code> is returned with the error
+message as the failure message. It works a bit like the <code>errors.Wrap</code> function of the <a href="https://github.com/pkg/errors"><code>github.com/pkgs/errors</code></a>
+package.</li>
+</ul>
+
+<p>
+The <code>cmp</code> package comes with a few defined comparison that, we think, should cover a high number of use-cases. Let&rsquo;s
+look at them.
+</p>
+</div>
+<div id="outline-container-Equality%20with%20%3DEqual%3D%20and%20%3DDeepEqual%3D" class="outline-3">
+<h3 id="Equality%20with%20%3DEqual%3D%20and%20%3DDeepEqual%3D">Equality with <code>Equal</code> and <code>DeepEqual</code></h3>
+<div class="outline-text-3" id="text-Equality%20with%20%3DEqual%3D%20and%20%3DDeepEqual%3D">
+<blockquote>
+<p>
+Equal uses the == operator to assert two values are equal and fails the test if they are not equal.
+</p>
+
+<p>
+If the comparison fails Equal will use the variable names for x and y as part of the failure message to identify the
+actual and expected values.
+</p>
+
+<p>
+If either x or y are a multi-line string the failure message will include a unified diff of the two values. If the
+values only differ by whitespace the unified diff will be augmented by replacing whitespace characters with visible
+characters to identify the whitespace difference.
+</p>
+</blockquote>
+
+<p>
+On the other hand…
+</p>
+
+<blockquote>
+<p>
+DeepEqual uses google/go-cmp (<a href="http://bit.do/go-cmp">http://bit.do/go-cmp</a>) to assert two values are equal and fails the test if they are not
+equal.
+</p>
+
+<p>
+Package <a href="https://godoc.org/gotest.tools/assert/opt">https://godoc.org/gotest.tools/assert/opt</a> provides some additional commonly used Options.
+</p>
+</blockquote>
+
+<p>
+Using one or the other is as simple as : if you wrote your <code>if</code> with <code>==</code> then use <code>Equal</code>, otherwise use <code>DeepEqual</code>.
+<code>DeepEqual</code> (and usually <code>reflect.DeepEqual</code>) is used when you want to compare anything more complex than primitive
+types. One advantage of using <code>cmp.DeepEqual</code> over <code>reflect.DeepEqual</code> (in an if), is that you get a well crafted
+message that shows the diff between the expected and the actual structs compared – and you can pass options to it.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">assert.Assert(t, cmp.DeepEqual([]string{"a", "b"}, []string{"b", "a"}))
+// Will print something like
+// --- result
+// +++ exp
+// {[]string}[0]:
+//         -: "a"
+//         +: "b"
+// {[]string}[1]:
+//         -: "b"
+//         +: "a"
+foo := &amp;someType(a: "with", b: "value")
+bar := &amp;someType(a: "with", b: "value")
+// the following will succeed as foo and bar are _DeepEqual_
+assert.Assert(t, cmp.DeepEqual(foo, bar))
+</pre>
+</div>
+
+<p>
+When using <code>DeepEqual</code>, you may end up with really weird behavior(s). You may want to ignore some fields, or consider
+<code>nil</code> slice or map the same as empty ones ; or more common, your <i>struct</i> contains some unexported fields that you
+cannot use when comparing (as they are not exported 😓). In those case, you can use <code>go-cmp</code> options.
+</p>
+
+<p>
+Some existing one are :
+</p>
+<ul class="org-ul">
+<li><a href="https://godoc.org/github.com/google/go-cmp/cmp/cmpopts#EquateEmpty"><code>EquateEmpty</code></a> returns a Comparer option that determines all maps and slices with a length of zero to be equal,
+regardless of whether they are nil.</li>
+<li><a href="https://godoc.org/github.com/google/go-cmp/cmp/cmpopts#IgnoreFields"><code>IgnoreFields</code></a> returns an Option that ignores exported fields of the given names on a single struct type. The struct
+type is specified by passing in a value of that type.</li>
+<li><a href="https://godoc.org/github.com/google/go-cmp/cmp/cmpopts#IgnoreUnexported"><code>IgnoreUnexported</code></a> returns an Option that only ignores the immediate unexported fields of a struct, including anonymous
+fields of unexported types.</li>
+<li><a href="https://godoc.org/github.com/google/go-cmp/cmp/cmpopts#SortSlices"><code>SortSlices</code></a> returns a Transformer option that sorts all <code>[]V</code></li>
+<li>… and <a href="https://godoc.org/github.com/google/go-cmp/cmp/cmpopts">more</a> 👼</li>
+</ul>
+
+<p>
+<code>gotest.tools</code> also defines some <b>and</b> you can define yours ! As an example, <code>gotest.tools</code> defines <code>TimeWithThreshold</code>
+and <code>DurationWithThreshold</code> that allows to not fails if the time (or duration) is not exactly the same but in the
+specified threshold we specified. Here is the code for <code>DurationWithThreshold</code> for inspiration.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">// DurationWithThreshold returns a gocmp.Comparer for comparing time.Duration. The
+// Comparer returns true if the difference between the two Duration values is
+// within the threshold and neither value is zero.
+func DurationWithThreshold(threshold time.Duration) gocmp.Option {
+        return gocmp.Comparer(cmpDuration(threshold))
+}
+
+func cmpDuration(threshold time.Duration) func(x, y time.Duration) bool {
+        return func(x, y time.Duration) bool {
+                if x == 0 || y == 0 {
+                        return false
+                }
+                delta := x - y
+                return delta &lt;= threshold &amp;&amp; delta &gt;= -threshold
+        }
+}
+</pre>
+</div>
+
+<p>
+Another good example for those options is when you want to skip some field. In <a href="https://github.com/docker/docker"><code>docker/docker</code></a> we want to be able to
+easily check for equality between two service specs, but those might have different <code>CreatedAt</code> and <code>UpdatedAt</code> values
+that we usually don&rsquo;t care about – what we want is to make sure it happens in the past 20 seconds. You can easily define
+an option for that.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">func cmpServiceOpts() cmp.Option {
+        const threshold = 20 * time.Second
+
+        // Apply withinThreshold only for the following fields
+        metaTimeFields := func(path cmp.Path)bool {
+                switch path.String() {
+                case "Meta.CreatedAt", "Meta.UpdatedAt":
+                        return true
+                }
+                return false
+        }
+        // have a 20s threshold for the time value that will be passed
+        withinThreshold := cmp.Comparer(func(x, y time.Time) bool {
+                delta := x.Sub(y)
+                return delta &lt; threshold &amp;&amp; delta &gt; -threshold
+        })
+
+        return cmp.FilterPath(metaTimeFields, withinThreshold)
+}
+</pre>
+</div>
+
+<p>
+I recommend you look at the <a href="https://godoc.org/gotest.tools/assert/opt">gotest.tools/assert/opt</a> documentation to see which one are defined and how to use them.
+</p>
+</div>
+</div>
+<div id="outline-container-Errors%20with%20%3DError%3D%2C%20%3DErrorContains%3D%20and%20%3DErrorType%3D" class="outline-3">
+<h3 id="Errors%20with%20%3DError%3D%2C%20%3DErrorContains%3D%20and%20%3DErrorType%3D">Errors with <code>Error</code>, <code>ErrorContains</code> and <code>ErrorType</code></h3>
+<div class="outline-text-3" id="text-Errors%20with%20%3DError%3D%2C%20%3DErrorContains%3D%20and%20%3DErrorType%3D">
+<p>
+Checking for errors is <b>very common</b> in Go, having <code>Comparison</code> function for it was a requirement.
+</p>
+
+<ul class="org-ul">
+<li><code>Error</code> fails if the error is <code>nil</code> <b>or</b> the error message is not the expected one.</li>
+<li><code>ErrorContains</code> fails if the error is <code>nil</code> <b>or</b> the error message does not contain the expected substring.</li>
+<li><code>ErrorType</code> fails if the error is <code>nil</code> <b>or</b> the error type is not the expected type.</li>
+</ul>
+
+<p>
+Let&rsquo;s first look at the most used : <code>Error</code> and <code>ErrorContains</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">var err error
+// will fail with : expected an error, got nil
+assert.Check(t, cmp.Error(err, "message in a bottle"))
+err = errors.Wrap(errors.New("other"), "wrapped")
+// will fail with : expected error "other", got "wrapped: other"
+assert.Check(t, cmp.Error(err, "other"))
+// will succeed
+assert.Check(t, cmp.ErrorContains(err, "other"))
+</pre>
+</div>
+
+<p>
+As you can see <code>ErrorContains</code> is especially useful when working with <i>wrapped</i> errors.
+Now let&rsquo;s look at <code>ErrorType</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">var err error
+// will fail with : error is nil, not StubError
+assert.Check(t, cmp.ErrorType(err, StubError{}))
+
+err := StubError{"foo"}
+// will succeed
+assert.Check(t, cmp.ErrorType(err, StubError{}))
+
+// Note that it also work with a function returning an error
+func foo() error {}
+assert.Check(t, cmp.ErrorType(foo, StubError{}))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Bonus%20with%20%3DPanics%3D" class="outline-3">
+<h3 id="Bonus%20with%20%3DPanics%3D">Bonus with <code>Panics</code></h3>
+<div class="outline-text-3" id="text-Bonus%20with%20%3DPanics%3D">
+<p>
+Sometimes, a code is supposed to <i>panic</i>, see <a href="https://golang.org/doc/effective_go.html#panic">Effective Go (#Panic)</a> for more information. And thus, you may want to make
+sure you&rsquo;re code panics in such cases. It&rsquo;s always a bit tricky to test a code that panic as you have to use a deferred
+function to recover the panic — but then if the panic doesn&rsquo;t happen how do you fail the test ?
+</p>
+
+<p>
+This is where <code>Panics</code> comes handy.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">func foo(shouldPanic bool) {
+        if shouldPanic {
+                panic("booooooooooh")
+        }
+        // don't worry, be happy
+}
+// will fail with : did not panic
+assert.Check(t, cmp.Panics(foo(false)))
+// will succeed
+assert.Check(t, cmp.Panics(foo(true)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Miscellaneous%20with%20%3DContains%3D%2C%20%3DLen%3D%20and%20%3DNil%3D" class="outline-3">
+<h3 id="Miscellaneous%20with%20%3DContains%3D%2C%20%3DLen%3D%20and%20%3DNil%3D">Miscellaneous with <code>Contains</code>, <code>Len</code> and <code>Nil</code></h3>
+<div class="outline-text-3" id="text-Miscellaneous%20with%20%3DContains%3D%2C%20%3DLen%3D%20and%20%3DNil%3D">
+<p>
+Those last three <i>built-in</i> <code>Comparison</code> are pretty straightforward.
+</p>
+
+<ul class="org-ul">
+<li><p>
+<code>Contains</code> succeeds if item is in collection. Collection may be a string, map, slice, or array.
+</p>
+
+<p>
+If collection is a string, item must also be a string, and is compared using <code>strings.Contains()</code>. If collection is a
+Map, contains will succeed if item is a key in the map. If collection is a slice or array, item is compared to each
+item in the sequence using <code>=reflect.DeepEqual()=</code>.
+</p></li>
+<li><code>Len</code> succeeds if the sequence has the expected length.</li>
+<li><code>Nil</code> succeeds if obj is a nil interface, pointer, or function.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-go">// Contains works on string, map, slice or arrays
+assert.Check(t, cmp.Contains("foobar", "foo"))
+assert.Check(t, cmp.Contains([]string{"a", "b", "c"}, "b"))
+assert.Check(t, cmp.Contains(map[string]int{"a": 1, "b": 2, "c": 4}, "b"))
+
+// Len also works on string, map, slice or arrays
+assert.Check(t, cmp.Len("foobar", 6))
+assert.Check(t, cmp.Len([]string{"a", "b", "c"}, 3))
+assert.Check(t, cmp.Len(map[string]int{"a": 1, "b": 2, "c": 4}, 3))
+
+// Nil
+var foo *MyStruc
+assert.Check(t, cmp.Nil(foo))
+assert.Check(t, cmp.Nil(bar()))
+</pre>
+</div>
+
+<p>
+But let&rsquo;s not waste more time and let&rsquo;s see how to write our own <code>Comparison</code> !
+</p>
+</div>
+</div>
+<div id="outline-container-Write%20your%20own%20%3DComparison%3D" class="outline-3">
+<h3 id="Write%20your%20own%20%3DComparison%3D">Write your own <code>Comparison</code></h3>
+<div class="outline-text-3" id="text-Write%20your%20own%20%3DComparison%3D">
+<p>
+One of the main aspect of <code>gotest.tools/assert</code> is to make it easy for developer to write as less boilerplate code as
+possible while writing tests. Writing your own <code>Comparison</code> allows you to write a well named function that will be easy
+to read and that can be re-used across your tests.
+</p>
+
+<p>
+Let&rsquo;s look back at the <code>cmp.Comparison</code> and <code>cmp.Result</code> types.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">type Comparison func() Result
+
+type Result interface {
+        Success() bool
+}
+</pre>
+</div>
+
+<p>
+A <code>Comparison</code> for <code>assert.Check</code> or <code>assert.Check</code> is a function that return a <code>Result</code>, it&rsquo;s pretty straightforward to
+implement, especially with <code>cmp.ResultSuccess</code> and <code>cmp.ResultFailure(…)</code> (as seen previously).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">func regexPattern(value string, pattern string) cmp.Comparison {
+        return func() cmp.Result {
+                re := regexp.MustCompile(pattern)
+                if re.MatchString(value) {
+                        return cmp.ResultSuccess
+                }
+                return cmp.ResultFailure(
+                        fmt.Sprintf("%q did not match pattern %q", value, pattern))
+        }
+}
+
+// To use it
+assert.Check(t, regexPattern("12345.34", `\d+.\d\d`))
+</pre>
+</div>
+
+<p>
+As you can see, it&rsquo;s pretty easy to implement, and you can do quite a lot in there easily. If a function call returns an
+error inside of your <code>Comparison</code> function, you can use <code>cmp.ResultFromError</code> for example. Having something like
+<code>assert.Check(t, isMyServerUp(":8080"))</code> is way more readable than a 30-line of code to check it.
+</p>
+</div>
+</div>
+</section>
+<section id="outline-container-Conclusion%E2%80%A6" class="outline-2">
+<h2 id="Conclusion%E2%80%A6">Conclusion…</h2>
+<div class="outline-text-2" id="text-Conclusion%E2%80%A6">
+<p>
+… and that&rsquo;s a wrap. We only looked at the <code>assert</code> package of <a href="https://gotest.tools"><code>gotest.tools</code></a> so far, but it&rsquo;s already quite a bit to process.
+</p>
+
+<p>
+We&rsquo;ve seen :
+</p>
+<ul class="org-ul">
+<li>the main functions provided by this package : <code>assert.Assert</code> and <code>assert.Check</code></li>
+<li>some helper functions like <code>assert.NilError</code>, …</li>
+<li>the <code>assert/cmp</code>, and <code>assert/opt</code> sub-package that allows you to write more custom <code>Comparison</code></li>
+</ul>
+
+<p>
+Next time, we&rsquo;ll look at the <code>skip</code> package, that is a really simple wrapper on top of <code>testing.Skip</code> function.
+</p>
+
+<p>
+**
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emacs bankruptcy is fun</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Emacs bankruptcy is fun</h1>
+</header><section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Since go 1.14 go released, I&rsquo;ve had a broken <code>go-mode</code> setup on my Emacs. I was using
+<code>lsp-mode</code> and <code>gopls</code> and well, the update broke everything. I initally try to fix it but
+I made it worse. At the same time, I started to get fed up with some performance issue of
+my configuration and how slow my Emacs starts, about 6s.
+</p>
+
+<p>
+I, thus, declared my third Emacs bankruptcy, <code>:disabled</code> everything and slowly started
+from scratch, with the following goal:
+</p>
+
+<ul class="org-ul">
+<li>Have it start quick, as less than a second, not too much more than <code>emacs -Q</code> would</li>
+<li>Disable anything that I don&rsquo;t use often initially</li>
+<li>Try to use as much built-in as possible (example: using <code>icomplete</code> instead of
+<code>ivy=/=counsel</code>)</li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Do%20I%20really%20need%20this%20feature" class="outline-2">
+<h2 id="Do%20I%20really%20need%20this%20feature">Do I really need this feature</h2>
+<div class="outline-text-2" id="text-Do%20I%20really%20need%20this%20feature">
+<p>
+Following <a href="https://protesilaos.com/">Protesilaos Stavrou</a>&rsquo;s emacs videos (and <a href="https://protesilaos.com/dotemacs/"><code>dotemacs</code></a>) for a while now, I have a
+tendency to try to use built-in feature as much as possible. The most obvious example is
+using <code>icomplete</code> instead of <code>ivy=/=counsel</code>.
+</p>
+
+<p>
+When I started my <i>bankruptcy</i>, I disabled every single customization I had, either using
+<code>:disabled</code> when using <code>use-package</code> <b>or</b> the <code>(when nil)</code> <i>hack</i>. I then started Emacs
+and acted on what was missing :
+</p>
+
+<ol class="org-ol">
+<li>Do I really miss it ? An example would be, at least initially, the completion in a <code>go</code>
+file. I do miss it, but I miss it <b>way less</b> than having Emacs lagging because of
+<code>lsp-mode</code> and showing me wrong completion.</li>
+<li>Is there a built-in option to what I previously used ? Here, the <code>icomplete</code> example
+fits well, or <code>isearch</code> instead of <code>swiper</code>.</li>
+<li>Do I need it at startup or <i>on-demand</i> ?</li>
+</ol>
+</div>
+</section>
+<section id="outline-container-Looking%20into%20what%20takes%20time" class="outline-2">
+<h2 id="Looking%20into%20what%20takes%20time">Looking into what takes time</h2>
+<div class="outline-text-2" id="text-Looking%20into%20what%20takes%20time">
+<p>
+In &ldquo;Advanced Techniques for Reducing Emacs Startup Time&rdquo;<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, I discovered the <a href="https://github.com/jschaf/esup"><code>esup</code></a>
+emacs library. In a gist, this is a profiler for Emacs. It starts a new Emacs instance and
+look at the loading time.
+</p>
+
+
+<figure id="orgb8e5f7b">
+<img src="../images/2020-04-15-16-12-54.png" alt="2020-04-15-16-12-54.png">
+
+<figcaption><span class="figure-number">Figure 1: </span>esup &ldquo;result&rdquo; view</figcaption>
+</figure>
+
+<p>
+Then, you can do a simple loop:
+</p>
+
+<ul class="org-ul">
+<li>Run <code>esup</code></li>
+<li>Look at the top result</li>
+<li>Fix it (lazy load, removing the feature, …)</li>
+<li>Re-iterate</li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Loading%20on-demand" class="outline-2">
+<h2 id="Loading%20on-demand">Loading on-demand</h2>
+<div class="outline-text-2" id="text-Loading%20on-demand">
+<p>
+Once you have the setup to know what takes time and what not, it&rsquo;s time to look into how
+to load the most thing on demand.
+</p>
+
+<p>
+For this, <a href="https://github.com/jwiegley/use-package"><code>use-package</code></a> is amazing, it tremendously help autoloading modules on-demand. If
+you are not using <code>use-package</code>, usually you are using <code>require</code>, which loads the
+underlying source file (all of it).
+</p>
+
+<p>
+With <code>use-package</code>, there is multiple ways to load on demand:
+</p>
+
+<ul class="org-ul">
+<li><code>:commands</code> to add callable that will trigger loading the package</li>
+<li><code>:bind</code>, <code>:bind*</code>, <code>:bind-keymap</code> and <code>:bind-keymap*</code> to bind key sequences to the
+global keymap or a specific keymap.</li>
+<li><code>:mode</code> and <code>:interpreter</code> establish a deferred binding with the <code>auto-mode-alist</code> and
+<code>interpreter-mode-alist</code>.</li>
+<li><code>:hook</code> allows adding functions onto the package hook</li>
+<li><code>:defer</code> is the most generic one, all the previous keyword imply <code>:defer</code>. You can
+specify a number of second of idle to load the package.</li>
+</ul>
+
+<aside id="orgbb35d32">
+<p>
+In a gist for <code>org-babel</code>, use <code>use-package ob-python</code> and never call <code>org-babel-do-languages</code>.
+</p>
+</aside>
+<p>
+Once this is done, you are left with edge cases, like <code>org-babel-do-languages</code>.  Those are
+to be handle case by case. The good thing about those cases is that you&rsquo;ll learn what
+those function do and this will give you an even better understanding of what is
+happening.
+</p>
+
+<p>
+Doing this exercise also forces you to make you see if you really use that feature or
+not. I ended up removing entire feature from my configuration because they were taking
+quite some time to load, and was used almost never. Instead I am forcing myself to learn
+more what I can do with the built-in features first.
+</p>
+</div>
+</section>
+<section id="outline-container-Conclusion" class="outline-2">
+<h2 id="Conclusion">Conclusion</h2>
+<div class="outline-text-2" id="text-Conclusion">
+<p>
+All in all, this <i>bankruptcy</i> was the most fun I had to do. I consider myself still in the
+process but the base is there.
+</p>
+
+<ol class="org-ol">
+<li>I learned a lot !</li>
+<li>My Emacs starts in 0.6s against previously in 5s — <code>emacs -q</code> starts in about 0.3s so
+there is still a little bit of room for improvement.</li>
+<li>I discovered / re-discovered a lot of built-in feature</li>
+<li>I started documenting my configuration, see <a href="../configurations/emacs.html">here</a>.</li>
+</ol>
+
+<p>
+🎉
+</p>
+
+<div class='drawer update'>
+<h6>Update</h6>
+<p>
+Well, I&rsquo;ve look into the <i>portable dump</i> feature of Emacs, thanks to <a href="https://archive.casouri.cat/note/2020/painless-transition-to-portable-dumper/index.html">Painless Transition
+to Portable Dumper</a>. And I am now down to <code>0.091s</code> for the startup. There is a few gotchas
+with <i>portable dump</i>, I&rsquo;ll try to write about it later.
+</p>
+</div>
+</div>
+</section>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+: <a href="https://blog.d46.us/advanced-emacs-startup/">Advanced Techniques for Reducing Emacs Startup Time</a>
+</p></div></div>
+
+
+</div>
+</div></main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

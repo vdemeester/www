@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GitOps</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="post" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="./css/2022.css" />
+<link rel="stylesheet" type="text/css" href="./css/syntax.css" />
+<link rel='icon' type='image/x-icon' href='./images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">GitOps</h1>
+</header><section id="outline-container-What%20is%20GitOps%3F" class="outline-2">
+<h2 id="What%20is%20GitOps%3F">What is GitOps?</h2>
+<div class="outline-text-2" id="text-What%20is%20GitOps%3F">
+<p>
+GitOps is an app dev and operations methodology that leverages
+</p>
+
+<ul class="org-ul">
+<li>an entire system that is described declaratively</li>
+<li>code that is version controlled and</li>
+<li>software agents that reconcile and ensure correctness (along with alerts, etc).</li>
+</ul>
+
+<p>
+GitOps is a paradigm, not a specific tool or technology. GitOps applies to everything and brings business value.
+</p>
+
+<p>
+Maya Kaczorowski adds that when you have everything “as code” with GitOps, you can make
+your code as automated and error-free as possible. With GitOps, you push a change to code
+that’s reviewed, and then you use automation to do the hard stuff of deploying,
+monitoring, etc. You also have a pipeline where devs only need to focus on developing
+their apps, and any operations or security control can be automatically verified or
+enforced as part of that pipeline. Teams have a clear separation of responsibilities.
+</p>
+</div>
+<div id="outline-container-The%204%20Principles%20of%20GitOps" class="outline-3">
+<h3 id="The%204%20Principles%20of%20GitOps">The 4 Principles of GitOps</h3>
+<div class="outline-text-3" id="text-The%204%20Principles%20of%20GitOps">
+<ol class="org-ol">
+<li>The entire system is described <b>declaratively</b></li>
+<li>The canonical desired system is <b>versioned</b> in git</li>
+<li>Approved changes can be <b>automatically applied</b> to the system</li>
+<li><b>Software agents</b> ensure correctness and alert (diffs &amp; actions)</li>
+</ol>
+
+<p>
+Most importantly, these are principles, <b>not technologies</b>. You can apply the principles
+across many of your existing technologies without replacing them.
+</p>
+
+<p>
+Also, <b>GitOps</b> is not constrained to Git. You can use whatever support version control.
+</p>
+</div>
+</div>
+<div id="outline-container-What%20is%20GitOps%20for%20Security%3F" class="outline-3">
+<h3 id="What%20is%20GitOps%20for%20Security%3F">What is GitOps for Security?</h3>
+<div class="outline-text-3" id="text-What%20is%20GitOps%20for%20Security%3F">
+<p>
+It provides
+</p>
+
+<ol class="org-ol">
+<li>Immutable infrastructure</li>
+<li>Single source of truth</li>
+<li>Dev velocity</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-Transparency%20and%20Collaboration" class="outline-3">
+<h3 id="Transparency%20and%20Collaboration">Transparency and Collaboration</h3>
+<div class="outline-text-3" id="text-Transparency%20and%20Collaboration">
+<ol class="org-ol">
+<li><b>Reversibility</b>: You can do rollbacks, and lower mean time to resolving config-based
+outages with version controlling.</li>
+<li><b>Audit trails</b>: You can track the history of a repo, …</li>
+</ol>
+
+<p>
+This also helps to reduce the risk of relying on a single employee.
+</p>
+</div>
+</div>
+<div id="outline-container-What%20can%20you%20GitOps%3F" class="outline-3">
+<h3 id="What%20can%20you%20GitOps%3F">What can you GitOps?</h3>
+<div class="outline-text-3" id="text-What%20can%20you%20GitOps%3F">
+<p>
+You can GitOps not just apps, but infrastructure, things that go onto DNS and identity
+providers, Chaos experiments and Kubernetes Clusters, and more. You can GitOps all the
+things!
+</p>
+</div>
+</div>
+</section>
+<section id="outline-container-GitOps%20tools" class="outline-2">
+<h2 id="GitOps%20tools">GitOps tools</h2>
+<div class="outline-text-2" id="text-GitOps%20tools">
+<ul class="org-ul">
+<li><a href="https://www.ansible.com/">Ansible</a></li>
+<li><a href="https://argoproj.github.io/argo-cd/">ArgoCD</a></li>
+<li><a href="https://www.runatlantis.io/">Atlantis</a></li>
+<li><a href="https://www.chef.io/">Chef</a></li>
+<li><a href="https://draft.sh/">Draft</a></li>
+<li><a href="https://eksctl.io/">eksctl</a></li>
+<li><a href="https://fluxcd.io/">FluxCD</a></li>
+<li><a href="https://flagger.app/">Flagger</a></li>
+<li><a href="https://git-scm.com/">Git</a></li>
+<li><a href="https://gitkube.sh/">GitKube</a></li>
+<li><a href="https://toolkit.fluxcd.io/">GitOps Toolkit</a></li>
+<li><a href="https://helm.sh/">Helm</a></li>
+<li><a href="https://medium.com/keikoproj/keiko-running-kubernetes-at-scale-1178491c1440">Keiko</a></li>
+<li><a href="https://kubernetes.io/">Kubernetes</a></li>
+<li><a href="https://kustomize.io/">Kustomize</a></li>
+<li><a href="https://www.jenkins.io/">Jenkins</a></li>
+<li><a href="https://jenkins-x.io/">Jenkins X</a></li>
+<li><a href="https://www.pulumi.com/">Pulumi</a></li>
+<li><a href="https://puppet.com/">Puppet</a></li>
+<li><a href="http://salt.io/">Salt</a></li>
+<li><a href="https://skaffold.dev/">Skaffold</a></li>
+<li><a href="https://www.terraform.io/">Terraform</a></li>
+</ul>
+
+<p>
+One day, <a href="tekton.html">Tekton</a> components could be in that list
+</p>
+</div>
+</section>
+<section id="outline-container-References" class="outline-2">
+<h2 id="References">References</h2>
+<div class="outline-text-2" id="text-References">
+<ul class="org-ul">
+<li><a href="https://gitops-community.github.io/kit/#need-help-or-want-updates">GitOps Conversation Kit (beta) | GitOps Community</a></li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fzwischenzugs.com%2F2020%2F11%2F30%2Fgitops-decisions%2F%5D%5BGitOps%20Decisions%20%E2%80%93%20zwischenzugs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fzwischenzugs.com%2F2020%2F11%2F30%2Fgitops-decisions%2F%5D%5BGitOps%20Decisions%20%E2%80%93%20zwischenzugs%5D%5D"><a href="https://zwischenzugs.com/2020/11/30/gitops-decisions/">GitOps Decisions – zwischenzugs</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fzwischenzugs.com%2F2020%2F11%2F30%2Fgitops-decisions%2F%5D%5BGitOps%20Decisions%20%E2%80%93%20zwischenzugs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-02 Wed 10:57]</span></span>
+</p>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

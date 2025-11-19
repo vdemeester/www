@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>config: Email configuration</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">config: Email configuration</h1>
+<p class="subtitle" role="doc-subtitle">A very opiniated mail setup</p>
+</header><div class="abstract" id="orgfdf41fd">
+<p>
+This article presents my opinionated email setup, client side. By opinionated I mean that
+it requires quite some stuff (like <code>nixpkgs</code>) and is cli/emacs/… oriented.
+</p>
+
+</div>
+
+<p>
+I used to read my mails only through the web interface of my mail provider (GMail for the
+most part), or through my phone. As I&rsquo;m trying to use my phone less, at least for work,
+and as I wanted to not have a gmail tab always opened on my browser, I decided to
+configure an email client on my laptops/desktops.
+</p>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h:db00a56e-c928-47d4-a784-3b2d2600759c">Module</a></li>
+<li><a href="#h:e492a4cf-41e5-4091-9fc3-1294bef31875">Base settings</a>
+<ul>
+<li><a href="#h:ddef34cf-07c6-4ae1-abc9-129440ded5e2">Accounts</a></li>
+<li><a href="#h:cc9d0707-d775-49ef-884d-ae65174fb259"><code>msmtp</code> wrapper</a></li>
+</ul>
+</li>
+<li><a href="#h:47e38880-580e-4335-a504-b3c9c580ec91">Syncing</a>
+<ul>
+<li><a href="#h:2b822f1b-cd0a-430d-8942-3ad21a4bcaa1">Service</a></li>
+<li><a href="#h:8e918ee0-4ef7-4f98-b170-dcfea20c6443">Programs</a></li>
+</ul>
+</li>
+<li><a href="#h:7672fedf-2afa-4eb1-a9f2-38a6aada5f5f">Close the module</a></li>
+<li><a href="#h:7012be97-2b81-44e9-b9bb-8c4147e3d561">References</a></li>
+</ul>
+</div>
+</nav>
+
+<p>
+So far, I ended up using the following tools:
+</p>
+
+<ul class="org-ul">
+<li><a href="http://isync.sourceforge.net/mbsync.html"><code>mbsync</code></a> to sync mails between server and laptop/desktop.</li>
+<li><a href="https://marlam.de/msmtp/"><code>msmtp</code></a> to send mails.</li>
+<li><a href="https://notmuchmail.org/"><code>notmuch</code></a> to index, and tag mails.</li>
+<li><a href="https://www.gnu.org/software/emacs/"><code>emacs</code></a> with <a href="https://www.gnu.org/software/emacs/manual/html_node/gnus/"><code>gnus</code></a> and <a href="https://notmuchmail.org/notmuch-emacs/"><code>notmuch</code></a> for reading/sending mails.</li>
+</ul>
+
+<p>
+Something a bit special here is that I also use <a href="https://github.com/rycee/home-manager"><code>home-manager</code></a>… and <a href="https://github.com/rycee/home-manager"><code>home-manager</code></a> has
+modules for those tools, so we are going to use thoses.
+</p>
+
+<p>
+<b>This needs to be updated and rewritten</b>.
+</p>
+<section id="outline-container-h:db00a56e-c928-47d4-a784-3b2d2600759c" class="outline-2">
+<h2 id="h:db00a56e-c928-47d4-a784-3b2d2600759c">Module</h2>
+<div class="outline-text-2" id="text-h:db00a56e-c928-47d4-a784-3b2d2600759c">
+<p>
+Let&rsquo;s start by defining the module, the usual Nix way.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix"># Generated from an org file 💃
+# See : https://sbr.pm/technical/configurations/mails.html
+{ config, lib, pkgs, ... }:
+
+with lib;
+let
+  cfg = config.profiles.mails;
+in
+{
+</pre>
+</div>
+
+<p>
+Let&rsquo;s now define options. As of now, except <code>enable</code> (to activate or not the module) I
+don&rsquo;t have any options in mind.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">options = {
+  profiles.mails = {
+    enable = mkEnableOption "Enable mails configuration";
+    sync = mkEnableOption "Enable sync mail service";
+    frequency = mkOption {
+      default = "*:0/30";
+      description = "Frequency at which the mail should be checked";
+      type = types.str;
+    };
+  };
+};
+</pre>
+</div>
+
+<p>
+Finally, create the configuration.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">config = mkIf cfg.enable (mkMerge [
+  {
+</pre>
+</div>
+</div>
+</section>
+<section id="outline-container-h:e492a4cf-41e5-4091-9fc3-1294bef31875" class="outline-2">
+<h2 id="h:e492a4cf-41e5-4091-9fc3-1294bef31875">Base settings</h2>
+<div class="outline-text-2" id="text-h:e492a4cf-41e5-4091-9fc3-1294bef31875">
+</div>
+<div id="outline-container-h:ddef34cf-07c6-4ae1-abc9-129440ded5e2" class="outline-3">
+<h3 id="h:ddef34cf-07c6-4ae1-abc9-129440ded5e2">Accounts</h3>
+<div class="outline-text-3" id="text-h:ddef34cf-07c6-4ae1-abc9-129440ded5e2">
+<p>
+The next step is to actually define the accounts we want use and where we want to store
+email, amongst other need.
+</p>
+
+<ul class="org-ul">
+<li>We want to store mails in <code>desktop/mails/{account}</code>.</li>
+<li>We don&rsquo;t want to input password each and every time so we&rsquo;re using an encrypted file
+(<a href="https://www.gnupg.org/gph/en/manual/x110.html">symmetric encryption using GnuPG</a> with a passphrase file).</li>
+<li>We&rsquo;re gonna enable diverse modules on each account
+<ul class="org-ul">
+<li><code>mbsync</code> to sync the mail with some setupts (like specific rules for GMail specific
+folders)</li>
+<li><code>notmuch</code> for email indexing</li>
+<li><code>msmtp</code> to send a mail, using the account&rsquo;s smtp server</li>
+<li><code>astroid</code> for a GUI</li>
+</ul></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-nix">accounts.email = {
+  maildirBasePath = "desktop/mails";
+  accounts = {
+    "redhat" = {
+      address = "vdemeest@redhat.com";
+      userName = "vdemeest@redhat.com";
+      realName = "Vincent Demeester";
+      passwordCommand = "${pkgs.gnupg}/bin/gpg -q --for-your-eyes-only --no-tty --exit-on-status-write-error --batch --passphrase-file ${config.home.homeDirectory}/sync/rh.pass -d ${config.home.homeDirectory}/desktop/documents/rh.pass.gpg";
+      imap.host = "imap.gmail.com";
+      smtp.host = "smtp.gmail.com";
+      mbsync = {
+        enable = true;
+        create = "both";
+        expunge = "both";
+        patterns = ["*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"];
+        extraConfig = {
+          channel = {
+            Sync = "All";
+          };
+          account = {
+            Timeout = 120;
+            PipelineDepth = 1;
+          };
+        };
+      };
+      notmuch.enable = cfg.sync;
+      astroid.enable = cfg.sync;
+      msmtp.enable = true;
+    };
+    "perso" = {
+      address = "vinc.demeester@gmail.com";
+      userName = "vinc.demeester@gmail.com";
+      realName = "Vincent Demeester";
+      passwordCommand = "${pkgs.gnupg}/bin/gpg -q --for-your-eyes-only --no-tty --exit-on-status-write-error --batch --passphrase-file ${config.home.homeDirectory}/sync/perso.pass -d ${config.home.homeDirectory}/desktop/documents/perso.pass.gpg";
+      imap.host = "imap.gmail.com";
+      smtp.host = "smtp.gmail.com";
+      mbsync = {
+        enable = true;
+        create = "both";
+        expunge = "both";
+        patterns = ["*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"];
+        extraConfig = {
+          channel = {
+            Sync = "All";
+          };
+          account = {
+            Timeout = 120;
+            PipelineDepth = 1;
+          };
+        };
+      };
+      notmuch.enable = cfg.sync;
+      astroid.enable = cfg.sync;
+      msmtp.enable = true;
+    };
+    "prv" = {
+      primary = true;
+      address = "vincent@demeester.fr";
+      userName = "vincent@demeester.fr";
+      realName = "Vincent Demeester";
+      passwordCommand = "${pkgs.gnupg}/bin/gpg -q --for-your-eyes-only --no-tty --exit-on-status-write-error --batch --passphrase-file ${config.home.homeDirectory}/sync/prv.pass -d ${config.home.homeDirectory}/desktop/documents/prv.pass.gpg";
+      imap.host = "mail.gandi.net";
+      smtp.host = "mail.gandi.net";
+      mbsync = {
+        enable = true;
+        create = "both";
+        expunge = "both";
+        patterns = ["*"];
+        extraConfig = {
+          channel = {
+            Sync = "All";
+          };
+          account = {
+            Timeout = 120;
+            PipelineDepth = 1;
+          };
+        };
+      };
+      notmuch.enable = cfg.sync;
+      astroid.enable = cfg.sync;
+      msmtp.enable = true;
+    };
+  };
+};
+</pre>
+</div>
+
+<p>
+To create the pasword files:
+</p>
+<ul class="org-ul">
+<li>create <code>~/desktop/documents/{account}.pass.gpg</code> file, you need to create a
+<code>~/desktop/documents/prv.pass</code> file with the actual password.</li>
+<li>create <code>~/sync/{account}.pass</code> with a passphrase (long, complex, whatever…)</li>
+<li><p>
+encrypt <code>~/desktop/documents/{account}.pass.gpg</code> with the following command
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">gpg --batch --yes --symmetric --passphrase-file ~/sync/{account}.pass --encrypt {account.pass}
+</pre>
+</div></li>
+
+<li>remove <code>~/desktop/documents/{account}.pass</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h:cc9d0707-d775-49ef-884d-ae65174fb259" class="outline-3">
+<h3 id="h:cc9d0707-d775-49ef-884d-ae65174fb259"><code>msmtp</code> wrapper</h3>
+<div class="outline-text-3" id="text-h:cc9d0707-d775-49ef-884d-ae65174fb259">
+<p>
+As I have multiple accounts, I need to be able to send mails from those multiple accounts
+too. For this we will use <code>msmtp</code>. We will <code>$HOME/.nix-profile/bin/msmtp</code> to make sure it
+uses <code>--read-envolep-from</code>. This means it will look at what <code>FROM</code> header is set in the
+e-mail and use the correct account accordingly.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">home.file."bin/msmtp" = {
+  text = ''
+  #!${pkgs.stdenv.shell}
+  ${pkgs.libnotify}/bin/notify-send "Sending mail ✉️"
+  ${pkgs.msmtp}/bin/msmtp --read-envelope-from $@
+  '';
+  executable = true;
+};
+</pre>
+</div>
+
+<p>
+We also want to make sure we enable <code>msmtp</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">programs.msmtp.enable = true;
+</pre>
+</div>
+
+<p>
+And that should be all for the base settings, so let&rsquo;s close that part
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">}
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-h:47e38880-580e-4335-a504-b3c9c580ec91" class="outline-2">
+<h2 id="h:47e38880-580e-4335-a504-b3c9c580ec91">Syncing</h2>
+<div class="outline-text-2" id="text-h:47e38880-580e-4335-a504-b3c9c580ec91">
+<p>
+I may not want to sync and index mails on all computers. In practice, I only do that on
+one computer and I sync these mails with the others.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">(mkIf cfg.sync {
+</pre>
+</div>
+</div>
+<div id="outline-container-h:2b822f1b-cd0a-430d-8942-3ad21a4bcaa1" class="outline-3">
+<h3 id="h:2b822f1b-cd0a-430d-8942-3ad21a4bcaa1">Service</h3>
+<div class="outline-text-3" id="text-h:2b822f1b-cd0a-430d-8942-3ad21a4bcaa1">
+<p>
+Now that all the configuration are defined (and generated once we run <a href="https://github.com/rycee/home-manager"><code>home-manager</code></a>),
+we&rsquo;re going to enable the <code>mbsync</code> service to synchronize email at the given frequency.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">services.mbsync = {
+  enable = true;
+  preExec = "${config.xdg.configHome}/mbsync/preExec";
+  postExec = "${config.xdg.configHome}/mbsync/postExec";
+  frequency = cfg.frequency;
+};
+</pre>
+</div>
+
+<p>
+We also setup <code>preExec</code> and <code>postExec</code> hooks on the service to be able to run commands
+before and after actually running <code>mbsync</code>.
+</p>
+
+<ul class="org-ul">
+<li><code>preExec</code> has two main purpose :
+
+<ul class="org-ul">
+<li>Create the accounts mail folder — this is <b>only</b> useful for the first run ever, but it
+is required.</li>
+<li>Move mails on the right folders
+<ul class="org-ul">
+<li>from Inbox to elsewhere (All mails, …)</li>
+<li>(in the future) to the right folders (from the tags)</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-nix">xdg.configFile."mbsync/preExec" = {
+  text = ''
+  #!${pkgs.stdenv.shell}
+
+  export NOTMUCH_CONFIG=${config.xdg.configHome}/notmuch/notmuchrc
+  export NMBGIT=${config.xdg.dataHome}/notmuch/nmbug
+
+  ${pkgs.coreutils}/bin/mkdir -p ${config.home.homeDirectory}/desktop/mails/redhat ${config.home.homeDirectory}/desktop/mails/perso
+  ${pkgs.afew}/bin/afew -C  ${config.xdg.configHome}/notmuch/notmuchrc -m -v
+  '';
+  executable = true;
+};
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><code>postExec</code> will index the new emails in the <code>notmuch</code> database and tag mail accordingly
+(to their folders and other rules in place).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-nix">xdg.configFile."mbsync/postExec" = {
+  text = ''
+  #!${pkgs.stdenv.shell}
+
+  export NOTMUCH_CONFIG=${config.xdg.configHome}/notmuch/notmuchrc
+  export NMBGIT=${config.xdg.dataHome}/notmuch/nmbug
+
+  ${pkgs.notmuch}/bin/notmuch new
+  ${pkgs.afew}/bin/afew -C ${config.xdg.configHome}/notmuch/notmuchrc --tag --new -v
+  # Remove inbox (lower-case)
+  ${pkgs.notmuch}/bin/notmuch tag -inbox -- tag:inbox
+  # Remove Inbox tagged message that are not in an Inbox
+  ${pkgs.notmuch}/bin/notmuch tag -Inbox -- not folder:redhat/Inbox and not folder:perso/Inbox and tag:Inbox
+  ${pkgs.libnotify}/bin/notify-send "Mails synced 📬"
+  '';
+  executable = true;
+};
+</pre>
+</div>
+
+<p>
+Finally, let&rsquo;s define custom commands to simplify my mail usage. Those should be nix
+package in the near future — as of now, it is a bit ugly as I&rsquo;m creating binaries inside
+<code>$HOME/bin</code> instead of relying of Nix.
+</p>
+
+<ul class="org-ul">
+<li><code>msync</code> is an helper to run quickly <code>mbsync</code> systemd service from anywhere</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-nix">home.file."bin/msync" = {
+  text = ''
+  #!${pkgs.stdenv.shell}
+  ${pkgs.libnotify}/bin/notify-send "Syncing mails 📫️"
+  systemctl --user start mbsync
+  '';
+  executable = true;
+};
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h:8e918ee0-4ef7-4f98-b170-dcfea20c6443" class="outline-3">
+<h3 id="h:8e918ee0-4ef7-4f98-b170-dcfea20c6443">Programs</h3>
+<div class="outline-text-3" id="text-h:8e918ee0-4ef7-4f98-b170-dcfea20c6443">
+<p>
+Additionally we can enable some programs and customize their behavior. Let&rsquo;s enable
+<code>programs.mbsync</code>, which has for effect to put <code>mbsync</code> binary in <code>PATH</code> so that the user
+(us) can call it. Same goes for <code>programs.msmtp</code> and <code>programs.notmuch</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">programs.mbsync.enable = true;
+programs.notmuch.enable = true;
+</pre>
+</div>
+</div>
+<div id="outline-container-h:74f4160b-d34a-490e-b56a-ad3d0e5f966c" class="outline-4">
+<h4 id="h:74f4160b-d34a-490e-b56a-ad3d0e5f966c">Afew</h4>
+<div class="outline-text-4" id="text-h:74f4160b-d34a-490e-b56a-ad3d0e5f966c">
+<p>
+<a href="https://github.com/afewmail/afew"><code>afew</code></a> is &ldquo;an initial tagging script for notmuch mail&rdquo;. We&rsquo;re going to define some extra
+configuration to enable some filters and <code>MailMover</code> rules.
+</p>
+
+<p>
+Note: This should go away at some point as these rules are not dynamic enough for my usage.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">programs.afew = {
+  enable = true;
+  extraConfig = ''
+    [SpamFilter]
+    [KillThreadsFilter]
+    [ListMailsFilter]
+    [ArchiveSentMailsFilter]
+    [FolderNameFilter]
+    maildir_separator = /
+
+    [MailMover]
+    folders = perso/Inbox redhat/Inbox
+    rename = true
+
+    perso/Inbox = 'NOT tag:Inbox':"perso/[Gmail]/All Mail"
+    redhat/Inbox = 'NOT tag:Inbox':"redhat/[Gmail]/All Mail"
+  '';
+};
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h:2d4558d2-0596-4c80-bab0-f259385375b1" class="outline-4">
+<h4 id="h:2d4558d2-0596-4c80-bab0-f259385375b1">Astroid</h4>
+<div class="outline-text-4" id="text-h:2d4558d2-0596-4c80-bab0-f259385375b1">
+<p>
+<a href="https://github.com/astroidmail/astroid/"><code>astroid</code></a> is a &ldquo;graphical threads-with-tags style, lightweight and fast, e-mail client for
+Notmuch&rdquo;. My main e-mail client is <code>emacs</code> with the <code>notmuch</code> mode, but sometimes I want a
+GUI, mainly to see wanky HTML mails that would not render correctly some times.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">programs.astroid = {
+  enable = true;
+  externalEditor = "emacsclient -c";
+  extraConfig = {
+    startup.queries.inbox = "tag:Inbox";
+    startup.queries.inbox_perso = "folder:perso/Inbox";
+    startup.queries.inbox_redhat = "folder:redhat/Inbox";
+  };
+};
+</pre>
+</div>
+
+<p>
+And that&rsquo;s all for the sync part, so let&rsquo;s close it
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">})
+</pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-h:7672fedf-2afa-4eb1-a9f2-38a6aada5f5f" class="outline-2">
+<h2 id="h:7672fedf-2afa-4eb1-a9f2-38a6aada5f5f">Close the module</h2>
+<div class="outline-text-2" id="text-h:7672fedf-2afa-4eb1-a9f2-38a6aada5f5f">
+<div class="org-src-container">
+<pre class="src src-nix">]);
+}
+</pre>
+</div>
+</div>
+</section>
+<section id="outline-container-h:7012be97-2b81-44e9-b9bb-8c4147e3d561" class="outline-2">
+<h2 id="h:7012be97-2b81-44e9-b9bb-8c4147e3d561">References</h2>
+<div class="outline-text-2" id="text-h:7012be97-2b81-44e9-b9bb-8c4147e3d561">
+<ul class="org-ul">
+<li><a href="https://copyninja.info/blog/email_setup.html">My personal Email setup - Notmuch, mbsync, postfix and dovecot</a></li>
+<li><a href="https://anarc.at/blog/2016-05-12-email-setup/">Notmuch, offlineimap and Sieve setup - anarcat</a></li>
+<li><a href="https://github.com/kzar/davemail">https://github.com/kzar/davemail</a></li>
+<li><a href="https://martinralbrecht.wordpress.com/2016/05/30/handling-email-with-emacs/">Handling Email with Emacs – malb::blog</a></li>
+<li><a href="https://kirang.in/post/emacs-as-email-client-with-offlineimap-and-mu4e-on-osx/">Emacs as email client with offlineimap and mu4e on OS X</a></li>
+<li><a href="http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/">A Complete Guide to Email in Emacs using Mu and Mu4e</a></li>
+<li><a href="https://notmuchmail.org/emacstips/#index24h2">emacstips</a></li>
+<li><a href="https://kkatsuyuki.github.io/notmuch-conf/">notmuch + emacs + offlineimap configuration procedure</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Isync">isync - ArchWiki</a></li>
+<li><a href="https://superuser.com/questions/437027/emacs-and-multiple-smtp-servers">email - Emacs and Multiple SMTP servers - Super User</a></li>
+<li><a href="https://notanumber.io/2016-10-03/better-email-with-mu4e/">Better Email with mu4e | NaN</a></li>
+<li><a href="https://wwwtech.de/articles/2016/jul/my-personal-mail-setup">My personal mail setup</a></li>
+<li><a href="https://foobacca.co.uk/blog/2013/04/initial-tagging-and-afew/">initial tagging and afew - Foobacca</a></li>
+<li><a href="https://martinralbrecht.wordpress.com/2016/05/30/handling-email-with-emacs/">Handling Email with Emacs – malb::blog</a></li>
+<li><a href="http://deferred.io/2016/01/18/how-i-email.html">How I email, 2016 edition</a></li>
+<li><a href="https://bostonenginerd.com/posts/notmuch-of-a-mail-setup-part-2-notmuch-and-emacs/">Notmuch of mail a setup Part 2 - notmuch and Emacs | Assorted Nerdery</a></li>
+<li><a href="http://www.johnborwick.com/2019/02/09/notmuch-gmailieer.html">Checking email with gmailieer + notmuch + Emacs | John’s Blog</a></li>
+<li><a href="https://blog.einval.eu/2019/06/one-year-with-notmuch.html">One year with Notmuch</a></li>
+</ul>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Emacs System</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">My Emacs System</h1>
+<p class="subtitle" role="doc-subtitle">A attempt to document my emacs setup 🙃</p>
+</header><p>
+Emacs is the best editor possible, at least for me, especially with the killer <a href="org_mode.html">org-mode</a>
+module.
+</p>
+
+<p>
+I do all in a lot in Emacs:
+</p>
+<ul class="org-ul">
+<li>task and calendar management using <a href="org_mode.html">org-mode</a>.</li>
+<li>mail using <a href="gnus.html">gnus</a>.</li>
+<li>programming in different languages (<a href="elisp.html">elisp</a>, <a href="go.html">go</a>, <a href="bash.html">bash</a>, …)</li>
+<li>interactive shell using either <a href="eshell.html">eshell</a> or <a href="vterm.html">vterm</a>.</li>
+</ul>
+
+<p>
+<a href="emacs.old.html">Here is my old attempt</a> to document my Emacs setup, inspired by <a href="https://writequit.org/eos/eos.html">The Emacs Operating System
+(EOS)</a> or <a href="http://doc.rix.si/cce/cce.html">Complete Computing Environment</a> and other litterate configurations.In a gist, this
+is the litterate version of the <a href="config_configurations.html">configurations</a> available in my <a href="https://git.sr.ht/~vdemeester/home">monorepo</a>. In the end, I
+don&rsquo;t have time to properly maintain this, and I prefer to do code and document it well.
+</p>
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+<p>
+Here is a compilation of <i>random</i> articles around GNU/Emacs that I found interesting to
+share. I may add comment on those too.
+</p>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Faliquote.org%2Fpost%2Fminimalist-emacs%2F%5D%5BMinimalist%20Emacs%20-%20aliquot%EF%A3%BF%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Faliquote.org%2Fpost%2Fminimalist-emacs%2F%5D%5BMinimalist%20Emacs%20-%20aliquot%EF%A3%BF%5D%5D"><a href="https://aliquote.org/post/minimalist-emacs/">Minimalist Emacs - aliquot</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Faliquote.org%2Fpost%2Fminimalist-emacs%2F%5D%5BMinimalist%20Emacs%20-%20aliquot%EF%A3%BF%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-17 Thu 17:55]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fkensanata%2Fggg%23gmail-gnus-gpg-guide-gggg%5D%5Bkensanata%2Fggg%3A%20Gmail%2C%20Gnus%20and%20GPG%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2Fkensanata%2Fggg%23gmail-gnus-gpg-guide-gggg%5D%5Bkensanata%2Fggg%3A%20Gmail%2C%20Gnus%20and%20GPG%5D%5D"><a href="https://github.com/kensanata/ggg#gmail-gnus-gpg-guide-gggg">kensanata/ggg: Gmail, Gnus and GPG</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fkensanata%2Fggg%23gmail-gnus-gpg-guide-gggg%5D%5Bkensanata%2Fggg%3A%20Gmail%2C%20Gnus%20and%20GPG%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-07-08 Wed 07:37]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.greghendershott.com%2F2017%2F02%2Femacs-themes.html%5D%5BEmacs%20Themes%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.greghendershott.com%2F2017%2F02%2Femacs-themes.html%5D%5BEmacs%20Themes%5D%5D"><a href="https://www.greghendershott.com/2017/02/emacs-themes.html">Emacs Themes</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.greghendershott.com%2F2017%2F02%2Femacs-themes.html%5D%5BEmacs%20Themes%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-02 Tue 18:07]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fdegruchy.org%2F2020%2F05%2F26%2Fbinding-emacs%2F%5D%5BBinding%20Emacs%20%E2%80%93%20Verily%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fdegruchy.org%2F2020%2F05%2F26%2Fbinding-emacs%2F%5D%5BBinding%20Emacs%20%E2%80%93%20Verily%5D%5D"><a href="https://degruchy.org/2020/05/26/binding-emacs/">Binding Emacs – Verily</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fdegruchy.org%2F2020%2F05%2F26%2Fbinding-emacs%2F%5D%5BBinding%20Emacs%20%E2%80%93%20Verily%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-02 Tue 18:04]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmihaiolteanu.me%2Feshell-toggle%2F%5D%5BHow%20to%20create%20and%20jump%20to%20eshell%20buffers%20with%20a%20single%20command%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmihaiolteanu.me%2Feshell-toggle%2F%5D%5BHow%20to%20create%20and%20jump%20to%20eshell%20buffers%20with%20a%20single%20command%5D%5D"><a href="https://mihaiolteanu.me/eshell-toggle/">How to create and jump to eshell buffers with a single command</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmihaiolteanu.me%2Feshell-toggle%2F%5D%5BHow%20to%20create%20and%20jump%20to%20eshell%20buffers%20with%20a%20single%20command%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-29 Fri 15:05]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Ffk7p49%2Fpiping_stdout_to_emacs%2F%5D%5BPiping%20stdout%20to%20Emacs%20%3A%20emacs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Ffk7p49%2Fpiping_stdout_to_emacs%2F%5D%5BPiping%20stdout%20to%20Emacs%20%3A%20emacs%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.reddit.com/r/emacs/comments/fk7p49/piping_stdout_to_emacs/">Piping stdout to Emacs : emacs</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Ffk7p49%2Fpiping_stdout_to_emacs%2F%5D%5BPiping%20stdout%20to%20Emacs%20%3A%20emacs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-24 Tue 07:54]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fexplog.in%2Fnotes%2Fpoet.html%5D%5BMaking%20Poet%2C%20an%20Emacs%20theme%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fexplog.in%2Fnotes%2Fpoet.html%5D%5BMaking%20Poet%2C%20an%20Emacs%20theme%5D%5D"><span class="todo TODO">TODO</span> <a href="https://explog.in/notes/poet.html">Making Poet, an Emacs theme</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fexplog.in%2Fnotes%2Fpoet.html%5D%5BMaking%20Poet%2C%20an%20Emacs%20theme%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-25 Wed 16:58]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwillschenk.com%2Farticles%2F2020%2Ftramp_tricks%2F%5D%5BEmacs%20Tramp%20tricks%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwillschenk.com%2Farticles%2F2020%2Ftramp_tricks%2F%5D%5BEmacs%20Tramp%20tricks%5D%5D"><span class="todo TODO">TODO</span> <a href="https://willschenk.com/articles/2020/tramp_tricks/">Emacs Tramp tricks</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwillschenk.com%2Farticles%2F2020%2Ftramp_tricks%2F%5D%5BEmacs%20Tramp%20tricks%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-08 Sun 16:44]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fazzamsa.com%2Fn%2Fscripts-el%2F%5D%5BUseful%20Emacs%20Lisp%20Scripts%C2%A0%F0%9F%8C%B1%20%C2%B7%20AZZAMSA%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fazzamsa.com%2Fn%2Fscripts-el%2F%5D%5BUseful%20Emacs%20Lisp%20Scripts%C2%A0%F0%9F%8C%B1%20%C2%B7%20AZZAMSA%5D%5D"><span class="todo TODO">TODO</span> <a href="https://azzamsa.com/n/scripts-el/">Useful Emacs Lisp Scripts 🌱 · AZZAMSA</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fazzamsa.com%2Fn%2Fscripts-el%2F%5D%5BUseful%20Emacs%20Lisp%20Scripts%C2%A0%F0%9F%8C%B1%20%C2%B7%20AZZAMSA%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-18 Thu 18:41]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2020%2F06%2F10%2Fcomment-commands-redux%2F%5D%5BComment%20Commands%20Redux%20%7C%20Emacs%20Redux%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2020%2F06%2F10%2Fcomment-commands-redux%2F%5D%5BComment%20Commands%20Redux%20%7C%20Emacs%20Redux%5D%5D"><span class="todo TODO">TODO</span> <a href="https://emacsredux.com/blog/2020/06/10/comment-commands-redux/">Comment Commands Redux | Emacs Redux</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2020%2F06%2F10%2Fcomment-commands-redux%2F%5D%5BComment%20Commands%20Redux%20%7C%20Emacs%20Redux%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-23 Tue 17:45]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2FMatthewZMD%2F.emacs.d%5D%5BMatthewZMD%2F.emacs.d%3A%20M-EMACS%2C%20a%20full-feature%20GNU%20Emacs%20configuration%20distribution%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2FMatthewZMD%2F.emacs.d%5D%5BMatthewZMD%2F.emacs.d%3A%20M-EMACS%2C%20a%20full-feature%20GNU%20Emacs%20configuration%20distribution%5D%5D"><span class="todo TODO">TODO</span> <a href="https://github.com/MatthewZMD/.emacs.d">MatthewZMD/.emacs.d: M-EMACS, a full-feature GNU Emacs configuration distribution</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2FMatthewZMD%2F.emacs.d%5D%5BMatthewZMD%2F.emacs.d%3A%20M-EMACS%2C%20a%20full-feature%20GNU%20Emacs%20configuration%20distribution%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-29 Mon 11:35]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwritequit.org%2Feos%2Feos.html%5D%5BThe%20Emacs%20Operating%20System%20%28EOS%29%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwritequit.org%2Feos%2Feos.html%5D%5BThe%20Emacs%20Operating%20System%20%28EOS%29%5D%5D"><span class="todo TODO">TODO</span> <a href="https://writequit.org/eos/eos.html">The Emacs Operating System (EOS)</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwritequit.org%2Feos%2Feos.html%5D%5BThe%20Emacs%20Operating%20System%20%28EOS%29%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-07-02 Thu 18:20]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjustin.abrah.ms%2Fdotfiles%2Femacs.html%5D%5BMy%20Emacs%20Configuration%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjustin.abrah.ms%2Fdotfiles%2Femacs.html%5D%5BMy%20Emacs%20Configuration%5D%5D"><span class="todo TODO">TODO</span> <a href="https://justin.abrah.ms/dotfiles/emacs.html">My Emacs Configuration</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjustin.abrah.ms%2Fdotfiles%2Femacs.html%5D%5BMy%20Emacs%20Configuration%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-07-15 Wed 12:29]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjakemccrary.com%2Fblog%2F2020%2F11%2F14%2Fspeeding-up-magit%2F%5D%5BSpeeding%20up%20magit%20-%20Jake%20McCrary%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjakemccrary.com%2Fblog%2F2020%2F11%2F14%2Fspeeding-up-magit%2F%5D%5BSpeeding%20up%20magit%20-%20Jake%20McCrary%5D%5D"><span class="todo TODO">TODO</span> <a href="https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/">Speeding up magit - Jake McCrary</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjakemccrary.com%2Fblog%2F2020%2F11%2F14%2Fspeeding-up-magit%2F%5D%5BSpeeding%20up%20magit%20-%20Jake%20McCrary%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-11-17 Tue 18:09]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Ftech.toryanderson.com%2F2020%2F11%2F13%2Fmigrating-to-a-custom-file-less-setup%2F%5D%5BMigrating%20to%20a%20custom-file-less%20setup%20%7C%20Tech.ToryAnderson.com%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Ftech.toryanderson.com%2F2020%2F11%2F13%2Fmigrating-to-a-custom-file-less-setup%2F%5D%5BMigrating%20to%20a%20custom-file-less%20setup%20%7C%20Tech.ToryAnderson.com%5D%5D"><span class="todo TODO">TODO</span> <a href="https://tech.toryanderson.com/2020/11/13/migrating-to-a-custom-file-less-setup/">Migrating to a custom-file-less setup | Tech.ToryAnderson.com</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Ftech.toryanderson.com%2F2020%2F11%2F13%2Fmigrating-to-a-custom-file-less-setup%2F%5D%5BMigrating%20to%20a%20custom-file-less%20setup%20%7C%20Tech.ToryAnderson.com%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-11-19 Thu 11:00]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.philnewton.net%2Fblog%2Fleanpub-with-emacs%2F%5D%5BWriting%20a%20Leanpub%20book%20with%20Emacs%20-%20philnewton.net%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.philnewton.net%2Fblog%2Fleanpub-with-emacs%2F%5D%5BWriting%20a%20Leanpub%20book%20with%20Emacs%20-%20philnewton.net%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.philnewton.net/blog/leanpub-with-emacs/">Writing a Leanpub book with Emacs - philnewton.net</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.philnewton.net%2Fblog%2Fleanpub-with-emacs%2F%5D%5BWriting%20a%20Leanpub%20book%20with%20Emacs%20-%20philnewton.net%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-11-19 Thu 11:11]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fen.liujiacai.net%2F2020%2F11%2F29%2Fwhy-emacs%2F%5D%5BWhat%20you%20need%20to%20know%20before%20try%20Emacs%20-%20KeepCoding%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fen.liujiacai.net%2F2020%2F11%2F29%2Fwhy-emacs%2F%5D%5BWhat%20you%20need%20to%20know%20before%20try%20Emacs%20-%20KeepCoding%5D%5D"><span class="todo TODO">TODO</span> <a href="https://en.liujiacai.net/2020/11/29/why-emacs/">What you need to know before try Emacs - KeepCoding</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fen.liujiacai.net%2F2020%2F11%2F29%2Fwhy-emacs%2F%5D%5BWhat%20you%20need%20to%20know%20before%20try%20Emacs%20-%20KeepCoding%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-01 Tue 08:02]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2Frougier%2Fnano-emacs%5D%5Brougier%2Fnano-emacs%3A%20GNU%20Emacs%20%2F%20N%20%CE%9B%20N%20O%20-%20Emacs%20made%20simple%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2Frougier%2Fnano-emacs%5D%5Brougier%2Fnano-emacs%3A%20GNU%20Emacs%20%2F%20N%20%CE%9B%20N%20O%20-%20Emacs%20made%20simple%5D%5D"><span class="todo TODO">TODO</span> <a href="https://github.com/rougier/nano-emacs">rougier/nano-emacs: GNU Emacs / N Λ N O - Emacs made simple</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2Frougier%2Fnano-emacs%5D%5Brougier%2Fnano-emacs%3A%20GNU%20Emacs%20%2F%20N%20%CE%9B%20N%20O%20-%20Emacs%20made%20simple%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-01 Tue 08:12]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2018%2F11%2F09%2Fan-easy-kill%2F%5D%5BAn%20easy-kill%20%7C%20Emacs%20Redux%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2018%2F11%2F09%2Fan-easy-kill%2F%5D%5BAn%20easy-kill%20%7C%20Emacs%20Redux%5D%5D"><span class="todo TODO">TODO</span> <a href="https://emacsredux.com/blog/2018/11/09/an-easy-kill/">An easy-kill | Emacs Redux</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2018%2F11%2F09%2Fan-easy-kill%2F%5D%5BAn%20easy-kill%20%7C%20Emacs%20Redux%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-10 Thu 11:19]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjherrlin.github.io%2Fposts%2Femacs-orgmode-source-code-blocks2%2F%5D%5BEmacs%20Orgmode%20Source%20Code%20Blocks%202%20%7C%20jherrlin%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjherrlin.github.io%2Fposts%2Femacs-orgmode-source-code-blocks2%2F%5D%5BEmacs%20Orgmode%20Source%20Code%20Blocks%202%20%7C%20jherrlin%5D%5D"><span class="todo TODO">TODO</span> <a href="https://jherrlin.github.io/posts/emacs-orgmode-source-code-blocks2/">Emacs Orgmode Source Code Blocks 2 | jherrlin</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjherrlin.github.io%2Fposts%2Femacs-orgmode-source-code-blocks2%2F%5D%5BEmacs%20Orgmode%20Source%20Code%20Blocks%202%20%7C%20jherrlin%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-17 Thu 16:04]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.sumtypeofway.com%2Fposts%2Femacs-config.html%5D%5Badventures%20in%20uncertainty%3A%20My%20Emacs%20Configuration%20%28Or%2C%20Emacs%20is%20Agar%20for%20Brain%20Worms%29%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.sumtypeofway.com%2Fposts%2Femacs-config.html%5D%5Badventures%20in%20uncertainty%3A%20My%20Emacs%20Configuration%20%28Or%2C%20Emacs%20is%20Agar%20for%20Brain%20Worms%29%5D%5D"><span class="todo TODO">TODO</span> <a href="https://blog.sumtypeofway.com/posts/emacs-config.html">adventures in uncertainty: My Emacs Configuration (Or, Emacs is Agar for Brain Worms)</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.sumtypeofway.com%2Fposts%2Femacs-config.html%5D%5Badventures%20in%20uncertainty%3A%20My%20Emacs%20Configuration%20%28Or%2C%20Emacs%20is%20Agar%20for%20Brain%20Worms%29%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-23 Wed 12:23]</span></span>
+</p>
+
+<p>
+Fixing Emacs’s defaults is a nontrivial problem. We’ll start with UI concerns.
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.aaronbieber.com%2F2016%2F09%2F24%2Fan-agenda-for-life-with-org-mode.html%5D%5BAn%20Agenda%20for%20Life%20With%20Org%20Mode%20-%20The%20Chronicle%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.aaronbieber.com%2F2016%2F09%2F24%2Fan-agenda-for-life-with-org-mode.html%5D%5BAn%20Agenda%20for%20Life%20With%20Org%20Mode%20-%20The%20Chronicle%5D%5D"><span class="todo TODO">TODO</span> <a href="https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html">An Agenda for Life With Org Mode - The Chronicle</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.aaronbieber.com%2F2016%2F09%2F24%2Fan-agenda-for-life-with-org-mode.html%5D%5BAn%20Agenda%20for%20Life%20With%20Org%20Mode%20-%20The%20Chronicle%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-24 Thu 18:52]</span></span>
+</p>
+
+<p>
+(org-agenda-skip-if nil &rsquo;(scheduled deadline))
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.rousette.org.uk%2Farchives%2Fadvising-emacs%2F%5D%5BBSAG%20%C2%BB%20Advising%20Emacs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.rousette.org.uk%2Farchives%2Fadvising-emacs%2F%5D%5BBSAG%20%C2%BB%20Advising%20Emacs%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.rousette.org.uk/archives/advising-emacs/">BSAG » Advising Emacs</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.rousette.org.uk%2Farchives%2Fadvising-emacs%2F%5D%5BBSAG%20%C2%BB%20Advising%20Emacs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-15 Tue 16:59]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.tastytea.de%2Fposts%2Fediting-remote-files-with-emacs-comfortably%2F%5D%5BEditing%20remote%20files%20with%20Emacs%2C%20comfortably%20%7C%20tastyteablog%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.tastytea.de%2Fposts%2Fediting-remote-files-with-emacs-comfortably%2F%5D%5BEditing%20remote%20files%20with%20Emacs%2C%20comfortably%20%7C%20tastyteablog%5D%5D"><span class="todo TODO">TODO</span> <a href="https://blog.tastytea.de/posts/editing-remote-files-with-emacs-comfortably/">Editing remote files with Emacs, comfortably | tastyteablog</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.tastytea.de%2Fposts%2Fediting-remote-files-with-emacs-comfortably%2F%5D%5BEditing%20remote%20files%20with%20Emacs%2C%20comfortably%20%7C%20tastyteablog%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-08-21 Fri 15:56]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.labri.fr%2Fperso%2Fnrougier%2FGTD%2Findex.html%5D%5BGet%20Things%20Done%20with%20Emacs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.labri.fr%2Fperso%2Fnrougier%2FGTD%2Findex.html%5D%5BGet%20Things%20Done%20with%20Emacs%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.labri.fr/perso/nrougier/GTD/index.html">Get Things Done with Emacs</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.labri.fr%2Fperso%2Fnrougier%2FGTD%2Findex.html%5D%5BGet%20Things%20Done%20with%20Emacs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-19 Sat 00:35]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fane.iki.fi%2Femacs%2Fpatches.html%5D%5BWorking%20with%20Git%20and%20patches%20in%20Emacs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fane.iki.fi%2Femacs%2Fpatches.html%5D%5BWorking%20with%20Git%20and%20patches%20in%20Emacs%5D%5D"><a href="https://ane.iki.fi/emacs/patches.html">Working with Git and patches in Emacs</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fane.iki.fi%2Femacs%2Fpatches.html%5D%5BWorking%20with%20Git%20and%20patches%20in%20Emacs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-10 Mon 19:33]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Famitp.blogspot.com%2F2024%2F05%2Femacs-consult-buffer-filenames.html%5D%5BAmit%27s%20Thoughts%3A%20Emacs%20consult-buffer%20filenames%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Famitp.blogspot.com%2F2024%2F05%2Femacs-consult-buffer-filenames.html%5D%5BAmit%27s%20Thoughts%3A%20Emacs%20consult-buffer%20filenames%5D%5D"><a href="https://amitp.blogspot.com/2024/05/emacs-consult-buffer-filenames.html">Amit&rsquo;s Thoughts: Emacs consult-buffer filenames</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Famitp.blogspot.com%2F2024%2F05%2Femacs-consult-buffer-filenames.html%5D%5BAmit%27s%20Thoughts%3A%20Emacs%20consult-buffer%20filenames%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-10 Mon 19:54]</span></span>
+</p>
+
+<p>
+Maybe one day ?
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjherrlin.github.io%2Fposts%2Femacs-mu4e%2F%5D%5BMail%20in%20Emacs%20with%20mu4e%20and%20mbsync%20%7C%20jherrlin%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjherrlin.github.io%2Fposts%2Femacs-mu4e%2F%5D%5BMail%20in%20Emacs%20with%20mu4e%20and%20mbsync%20%7C%20jherrlin%5D%5D"><a href="https://jherrlin.github.io/posts/emacs-mu4e/">Mail in Emacs with mu4e and mbsync | jherrlin</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjherrlin.github.io%2Fposts%2Femacs-mu4e%2F%5D%5BMail%20in%20Emacs%20with%20mu4e%20and%20mbsync%20%7C%20jherrlin%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-11 Tue 15:48]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Frakhim.org%2Ffastmail-setup-with-emacs-mu4e-and-mbsync-on-macos%2F%5D%5BFastmail%20setup%20with%20Emacs%2C%20mu4e%20and%20mbsync%20on%20macOS%20-%20Rakhim.org%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Frakhim.org%2Ffastmail-setup-with-emacs-mu4e-and-mbsync-on-macos%2F%5D%5BFastmail%20setup%20with%20Emacs%2C%20mu4e%20and%20mbsync%20on%20macOS%20-%20Rakhim.org%5D%5D"><a href="https://rakhim.org/fastmail-setup-with-emacs-mu4e-and-mbsync-on-macos/">Fastmail setup with Emacs, mu4e and mbsync on macOS - Rakhim.org</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Frakhim.org%2Ffastmail-setup-with-emacs-mu4e-and-mbsync-on-macos%2F%5D%5BFastmail%20setup%20with%20Emacs%2C%20mu4e%20and%20mbsync%20on%20macOS%20-%20Rakhim.org%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-11 Tue 15:48]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Fqo3eza%2Fnotmuch_as_an_alternative_to_mu4e%2F%5D%5BNotmuch%20as%20an%20alternative%20to%20mu4e%20%3A%20r%2Femacs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Fqo3eza%2Fnotmuch_as_an_alternative_to_mu4e%2F%5D%5BNotmuch%20as%20an%20alternative%20to%20mu4e%20%3A%20r%2Femacs%5D%5D"><a href="https://www.reddit.com/r/emacs/comments/qo3eza/notmuch_as_an_alternative_to_mu4e/">Notmuch as an alternative to mu4e : r/emacs</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Fqo3eza%2Fnotmuch_as_an_alternative_to_mu4e%2F%5D%5BNotmuch%20as%20an%20alternative%20to%20mu4e%20%3A%20r%2Femacs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-11 Tue 15:56]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fsqrtminusone.xyz%2Fconfigs%2Fmail%2F%5D%5BMail%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fsqrtminusone.xyz%2Fconfigs%2Fmail%2F%5D%5BMail%5D%5D"><a href="https://sqrtminusone.xyz/configs/mail/">Mail</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fsqrtminusone.xyz%2Fconfigs%2Fmail%2F%5D%5BMail%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-11 Tue 15:57]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmacowners.club%2Fposts%2Femail-emacs-mu4e-macos%2F%5D%5BEmail%20setup%20in%20Emacs%20with%20Mu4e%20on%20macOS%20%7C%20macOS%20%26%20%28open-source%29%20Software%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmacowners.club%2Fposts%2Femail-emacs-mu4e-macos%2F%5D%5BEmail%20setup%20in%20Emacs%20with%20Mu4e%20on%20macOS%20%7C%20macOS%20%26%20%28open-source%29%20Software%5D%5D"><a href="https://macowners.club/posts/email-emacs-mu4e-macos/">Email setup in Emacs with Mu4e on macOS | macOS &amp; (open-source) Software</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmacowners.club%2Fposts%2Femail-emacs-mu4e-macos%2F%5D%5BEmail%20setup%20in%20Emacs%20with%20Mu4e%20on%20macOS%20%7C%20macOS%20%26%20%28open-source%29%20Software%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-11 Tue 16:01]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmacowners.club%2Fposts%2Fpersonal-touch-org-agenda%2F%5D%5BA%20Personal%20Touch%20in%20my%20Org%20Agenda%20%7C%20macOS%20%26%20%28open-source%29%20Software%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmacowners.club%2Fposts%2Fpersonal-touch-org-agenda%2F%5D%5BA%20Personal%20Touch%20in%20my%20Org%20Agenda%20%7C%20macOS%20%26%20%28open-source%29%20Software%5D%5D"><a href="https://macowners.club/posts/personal-touch-org-agenda/">A Personal Touch in my Org Agenda | macOS &amp; (open-source) Software</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmacowners.club%2Fposts%2Fpersonal-touch-org-agenda%2F%5D%5BA%20Personal%20Touch%20in%20my%20Org%20Agenda%20%7C%20macOS%20%26%20%28open-source%29%20Software%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-11 Tue 16:04]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fsystemcrafters.net%2Femacs-mail%2Fmanaging-multiple-accounts%2F%5D%5BManaging%20Multiple%20Email%20Accounts%20with%20mu4e%20and%20mbsync%20-%20System%20Crafters%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fsystemcrafters.net%2Femacs-mail%2Fmanaging-multiple-accounts%2F%5D%5BManaging%20Multiple%20Email%20Accounts%20with%20mu4e%20and%20mbsync%20-%20System%20Crafters%5D%5D"><a href="https://systemcrafters.net/emacs-mail/managing-multiple-accounts/">Managing Multiple Email Accounts with mu4e and mbsync - System Crafters</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fsystemcrafters.net%2Femacs-mail%2Fmanaging-multiple-accounts%2F%5D%5BManaging%20Multiple%20Email%20Accounts%20with%20mu4e%20and%20mbsync%20-%20System%20Crafters%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-11 Tue 16:06]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fcjohansson%2Femacs-ssh-deploy%5D%5Bcjohansson%2Femacs-ssh-deploy%3A%20A%20deployment%20plugin%20via%20Tramp%20for%20Emacs.%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2Fcjohansson%2Femacs-ssh-deploy%5D%5Bcjohansson%2Femacs-ssh-deploy%3A%20A%20deployment%20plugin%20via%20Tramp%20for%20Emacs.%5D%5D"><a href="https://github.com/cjohansson/emacs-ssh-deploy">cjohansson/emacs-ssh-deploy: A deployment plugin via Tramp for Emacs.</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fcjohansson%2Femacs-ssh-deploy%5D%5Bcjohansson%2Femacs-ssh-deploy%3A%20A%20deployment%20plugin%20via%20Tramp%20for%20Emacs.%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-06-17 Mon 17:44]</span></span>
+</p>
+
+<p>
+Something to try out ?
+</p>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

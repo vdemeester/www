@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tekton</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Tekton</h1>
+</header><section id="outline-container-What%20is%20Tektoncd%20%3F" class="outline-2">
+<h2 id="What%20is%20Tektoncd%20%3F">What is Tektoncd ?</h2>
+<div class="outline-text-2" id="text-What%20is%20Tektoncd%20%3F">
+<div class='drawer logbook'>
+<h6>Logbook</h6>
+nil</div>
+
+
+<figure id="org0aac350">
+<img src="./images/tekton/tekton-horizontal-color.png" alt="tekton-horizontal-color.png" width="400/600px">
+
+</figure>
+
+<blockquote>
+<p>
+The Tekton Pipelines project provides <a href="kubernetes.html">Kubernetes</a>-style resources for declaring <a href="continuous_integration.html">CI</a>/<a href="continuous_deployment.html">CD</a>-style pipelines.
+</p>
+</blockquote>
+
+<ul class="org-ul">
+<li>Started as an experiment from <a href="knative.html">knative</a> to define more advance build use cases that
+<a href="https://github.com/knative/build/"><code>knative/build</code></a> was able to.</li>
+<li>Is now it&rsquo;s own <a href="https://tekton.dev">project</a> and <a href="https://github.com/tetkon">GitHub organization</a>.</li>
+</ul>
+
+<p>
+It can be deployed in <a href="openshift.html">OpenShift</a> either using the upstream releases or with <a href="openshift_pipeline.html">OpenShift
+Pipeline</a>.
+</p>
+
+<p>
+As it is running in <a href="kubernetes.html">Kubernetes</a>, everything runs into <a href="containers.html">containers</a>.
+</p>
+</div>
+</section>
+<section id="outline-container-Guides" class="outline-2">
+<h2 id="Guides"><span class="todo TODO">TODO</span> Guides</h2>
+<div class="outline-text-2" id="text-Guides">
+</div>
+<div id="outline-container-%5B%5Bfile%3Atekton-migrating-from-jenkins.org%5D%5BMigrating%20from%20Jenkins%20to%20Tekton%5D%5D" class="outline-3">
+<h3 id="%5B%5Bfile%3Atekton-migrating-from-jenkins.org%5D%5BMigrating%20from%20Jenkins%20to%20Tekton%5D%5D"><span class="todo TODO">TODO</span> <a href="tekton-migrating-from-jenkins.html">Migrating from Jenkins to Tekton</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bfile%3Atekton-migrating-from-jenkins.org%5D%5BMigrating%20from%20Jenkins%20to%20Tekton%5D%5D">
+<p>
+The gist of this guide is to help you migrate from Jenkins (using <code>Jenkinsfile</code>, or not) to
+Tekton pipelines.
+</p>
+</div>
+</div>
+<div id="outline-container-Efficient%20Tekton%20Pipelines" class="outline-3">
+<h3 id="Efficient%20Tekton%20Pipelines"><span class="todo TODO">TODO</span> Efficient Tekton Pipelines</h3>
+</div>
+</section>
+<section id="outline-container-Contributing" class="outline-2">
+<h2 id="Contributing">Contributing</h2>
+<div class="outline-text-2" id="text-Contributing">
+<ul class="org-ul">
+<li><a href="tekton_dev.html">Tekton development environment</a> is a good <i>getting started</i> article.</li>
+<li><a href="https://github.com/tektoncd/community/blob/master/teps/README.md">Tekton Enhancement proposals (TEPs)</a> are a good way to see what and how are the features
+discuss in the tekton community.</li>
+</ul>
+</div>
+<div id="outline-container-Design%20Docs" class="outline-3">
+<h3 id="Design%20Docs">Design Docs</h3>
+<div class="outline-text-3" id="text-Design%20Docs">
+<p>
+Let&rsquo;s list some interesting design docs I worked on (or reviewed).
+</p>
+
+<ul class="org-ul">
+<li><a href="https://docs.google.com/document/d/10nQSeIse7Ld4fLg4lhfgUmNKtewfaFNET3zlMdRnBuQ/edit#heading=h.nz0qjg4cmzp0">Tekton Custom Tasks</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-TEPs%20%3A%20Tekton%20Enhancement%20Proposals" class="outline-3">
+<h3 id="TEPs%20%3A%20Tekton%20Enhancement%20Proposals">TEPs : Tekton Enhancement Proposals</h3>
+<div class="outline-text-3" id="text-TEPs%20%3A%20Tekton%20Enhancement%20Proposals">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-17 Wed] </span></span> TEP, or Tekton Enhancement Proposal is a new process to to propose,
+communicate and coordinate on new efforts for the Tekton project. You can read the full
+details of the project in <a href="https://github.com/tektoncd/community/blob/master/teps/0001-tekton-enhancement-proposal-process.md">TEP-1</a>.
+</p>
+
+<blockquote>
+<p>
+A standardized development process for Tekton is proposed in order to
+</p>
+
+<ul class="org-ul">
+<li>provide a common structure and clear checkpoints for proposing changes to Tekton</li>
+<li>ensure that the motivation for a change is clear</li>
+<li>allow for the enumeration stability milestones and stability graduation criteria</li>
+<li>persist project information in a Version Control System (VCS) for future Tekton users
+and contributors</li>
+<li>support the creation of high value user facing information such as:
+<ul class="org-ul">
+<li>motivation for impactful user facing changes</li>
+<li>an overall project development roadmap</li>
+</ul></li>
+<li>ensure community participants are successfully able to drive changes to completion
+across one or more releases while stakeholders are adequately represented throughout the
+process</li>
+</ul>
+
+<p>
+<b>This process is supported by a unit of work called a Tekton Enhancement Proposal (TEP)</b>. A
+TEP attempts to combine aspects of the following:
+</p>
+
+<ul class="org-ul">
+<li>feature, and effort tracking document</li>
+<li>a product requirements document</li>
+<li>design document</li>
+</ul>
+
+<p>
+into one file which is created incrementally in collaboration with one or more <a href="https://github.com/tektoncd/community/blob/master/working-groups.md">Working
+Groups (WGs)</a>.
+</p>
+
+<p>
+This process does not block authors from doing early design docs using any means. It does
+not block authors from sharing those design docs with the community (during Working
+groups, on Slack, GitHub, ….
+</p>
+
+<p>
+This process acts as a requirement when a design docs is ready to be implemented or
+integrated in the tektoncd projects. In other words, a change that impact other tektoncd
+projects or users cannot be merged if there is no TEP associated with it.
+</p>
+
+<p>
+This TEP process is related to
+</p>
+
+<p>
+the generation of an architectural roadmap
+the fact that the what constitutes a feature is still undefined
+issue management
+the difference between an accepted design and a proposal
+the organization of design proposals
+</p>
+
+<p>
+This proposal attempts to place these concerns within a general framework.
+</p>
+</blockquote>
+
+<p>
+The TEPs should be publish at <a href="https://teps.tekton.dev">https://teps.tekton.dev</a> at some point.
+</p>
+</div>
+</div>
+</section>
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Flewo.abesis.fr%2Fposts%2F2019-09-30-tekton-pipelines-the-nix-way.html%5D%5BLewo%20-%20Tekton%20Pipelines%20-%20the%20Nix%20way%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Flewo.abesis.fr%2Fposts%2F2019-09-30-tekton-pipelines-the-nix-way.html%5D%5BLewo%20-%20Tekton%20Pipelines%20-%20the%20Nix%20way%5D%5D"><span class="todo TODO">TODO</span> <a href="https://lewo.abesis.fr/posts/2019-09-30-tekton-pipelines-the-nix-way.html">Lewo - Tekton Pipelines - the Nix way</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Flewo.abesis.fr%2Fposts%2F2019-09-30-tekton-pipelines-the-nix-way.html%5D%5BLewo%20-%20Tekton%20Pipelines%20-%20the%20Nix%20way%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-10-09 Wed 17:05]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmustafaakin.dev%2Fposts%2F2020-04-26-using-jsonnet-to-generate-dynamic-tekton-pipelines-in-kubernetes%2F%5D%5BUsing%20Jsonnet%20to%20Generate%20Dynamic%20Tekton%20Pipelines%20in%20Kubernetes%20%C2%B7%20Mustafa%20Ak%C4%B1n%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmustafaakin.dev%2Fposts%2F2020-04-26-using-jsonnet-to-generate-dynamic-tekton-pipelines-in-kubernetes%2F%5D%5BUsing%20Jsonnet%20to%20Generate%20Dynamic%20Tekton%20Pipelines%20in%20Kubernetes%20%C2%B7%20Mustafa%20Ak%C4%B1n%5D%5D"><span class="todo TODO">TODO</span> <a href="https://mustafaakin.dev/posts/2020-04-26-using-jsonnet-to-generate-dynamic-tekton-pipelines-in-kubernetes/">Using Jsonnet to Generate Dynamic Tekton Pipelines in Kubernetes · Mustafa Akın</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="kubernetes">kubernetes</span>&#xa0;<span class="tetkon">tetkon</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmustafaakin.dev%2Fposts%2F2020-04-26-using-jsonnet-to-generate-dynamic-tekton-pipelines-in-kubernetes%2F%5D%5BUsing%20Jsonnet%20to%20Generate%20Dynamic%20Tekton%20Pipelines%20in%20Kubernetes%20%C2%B7%20Mustafa%20Ak%C4%B1n%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-04-28 Tue 00:41]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.blokje5.dev%2Fposts%2Fcompliance-in-cicd%2F%5D%5BBuilding%20in%20compliance%20in%20your%20CI%2FCD%20pipeline%20with%20conftest%20%C2%B7%20blokje5.dev%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.blokje5.dev%2Fposts%2Fcompliance-in-cicd%2F%5D%5BBuilding%20in%20compliance%20in%20your%20CI%2FCD%20pipeline%20with%20conftest%20%C2%B7%20blokje5.dev%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.blokje5.dev/posts/compliance-in-cicd/">Building in compliance in your CI/CD pipeline with conftest · blokje5.dev</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.blokje5.dev%2Fposts%2Fcompliance-in-cicd%2F%5D%5BBuilding%20in%20compliance%20in%20your%20CI%2FCD%20pipeline%20with%20conftest%20%C2%B7%20blokje5.dev%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-23 Tue 18:07]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Ftechnologists.dev%2Fposts%2Ftekton-jx-pipelines%2F%5D%5BJenkins%20X%20Orchestration%3A%20More%20than%20Tekton%20on%20Steroids%20%3A%3A%20CloudBees%20Technologists%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Ftechnologists.dev%2Fposts%2Ftekton-jx-pipelines%2F%5D%5BJenkins%20X%20Orchestration%3A%20More%20than%20Tekton%20on%20Steroids%20%3A%3A%20CloudBees%20Technologists%5D%5D"><span class="todo TODO">TODO</span> <a href="https://technologists.dev/posts/tekton-jx-pipelines/">Jenkins X Orchestration: More than Tekton on Steroids :: CloudBees Technologists</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tekton">tekton</span>&#xa0;<span class="jenkins">jenkins</span>&#xa0;<span class="x">x</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Ftechnologists.dev%2Fposts%2Ftekton-jx-pipelines%2F%5D%5BJenkins%20X%20Orchestration%3A%20More%20than%20Tekton%20on%20Steroids%20%3A%3A%20CloudBees%20Technologists%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-12 Tue 10:36]</span></span>
+</p>
+
+<p>
+Read and gather feedback in issues from there maybe ?
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmartinheinz.dev%2Fblog%2F45%5D%5BCloud%20Native%20CI%2FCD%20with%20Tekton%20%E2%80%94%20Laying%20The%20Foundation%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmartinheinz.dev%2Fblog%2F45%5D%5BCloud%20Native%20CI%2FCD%20with%20Tekton%20%E2%80%94%20Laying%20The%20Foundation%5D%5D"><span class="todo TODO">TODO</span> <a href="https://martinheinz.dev/blog/45">Cloud Native CI/CD with Tekton — Laying The Foundation</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmartinheinz.dev%2Fblog%2F45%5D%5BCloud%20Native%20CI%2FCD%20with%20Tekton%20%E2%80%94%20Laying%20The%20Foundation%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2021-03-18 Thu 11:21]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmartinheinz.dev%2Fblog%2F47%3Futm_source%3Drss%26utm_medium%3Dreferral%26utm_campaign%3Dblog_post_47%5D%5BMartin%20Heinz%20%7C%20Cloud%20Native%20CI%2FCD%20with%20Tekton%20-%20Building%20Custom%20Tasks%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmartinheinz.dev%2Fblog%2F47%3Futm_source%3Drss%26utm_medium%3Dreferral%26utm_campaign%3Dblog_post_47%5D%5BMartin%20Heinz%20%7C%20Cloud%20Native%20CI%2FCD%20with%20Tekton%20-%20Building%20Custom%20Tasks%5D%5D"><span class="todo TODO">TODO</span> <a href="https://martinheinz.dev/blog/47?utm_source=rss&amp;utm_medium=referral&amp;utm_campaign=blog_post_47">Martin Heinz | Cloud Native CI/CD with Tekton - Building Custom Tasks</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmartinheinz.dev%2Fblog%2F47%3Futm_source%3Drss%26utm_medium%3Dreferral%26utm_campaign%3Dblog_post_47%5D%5BMartin%20Heinz%20%7C%20Cloud%20Native%20CI%2FCD%20with%20Tekton%20-%20Building%20Custom%20Tasks%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2021-04-16 Fri 07:01]</span></span>
+</p>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Organizational Workflow</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">My Organizational Workflow</h1>
+<p class="subtitle" role="doc-subtitle">How I use org-mode and other tools to streamline my life</p>
+</header><p>
+This is an up-to-date document on my <a href="org_mode.html">org-mode</a> workflow. This is inspired by &ldquo;<a href="http://cachestocaches.com/2020/3/my-organized-life/">A Guide to My
+Organizational Workflow: How to Streamline Your Life</a>&rdquo; and other articles like <a href="http://www.howardism.org/Technical/Emacs/getting-boxes-done.html">Getting
+Boxes Done</a>, <a href="http://www.howardism.org/Technical/Emacs/getting-more-boxes-done.html">Getting Boxes Done, the Code</a>, <a href="http://www.howardism.org/Technical/Emacs/getting-even-more-boxes-done.html">Refiling Trees to Files</a>. In a gist this is about
+how I take notes and how I keep track on what I work on and what I need to work on.
+</p>
+
+<p>
+This is part of <a href="emacs.html">My Emacs System</a>.
+</p>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#Goals">Goals</a></li>
+<li><a href="#My%20workflow">My workflow</a></li>
+<li><a href="#Implementation">Implementation</a>
+<ul>
+<li><a href="#Constants%20and%20registers">Constants and registers</a></li>
+<li><a href="#Main%20configuration"><span class="todo TODO">TODO</span> Main configuration</a></li>
+<li><a href="#Agenda"><span class="todo TODO">TODO</span> Agenda</a></li>
+<li><a href="#Habits"><span class="todo TODO">TODO</span> Habits</a></li>
+<li><a href="#Capture"><span class="todo TODO">TODO</span> Capture</a></li>
+<li><a href="#Clocking"><span class="todo TODO">TODO</span> Clocking</a></li>
+<li><a href="#Notes%20taking"><span class="todo TODO">TODO</span> Notes taking</a></li>
+<li><a href="#Journaling"><span class="todo TODO">TODO</span> Journaling</a></li>
+<li><a href="#Litterate%20programming"><span class="todo TODO">TODO</span> Litterate programming</a></li>
+<li><a href="#Diary"><span class="todo TODO">TODO</span> Diary</a></li>
+<li><a href="#Miscellaneous"><span class="todo TODO">TODO</span> Miscellaneous</a></li>
+</ul>
+</li>
+<li><a href="#Triage">Triage</a>
+<ul>
+<li><a href="#~org-mode~%20Workflow"><span class="todo TODO">TODO</span> <code>org-mode</code> Workflow</a></li>
+<li><a href="#%3Dorg-mode%3D%20entry%20ordering"><span class="todo TODO">TODO</span> <code>org-mode</code> entry ordering</a></li>
+<li><a href="#Legacy">Legacy</a></li>
+<li><a href="#Foobar">Foobar</a></li>
+</ul>
+</li>
+<li><a href="#Configuration%20layout">Configuration layout</a></li>
+</ul>
+</div>
+</nav>
+
+<section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+I am not sure exactly when, but overtime, my life grew in complexity, and I decide along
+the way to use <a href="org_mode.html">org-mode</a> to help me with that. Even though <a href="org_mode.html">org-mode</a> could be considered as
+an implementation detail of my workflow, it&rsquo;s really hard to separate from it. I&rsquo;ll try my
+best to describe the workflow without mentionning <a href="org_mode.html">org-mode</a> and from there, we&rsquo;ll see how
+my setup does it.
+</p>
+
+<p>
+Many of the ideas presented here derive from the <a href="https://gettingthingsdone.com/what-is-gtd/">Getting Things Done</a> methodology, but
+adapted and expanded to meet my personal needs. With that workflow, I am trying to spint
+my time more wisely and focus on what&rsquo;s important to me. This is not a silver bullet
+though, and is an always in progress work.
+</p>
+</div>
+</section>
+<section id="outline-container-Goals" class="outline-2">
+<h2 id="Goals">Goals</h2>
+<div class="outline-text-2" id="text-Goals">
+<p>
+I really liked the goal list from &ldquo;<a href="http://cachestocaches.com/2020/3/my-organized-life/">A Guide to My
+Organizational Workflow: How to Streamline Your Life</a>&rdquo;, so I kinda took <b>heavy</b> inspiration
+from it.
+</p>
+
+<p>
+In order to determine how effective an organizational system is, it is important to have
+clearly enumerated aims: what is the system being designed to enable? Your goals may be
+different, but my system is structured to prioritize the following:
+</p>
+
+<ul class="org-ul">
+<li>Ensure that I never miss a task, <i>meeting</i>, or deadline (<i>note: the meeting part is
+tricky</i>);</li>
+<li>Manage tasks that I need to work on;</li>
+<li>Manage tasks that I share with and have assigned to others (<i>when I depend on it</i>);</li>
+<li>Keep a permanent record of my work and research, and in a way that can be easily shared
+with others if necessary;</li>
+<li>Collect my thoughts, writings, and half-baked ideas;</li>
+<li>Ensure that my local progress—on a daily or monthly basis—is in service of my long-term
+goals (this is kinda hard to do);</li>
+<li>Finally: ensure I enjoy my life and make time for fun and friends! My system is meant to
+organize, not confine.</li>
+</ul>
+
+<blockquote>
+<p>
+One key idea to keep in mind as well is that an organizational system should be
+flexible. Life is complicated and unexpected items—both good and bad—can appear at a
+moment&rsquo;s notice. While it may not be immediately clear where a new task or project
+belongs, one should always have the ability to add new files or lists to which the new
+items can be added. Additionally, I do occasionally discover a file or project will
+outgrow the way I decided to structure it at its inception. My tools support fast and easy
+refactoring when necessary so that I can restructure a project to reflect my updated
+understanding of the problems it was intended to solve. The greater the effort required to
+reorganize when necessary, the less frequently it will happen and the effectiveness of the
+organizational system will decline. The tools I will describe later on work well for me,
+but you should find those tools that work best for you.
+</p>
+</blockquote>
+
+<p>
+The above is the reason why I am using <a href="org_mode.html">org-mode</a> : it&rsquo;s plain text, it&rsquo;s flexible — you can
+add data (properties, tags, …), you can define your behavior (using <code>emacs-lisp</code> code).
+</p>
+</div>
+</section>
+<section id="outline-container-My%20workflow" class="outline-2">
+<h2 id="My%20workflow">My workflow</h2>
+<div class="outline-text-2" id="text-My%20workflow">
+<p>
+As described earlier, my workflow is loosely based on some concept from the <a href="https://gettingthingsdone.com/what-is-gtd/">Getting Things
+Done</a> methodology, but adapted and expanded to meet my personal needs. One of the core
+principles of the <i>Getting Things Done</i> methodology, is that &ldquo;the mind is for thinking,
+not remembering&rdquo;. Everything that may need to be accomplished—or that you might someday
+want to accomplish—should be written down.
+</p>
+
+<p>
+I also really like the <i>boxes</i> comparison from <a href="http://www.howardism.org/Technical/Emacs/getting-boxes-done.html">Getting Boxes Done</a>.
+</p>
+
+<blockquote>
+<p>
+On my workbench is a box. Actually, a few boxes. Each uncompleted project goes into a box…
+no lost screws. Sure unpacking and packing between each session is a hassle, but since the
+best projects take a few weekends, boxes are required.
+</p>
+
+<p>
+Non-workbench-oriented projects go into mental boxes, and I’m thinking of my self
+organization in terms of boxes. Thoughts don’t go into physical boxes, but in my world,
+they live in text files. […]
+</p>
+</blockquote>
+
+<p>
+My usual workflow for solving a problem involves breaking up a high-level objective into
+increasingly smaller goals until I can make progress towards accomplishing it. <a href="org_mode.html">org-mode</a>
+allows me to collect my tasks and projects when needed and build the lists. As I work, I
+log my progress, my thoughts, where I get stuck, temporary images or figures, intermediate
+results, how to reproduce my work, and so on. Note taking is a critical part of my
+thinking process, so notes and their parent tasks should coexist.
+</p>
+
+<p>
+If we talk in files now, this looks like the following:
+</p>
+
+<dl class="org-dl">
+<dt>archive</dt><dd>this is where I archive my project and notes if they don&rsquo;t make sense
+anymore.</dd>
+<dt>notes</dt><dd>this is my <i>notes boxes</i>, where I keep my journal entry (monthly files),
+private and public notes (the one published <a href="https://vincent.demeester.fr/articles/">here</a>).</dd>
+<dt>projects</dt><dd>this is my <i>project boxes</i>, where I keep a set of files containing tasks I
+need to do for specific projects (related to my work, or personal). Each file represent
+a project and should be <i>archived</i> at some point, except a bunch of special ones
+(<code>inbox</code>, <code>incubate</code>, <code>next</code>, …)
+<ul class="org-ul">
+<li><code>inbox</code> is where I capture ideas, task and links that I need to review later.</li>
+<li><code>incubate</code> is where ideas (captured previously in inbox) are going while <i>waiting</i> for
+being picked up.</li>
+<li><code>next</code> is where I put small task that can be quickly done, like a doing a quick
+backup, etc. My <i>wish</i> is to have the least amount of tasks in <code>next</code>.</li>
+</ul></dd>
+</dl>
+</div>
+</section>
+<section id="outline-container-Implementation" class="outline-2">
+<h2 id="Implementation">Implementation</h2>
+<div class="outline-text-2" id="text-Implementation">
+</div>
+<div id="outline-container-Constants%20and%20registers" class="outline-3">
+<h3 id="Constants%20and%20registers">Constants and registers</h3>
+<div class="outline-text-3" id="text-Constants%20and%20registers">
+<p>
+Let&rsquo;s dig into the files and folders I&rsquo;ll use across the rest of my configuration.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-directory</span> <span class="org-string">"~/desktop/org/"</span>
+  <span class="org-doc">"org-mode directory, where most of the org-mode file lives"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-projects-dir</span> (expand-file-name <span class="org-string">"projects"</span> org-directory)
+  <span class="org-doc">"Primary tasks directory."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-notes-dir</span> (expand-file-name <span class="org-string">"notes"</span> org-directory)
+  <span class="org-doc">"Directory of shareable, technical notes."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-archive-dir</span> (expand-file-name <span class="org-string">"archive"</span> org-directory)
+  <span class="org-doc">"Directory of shareable, technical notes."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-completed-dir</span> (expand-file-name <span class="org-string">"projects"</span> org-archive-dir)
+  <span class="org-doc">"Directory of completed project files."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-inbox-file</span> (expand-file-name <span class="org-string">"inbox.org"</span> org-projects-dir)
+  <span class="org-doc">"New stuff collected in this file."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-next-file</span> (expand-file-name <span class="org-string">"next.org"</span> org-projects-dir)
+  <span class="org-doc">"Todo *next* collected in this file."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-incubate-file</span> (expand-file-name <span class="org-string">"incubate.org"</span> org-projects-dir)
+  <span class="org-doc">"Ideas simmering on back burner."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">org-babel-library-file</span> (expand-file-name <span class="org-string">"org_library_of_babel.org"</span> org-notes-dir)
+  <span class="org-doc">"Org babel library."</span>)
+</pre>
+</div>
+
+<p>
+I&rsquo;m also using <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Registers.html">registers</a> to quickly access some files, mainly the <code>inbox</code> file, the
+<code>incubate</code> file and the <code>next</code> file.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(set-register ?i `(file . ,org-inbox-file))
+(set-register ?I `(file . ,org-incubate-file))
+(set-register ?n `(file . ,org-next-file))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Main%20configuration" class="outline-3">
+<h3 id="Main%20configuration"><span class="todo TODO">TODO</span> Main configuration</h3>
+<div class="outline-text-3" id="text-Main%20configuration">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org1217068">(use-package org
+  <span class="org-builtin">:ensure</span> org-plus-contrib <span class="org-comment-delimiter">;; </span><span class="org-comment">load from the package instead of internal</span>
+  <span class="org-builtin">:mode</span> ((<span class="org-string">"\\.org$"</span> . org-mode)
+         (<span class="org-string">"\\.org.draft$"</span> . org-mode))
+  <span class="org-builtin">:commands</span> (org-agenda org-capture)
+  <span class="org-builtin">:bind</span> ((<span class="org-string">"C-c o l"</span> . org-store-link)
+         (<span class="org-string">"C-c o r r"</span> . org-refile)
+         (<span class="org-string">"C-c o a a"</span> . org-agenda)
+         (<span class="org-string">"C-c o a r"</span> . my/reload-org-agenda-files)
+         (<span class="org-string">"C-c o s"</span> . org-sort)
+         (<span class="org-string">"&lt;f12&gt;"</span> . org-agenda)
+         (<span class="org-string">"C-c o c"</span> . org-capture)
+         <span class="org-comment-delimiter">;; </span><span class="org-comment">Skeletons</span>
+         (<span class="org-string">"C-c o i p"</span> . vde/org-project)
+         (<span class="org-string">"C-c o i n"</span> . vde/org-www-post))
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">define-skeleton</span> <span class="org-function-name">vde/org-project</span>
+    <span class="org-doc">"new org-mode project"</span>
+    nil
+    &gt; <span class="org-string">"#+TITLE: "</span> (skeleton-read <span class="org-string">"Title: "</span>) \n
+    &gt; <span class="org-string">"#+FILETAGS: "</span> (skeleton-read <span class="org-string">"Tags: "</span>) \n
+    &gt; _ \n
+    &gt; <span class="org-string">"#+BEGIN: clocktable :scope file :maxlevel 2 :emphasize nil :link t"</span> \n
+    &gt; <span class="org-string">"#+END:"</span> \n
+    &gt; _ \n)
+  (<span class="org-keyword">define-skeleton</span> <span class="org-function-name">vde/org-www-post</span>
+    <span class="org-doc">"new www post"</span>
+    nil
+    &gt; <span class="org-string">"#+title: "</span> (skeleton-read <span class="org-string">"Title: "</span>) \n
+    &gt; <span class="org-string">"#+date: "</span> (format-time-string <span class="org-string">"&lt;%Y-%M-%d %a&gt;"</span>) \n
+    &gt; <span class="org-string">"#+filetags: "</span> (skeleton-read <span class="org-string">"Tags: "</span>) \n
+    &gt; <span class="org-string">"#+setupfile: ../templates/post.org"</span> \n
+    &gt; _ \n
+    &gt; <span class="org-string">"* Introduction"</span>
+    )
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Org Babel configurations</span>
+  (<span class="org-keyword">when</span> (file-exists-p org-babel-library-file)
+    (org-babel-lob-ingest org-babel-library-file))
+  (<span class="org-keyword">defun</span> <span class="org-function-name">my/org-agenda-files</span> ()
+    `(,org-projects-dir
+      <span class="org-string">"~/src/home/tasks.org"</span>
+      <span class="org-string">"~/src/www/tasks.org"</span>))
+  (<span class="org-keyword">defun</span> <span class="org-function-name">my/reload-org-agenda-files</span> ()
+    (<span class="org-keyword">interactive</span>)
+    (<span class="org-keyword">setq</span> org-agenda-files (my/org-agenda-files)))
+  (<span class="org-keyword">setq</span> org-agenda-files (my/org-agenda-files)
+        org-agenda-file-regexp <span class="org-string">"^[a-zA-Z0-9-_]+.org$"</span>
+        org-use-speed-commands t
+        org-special-ctrl-a/e t
+        org-special-ctrl-k t
+        org-todo-keywords '((sequence <span class="org-string">"TODO(t)"</span> <span class="org-string">"NEXT(n)"</span> <span class="org-string">"STARTED(s)"</span> <span class="org-string">"|"</span> <span class="org-string">"DONE(d!)"</span> <span class="org-string">"CANCELED(c@/!)"</span>)
+                            (sequence <span class="org-string">"WAITING(w@/!)"</span> <span class="org-string">"SOMEDAY(s)"</span> <span class="org-string">"|"</span> <span class="org-string">"CANCELED(c@/!)"</span>)
+                            (sequence <span class="org-string">"IDEA(i)"</span> <span class="org-string">"|"</span> <span class="org-string">"CANCELED(c@/!)"</span>))
+        org-todo-state-tags-triggers '((<span class="org-string">"CANCELLED"</span> (<span class="org-string">"CANCELLED"</span> . t))
+                                       (<span class="org-string">"WAITING"</span> (<span class="org-string">"WAITING"</span> . t))
+                                       (done (<span class="org-string">"WAITING"</span>))
+                                       (<span class="org-string">"TODO"</span> (<span class="org-string">"WAITING"</span>) (<span class="org-string">"CANCELLED"</span>))
+                                       (<span class="org-string">"NEXT"</span> (<span class="org-string">"WAITING"</span>) (<span class="org-string">"CANCELLED"</span>))
+                                       (<span class="org-string">"DONE"</span> (<span class="org-string">"WAITING"</span>) (<span class="org-string">"CANCELLED"</span>)))
+        org-use-tag-inheritance t
+        org-tag-alist '((<span class="org-string">"linux"</span>) (<span class="org-string">"nixos"</span>) (<span class="org-string">"emacs"</span>) (<span class="org-string">"org"</span>)
+                        (<span class="org-string">"openshift"</span>) (<span class="org-string">"redhat"</span>) (<span class="org-string">"tektoncd"</span>) (<span class="org-string">"kubernetes"</span>) (<span class="org-string">"knative"</span> ) (<span class="org-string">"docker"</span>)
+                        (<span class="org-string">"docs"</span>) (<span class="org-string">"code"</span>) (<span class="org-string">"review"</span>)
+                        (<span class="org-builtin">:startgroup</span> . nil)
+                        (<span class="org-string">"#home"</span> . ?h) (<span class="org-string">"#work"</span> . ?w) (<span class="org-string">"#errand"</span> . ?e) (<span class="org-string">"#health"</span> . ?l)
+                        (<span class="org-builtin">:endgroup</span> . nil)
+                        (<span class="org-builtin">:startgroup</span> . nil)
+                        (<span class="org-string">"#link"</span> . ?i) (<span class="org-string">"#read"</span> . ?r) (<span class="org-string">"#project"</span> . ?p)
+                        (<span class="org-builtin">:endgroup</span> . nil))
+        org-log-done 'time
+        org-log-redeadline 'time
+        org-log-reschedule 'time
+        org-log-into-drawer t
+        org-enforce-todo-dependencies t
+        org-refile-targets (append '((org-inbox-file <span class="org-builtin">:level</span> . 0))
+                                   (<span class="org-keyword">-&gt;&gt;</span>
+                                    (directory-files org-projects-dir nil <span class="org-string">".org"</span>)
+                                    (<span class="org-keyword">--remove</span> (s-starts-with? <span class="org-string">"."</span> it))
+                                    (<span class="org-keyword">--map</span> (format <span class="org-string">"%s/%s"</span> org-projects-dir it))
+                                    (<span class="org-keyword">--map</span> `(,it <span class="org-builtin">:level</span> . 1))))
+        org-refile-use-outline-path 'file
+        org-refile-allow-creating-parent-nodes 'confirm
+        org-outline-path-complete-in-steps nil
+        org-columns-default-format <span class="org-string">"%80ITEM(Task) %TODO %3PRIORITY %10Effort(Effort){:} %10CLOCKSUM"</span>
+        org-fontify-whole-heading-line t
+        org-pretty-entities t
+        org-ellipsis <span class="org-string">" &#10549;"</span>
+        org-archive-location (concat org-completed-dir <span class="org-string">"/%s::datetree/"</span>)
+        org-use-property-inheritance t
+        org-priority 67
+        org-priority-faces '((?A . <span class="org-string">"#ff2600"</span>)
+                             (?B . <span class="org-string">"#ff5900"</span>)
+                             (?C . <span class="org-string">"#ff9200"</span>)
+                             (?D . <span class="org-string">"#747474"</span>))
+        org-global-properties (<span class="org-keyword">quote</span> ((<span class="org-string">"EFFORT_ALL"</span> . <span class="org-string">"0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00"</span>)
+                                      (<span class="org-string">"STYLE_ALL"</span> . <span class="org-string">"habit"</span>)))
+        org-blank-before-new-entry '((heading . t)
+                                     (plain-list-item . nil))
+        org-insert-heading-respect-content t
+        org-yank-adjusted-subtrees t
+        org-image-actual-width nil
+        org-startup-with-inline-images nil
+        org-list-demote-modify-bullet '((<span class="org-string">"+"</span> . <span class="org-string">"-"</span>) (<span class="org-string">"-"</span> . <span class="org-string">"+"</span>))
+        org-catch-invisible-edits 'error
+        <span class="org-comment-delimiter">;; </span><span class="org-comment">Put theses into a minor mode</span>
+        org-indent-indentation-per-level 1
+        org-cycle-separator-lines 1
+        org-adapt-indentation nil
+        org-hide-leading-stars t
+        org-hide-emphasis-markers t)
+  (setcar (nthcdr 4 org-emphasis-regexp-components) 10)
+  <span class="org-builtin">:hook</span> (org-mode . vde/org-mode-hook))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">vde/org-mode-hook</span> ()
+  <span class="org-doc">"Org-mode hook"</span>
+  (<span class="org-keyword">setq</span> show-trailing-whitespace t)
+  (<span class="org-keyword">when</span> (not (eq major-mode 'org-agenda-mode))
+    (<span class="org-keyword">setq</span> fill-column 90)
+    (auto-revert-mode)
+    (auto-fill-mode)
+    (org-indent-mode)
+    (set (make-local-variable 'company-backends)
+         '(company-emoji company-capf company-files company-dabbrev))
+    (company-mode 1)
+    (add-hook 'before-save-hook #'save-and-update-includes nil 'make-it-local)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Agenda" class="outline-3">
+<h3 id="Agenda"><span class="todo TODO">TODO</span> Agenda</h3>
+<div class="outline-text-3" id="text-Agenda">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-agenda
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-agenda)
+  <span class="org-builtin">:bind</span> ((<span class="org-string">"C-c o a a"</span> . org-agenda)
+         (<span class="org-string">"&lt;f12&gt;"</span> . org-agenda)
+         (<span class="org-string">"C-c o r a"</span> . org-agenda-refile))
+  <span class="org-builtin">:config</span>
+  (use-package org-super-agenda
+    <span class="org-builtin">:config</span> (org-super-agenda-mode))
+  (<span class="org-keyword">setq</span> org-agenda-span 'day
+        org-agenda-start-on-weekday 1
+        org-agenda-include-diary t
+        org-agenda-window-setup 'current-window
+        org-agenda-skip-scheduled-if-done nil
+        org-agenda-compact-blocks t
+        org-agenda-sticky t
+        org-super-agenda-header-separator <span class="org-string">""</span>
+        org-agenda-custom-commands
+        `((<span class="org-string">"w"</span> <span class="org-string">"Agenda"</span>
+           ((agenda <span class="org-string">""</span>)
+            (tags-todo <span class="org-string">"-goals-incubate-inbox+TODO=\"STARTED\""</span>
+                       ((org-agenda-overriding-header <span class="org-string">"Ongoing"</span>)))
+            (tags-todo <span class="org-string">"-goals-incubate-inbox+TODO=\"NEXT\""</span>
+                       ((org-agenda-overriding-header <span class="org-string">"Next"</span>))))
+           ((org-super-agenda-groups
+             '((<span class="org-builtin">:name</span> <span class="org-string">"Important"</span> <span class="org-builtin">:priority</span> <span class="org-string">"A"</span>)
+               (<span class="org-builtin">:name</span> <span class="org-string">"Scheduled"</span> <span class="org-builtin">:time-grid</span> t)
+               (<span class="org-builtin">:habit</span> t))))
+           (org-agenda-list)))))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-gcal
+  <span class="org-builtin">:after</span> (org)
+  <span class="org-builtin">:commands</span> (org-gcal-fetch)
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">require</span> '<span class="org-constant">netrc</span>)
+  (<span class="org-keyword">setq-default</span> org-gcal-remove-cancelled-events t)
+  (<span class="org-keyword">defun</span> <span class="org-function-name">get-authinfo</span> (host port)
+    (<span class="org-keyword">let*</span> ((netrc (netrc-parse (expand-file-name <span class="org-string">"~/.authinfo.gpg"</span>)))
+           (hostentry (netrc-machine netrc host port port)))
+      (<span class="org-keyword">when</span> hostentry (netrc-get hostentry <span class="org-string">"password"</span>))))
+
+  (<span class="org-keyword">setq</span> org-gcal-client-id <span class="org-string">"959564825992-kvc7ofe9640cpc8ibgjqqgpi15e89nkn.apps.googleusercontent.com"</span>
+        org-gcal-client-secret (get-authinfo <span class="org-string">"gcal.api"</span> <span class="org-string">"9999"</span>)
+        org-gcal-file-alist '((<span class="org-string">"vdemeest@redhat.com"</span> . <span class="org-string">"~/desktop/org/projects/schedule.org"</span>))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Habits" class="outline-3">
+<h3 id="Habits"><span class="todo TODO">TODO</span> Habits</h3>
+<div class="outline-text-3" id="text-Habits">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org50f107a">(use-package org-habit
+  <span class="org-builtin">:after</span> (org)
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span> org-habit-show-habits-only-for-today nil
+        org-habit-graph-column 80))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Capture" class="outline-3">
+<h3 id="Capture"><span class="todo TODO">TODO</span> Capture</h3>
+<div class="outline-text-3" id="text-Capture">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgcb0471a">(use-package org-capture
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-capture)
+  <span class="org-builtin">:config</span>
+
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"l"</span> <span class="org-string">"Link"</span> entry
+                 (file ,org-inbox-file)
+                 <span class="org-string">"* %a\n%U\n%?\n%i"</span>
+                 <span class="org-builtin">:empty-lines</span> 1))
+
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"t"</span> <span class="org-string">"Tasks"</span>))
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"tt"</span> <span class="org-string">"New task"</span> entry
+                 (file ,org-inbox-file)
+                 <span class="org-string">"* %?\n:PROPERTIES:\n:CREATED:%U\n:END:\n\n%i\n\nFrom: %a"</span>
+                 <span class="org-builtin">:empty-lines</span> 1))
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"tr"</span> <span class="org-string">"PR Review"</span> entry
+                 (file ,org-inbox-file)
+                 <span class="org-string">"* TODO review gh:%^{issue} :review:\n:PROPERTIES:\n:CREATED:%U\n:END:\n\n%i\n%?\nFrom: %a"</span>
+                 <span class="org-builtin">:empty-lines</span> 1))
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(add-to-list 'org-capture-templates</span>
+  <span class="org-comment-delimiter">;;              </span><span class="org-comment">`("m" "Meeting notes" entry</span>
+  <span class="org-comment-delimiter">;;                </span><span class="org-comment">(file+datetree ,org-meeting-notes-file)</span>
+  <span class="org-comment-delimiter">;;                </span><span class="org-comment">(file ,(concat user-emacs-directory "/etc/orgmode/meeting-notes.org"))))</span>
+
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"w"</span> <span class="org-string">"Writing"</span>))
+  <span class="org-builtin">:bind</span> ((<span class="org-string">"C-c o c"</span> . org-capture)))
+
+
+(use-package org-capture-pop-frame
+  <span class="org-builtin">:after</span> org)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-Templates" class="outline-4">
+<h4 id="Templates"><span class="todo TODO">TODO</span> Templates</h4>
+<div class="outline-text-4" id="text-Templates">
+<div class="org-src-container">
+<pre class="src src-org"><span class="org-org-level-1">* %^{meeting}</span>
+
+- <span class="org-org-list-dt">Actions ::</span>
+<span class="org-org-meta-line">  #+BEGIN: columnview :id local :match "/TODO|DONE" :format "%ITEM(What) %TAGS(Who) %DEADLINE(When) %TODO(State)"</span>
+  <span class="org-org-table">| What                                | Who        | When | State |</span>
+  <span class="org-org-table">|-------------------------------------+------------+------+-------|</span>
+<span class="org-org-meta-line">  #+END:</span>
+- <span class="org-org-list-dt">Decisions ::</span>
+<span class="org-org-meta-line">  #+BEGIN: columnview :id local :match "Decision" :format "%ITEM(Decisions)"</span>
+  <span class="org-org-table">| Decisions |</span>
+  <span class="org-org-table">|-----------|</span>
+<span class="org-org-meta-line">  #+END:</span>
+
+<span class="org-org-level-2">** Present at meeting</span>
+  - <span class="org-org-checkbox">[ ]</span>
+<span class="org-org-level-2">** Agenda</span>
+- %?
+<span class="org-org-level-2">** Notes</span>
+- Use <span class="org-org-verbatim">=:Decision:=</span> tag for decision
+- Use entry with <span class="org-org-verbatim">=TODO=</span> (or <span class="org-org-verbatim">=DONE=</span>) for actions
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-org"><span class="org-org-level-2">** %(format-time-string org-journal-time-format) weekly review </span><span class="org-org-level-2"><span class="org-org-tag">:weekly:review:</span></span>
+%U
+
+- <span class="org-org-checkbox">[ ]</span> review <span class="org-org-link"><a href="file:../projects/inbox.org">~inbox.org~</a></span>
+  Clean the file by either
+  - refiling it to <span class="org-org-code">~incubate.org~</span>
+  - removing it / archiving it
+- <span class="org-org-checkbox">[ ]</span> review <span class="org-org-link"><a href="file:../projects/incubate.org">~incubate.org~</a></span>
+  - Is something worth becoming a project
+  - Is something not worth thinking about anymore&#160;?
+- <span class="org-org-checkbox">[ ]</span> empty mail inbox (and create task if needed)
+  - <span class="org-org-checkbox">[ ]</span> work
+  - <span class="org-org-checkbox">[ ]</span> perso
+- <span class="org-org-checkbox">[ ]</span> Review next week <span class="org-org-code">~F12 n w f~</span>
+- <span class="org-org-checkbox">[ ]</span> review <span class="org-org-code">~org-mode~</span> workflow
+  - <span class="org-bold">*what works, what doesn't ?*</span>
+  - <span class="org-bold">*is there task / stuck projects ?*</span>
+  - <span class="org-bold">*enhancement possible ?*</span>
+- <span class="org-org-checkbox">[ ]</span> export previous agenda (somewhere)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Protocol" class="outline-4">
+<h4 id="Protocol"><span class="todo TODO">TODO</span> Protocol</h4>
+<div class="outline-text-4" id="text-Protocol">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orga6ddf01">(use-package org-protocol
+  <span class="org-builtin">:after</span> org)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Clocking" class="outline-3">
+<h3 id="Clocking"><span class="todo TODO">TODO</span> Clocking</h3>
+<div class="outline-text-3" id="text-Clocking">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgc9627f9">(use-package org-clock
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-clock-in org-clock-out org-clock-goto)
+  <span class="org-builtin">:config</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Setup hooks for clock persistance</span>
+  (org-clock-persistence-insinuate)
+  (<span class="org-keyword">setq</span> org-clock-clocked-in-display nil
+        <span class="org-comment-delimiter">;; </span><span class="org-comment">Show lot of clocking history so it's easy to pick items off the C-F11 list</span>
+        org-clock-history-length 23
+        <span class="org-comment-delimiter">;; </span><span class="org-comment">Change tasks to STARTED when clocking in</span>
+        org-clock-in-switch-to-state 'vde/clock-in-to-started
+        <span class="org-comment-delimiter">;; </span><span class="org-comment">Clock out when moving task to a done state</span>
+        org-clock-out-when-done t
+        <span class="org-comment-delimiter">;; </span><span class="org-comment">Save the running clock and all clock history when exiting Emacs, load it on startup</span>
+        org-clock-persist t)
+  (use-package find-lisp)
+  (<span class="org-keyword">defun</span> <span class="org-function-name">vde/is-project-p</span> ()
+    <span class="org-doc">"Any task with a todo keyword subtask"</span>
+    (<span class="org-keyword">save-restriction</span>
+      (widen)
+      (<span class="org-keyword">let</span> ((has-subtask)
+            (subtree-end (<span class="org-keyword">save-excursion</span> (org-end-of-subtree t)))
+            (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+        (<span class="org-keyword">save-excursion</span>
+          (forward-line 1)
+          (<span class="org-keyword">while</span> (<span class="org-keyword">and</span> (not has-subtask)
+                      (&lt; (point) subtree-end)
+                      (re-search-forward <span class="org-string">"^</span><span class="org-string"><span class="org-warning">\</span></span><span class="org-string">*+ "</span> subtree-end t))
+            (<span class="org-keyword">when</span> (member (org-get-todo-state) org-todo-keywords-1)
+              (<span class="org-keyword">setq</span> has-subtask t))))
+        (<span class="org-keyword">and</span> is-a-task has-subtask))))
+
+  (<span class="org-keyword">defun</span> <span class="org-function-name">vde/is-project-subtree-p</span> ()
+    <span class="org-doc">"Any task with a todo keyword that is in a project subtree.</span>
+<span class="org-doc">Callers of this function already widen the buffer view."</span>
+    (<span class="org-keyword">let</span> ((task (<span class="org-keyword">save-excursion</span> (org-back-to-heading 'invisible-ok)
+                                (point))))
+      (<span class="org-keyword">save-excursion</span>
+        (vde/find-project-task)
+        (<span class="org-keyword">if</span> (equal (point) task)
+            nil
+          t))))
+
+  (<span class="org-keyword">defun</span> <span class="org-function-name">vde/find-project-task</span> ()
+    <span class="org-doc">"Move point to the parent (project) task if any"</span>
+    (<span class="org-keyword">save-restriction</span>
+      (widen)
+      (<span class="org-keyword">let</span> ((parent-task (<span class="org-keyword">save-excursion</span> (org-back-to-heading 'invisible-ok) (point))))
+        (<span class="org-keyword">while</span> (org-up-heading-safe)
+          (<span class="org-keyword">when</span> (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+            (<span class="org-keyword">setq</span> parent-task (point))))
+        (goto-char parent-task)
+        parent-task)))
+
+  (<span class="org-keyword">defun</span> <span class="org-function-name">vde/is-task-p</span> ()
+    <span class="org-doc">"Any task with a todo keyword and no subtask"</span>
+    (<span class="org-keyword">save-restriction</span>
+      (widen)
+      (<span class="org-keyword">let</span> ((has-subtask)
+            (subtree-end (<span class="org-keyword">save-excursion</span> (org-end-of-subtree t)))
+            (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+        (<span class="org-keyword">save-excursion</span>
+          (forward-line 1)
+          (<span class="org-keyword">while</span> (<span class="org-keyword">and</span> (not has-subtask)
+                      (&lt; (point) subtree-end)
+                      (re-search-forward <span class="org-string">"^</span><span class="org-string"><span class="org-warning">\</span></span><span class="org-string">*+ "</span> subtree-end t))
+            (<span class="org-keyword">when</span> (member (org-get-todo-state) org-todo-keywords-1)
+              (<span class="org-keyword">setq</span> has-subtask t))))
+        (<span class="org-keyword">and</span> is-a-task (not has-subtask)))))
+
+  (<span class="org-keyword">defun</span> <span class="org-function-name">vde/is-subproject-p</span> ()
+    <span class="org-doc">"Any task which is a subtask of another project"</span>
+    (<span class="org-keyword">let</span> ((is-subproject)
+          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+      (<span class="org-keyword">save-excursion</span>
+        (<span class="org-keyword">while</span> (<span class="org-keyword">and</span> (not is-subproject) (org-up-heading-safe))
+          (<span class="org-keyword">when</span> (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+            (<span class="org-keyword">setq</span> is-subproject t))))
+      (<span class="org-keyword">and</span> is-a-task is-subproject)))
+
+  (<span class="org-keyword">defun</span> <span class="org-function-name">vde/clock-in-to-started</span> (kw)
+    <span class="org-doc">"Switch a task from TODO to STARTED when clocking in.</span>
+<span class="org-doc">Skips capture tasks, projects, and subprojects.</span>
+<span class="org-doc">Switch projects and subprojects from STARTED back to TODO"</span>
+    (<span class="org-keyword">when</span> (not (<span class="org-keyword">and</span> (boundp 'org-capture-mode) org-capture-mode))
+      (<span class="org-keyword">cond</span>
+       ((<span class="org-keyword">and</span> (member (org-get-todo-state) (list <span class="org-string">"TODO"</span>))
+             (vde/is-task-p))
+        <span class="org-string">"STARTED"</span>)
+       ((<span class="org-keyword">and</span> (member (org-get-todo-state) (list <span class="org-string">"STARTED"</span>))
+             (vde/is-project-p))
+        <span class="org-string">"TODO"</span>))))
+  <span class="org-builtin">:bind</span> ((<span class="org-string">"&lt;f11&gt;"</span> . org-clock-goto)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Notes%20taking" class="outline-3">
+<h3 id="Notes%20taking"><span class="todo TODO">TODO</span> Notes taking</h3>
+<div class="outline-text-3" id="text-Notes%20taking">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-roam
+  <span class="org-builtin">:commands</span> (org-roam org-roam-build-cache)
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">:hook</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(after-init . org-roam-mode)</span>
+  <span class="org-builtin">:bind</span> ((<span class="org-string">"C-c o n"</span> . org-roam-mode)
+         <span class="org-builtin">:map</span> org-roam-mode-map
+         ((<span class="org-string">"C-c n l"</span> . org-roam)
+          (<span class="org-string">"C-c n f"</span> . org-roam-find-file)
+          (<span class="org-string">"C-c n g"</span> . org-roam-show-graph)
+          (<span class="org-string">"C-c n b"</span> . org-roam-switch-to-buffer))
+         <span class="org-builtin">:map</span> org-mode-map
+         ((<span class="org-string">"C-c n i"</span> . org-roam-insert)))
+  <span class="org-builtin">:custom</span>
+  (org-roam-directory org-notes-dir)
+  <span class="org-builtin">:custom-face</span>
+  (org-roam-link ((t (<span class="org-builtin">:inherit</span> org-link <span class="org-builtin">:foreground</span> <span class="org-string">"#C991E1"</span>))))
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">require</span> '<span class="org-constant">org-roam-protocol</span>)
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(defun jethro/conditional-hugo-enable ()</span>
+  <span class="org-comment-delimiter">;;     </span><span class="org-comment">(save-excursion</span>
+  <span class="org-comment-delimiter">;;       </span><span class="org-comment">(if (cdr (assoc "SETUPFILE" (org-roam--extract-global-props '("SETUPFILE"))))</span>
+  <span class="org-comment-delimiter">;;           </span><span class="org-comment">(org-hugo-auto-export-mode +1)</span>
+  <span class="org-comment-delimiter">;;         </span><span class="org-comment">(org-hugo-auto-export-mode -1))))</span>
+  <span class="org-comment-delimiter">;;</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(with-eval-after-load 'org</span>
+  <span class="org-comment-delimiter">;;     </span><span class="org-comment">(defun my/org-roam--backlinks-list (file)</span>
+  <span class="org-comment-delimiter">;;       </span><span class="org-comment">(if (org-roam--org-roam-file-p file)</span>
+  <span class="org-comment-delimiter">;;           </span><span class="org-comment">(--reduce-from</span>
+  <span class="org-comment-delimiter">;;            </span><span class="org-comment">(concat acc (format "- [[file:%s][%s]]\n"</span>
+  <span class="org-comment-delimiter">;;                                </span><span class="org-comment">(file-relative-name (car it) org-roam-directory)</span>
+  <span class="org-comment-delimiter">;;                                </span><span class="org-comment">(org-roam--get-title-or-slug (car it))))</span>
+  <span class="org-comment-delimiter">;;            </span><span class="org-comment">"" (org-roam-sql [:select [file-from]</span>
+  <span class="org-comment-delimiter">;;                                      </span><span class="org-comment">:from file-links</span>
+  <span class="org-comment-delimiter">;;                                      </span><span class="org-comment">:where (= file-to $s1)</span>
+  <span class="org-comment-delimiter">;;                                      </span><span class="org-comment">:and file-from :not :like $s2] file "%private%"))</span>
+  <span class="org-comment-delimiter">;;         </span><span class="org-comment">""))</span>
+  <span class="org-comment-delimiter">;;     </span><span class="org-comment">(defun my/org-export-preprocessor (_backend)</span>
+  <span class="org-comment-delimiter">;;       </span><span class="org-comment">(let ((links (my/org-roam--backlinks-list (buffer-file-name))))</span>
+  <span class="org-comment-delimiter">;;         </span><span class="org-comment">(unless (string= links "")</span>
+  <span class="org-comment-delimiter">;;           </span><span class="org-comment">(save-excursion</span>
+  <span class="org-comment-delimiter">;;             </span><span class="org-comment">(goto-char (point-max))</span>
+  <span class="org-comment-delimiter">;;             </span><span class="org-comment">(insert (concat "\n* Backlinks\n" links))))))</span>
+  <span class="org-comment-delimiter">;;     </span><span class="org-comment">(add-hook 'org-export-before-processing-hook 'my/org-export-preprocessor))</span>
+  (<span class="org-keyword">setq</span> org-roam-capture-ref-templates
+        '((<span class="org-string">"r"</span> <span class="org-string">"ref"</span> plain #'org-roam-capture--get-point <span class="org-string">""</span>
+           <span class="org-builtin">:file-name</span> <span class="org-string">"${slug}"</span>
+           <span class="org-builtin">:head</span> <span class="org-string">"#+title: ${title}\n#+roam_key: ${ref}\n\n${body}"</span>
+           <span class="org-builtin">:unnarrowed</span> t)))
+  (<span class="org-keyword">setq</span> org-roam-capture-templates
+        '((<span class="org-string">"d"</span> <span class="org-string">"default"</span> plain (<span class="org-keyword">function</span> org-roam--capture-get-point)
+           <span class="org-string">"%?"</span>
+           <span class="org-builtin">:file-name</span> <span class="org-string">"${slug}"</span>
+#+TITLE: ${title}\n<span class="org-string">"</span>
+<span class="org-string">           :unnarrowed t)</span>
+<span class="org-string">          ("</span>p<span class="org-string">" "</span>private<span class="org-string">" plain (function org-roam--capture-get-point)</span>
+<span class="org-string">           "</span>%?<span class="org-string">"</span>
+<span class="org-string">           :file-name "</span>${slug}.private<span class="org-string">"</span>
+<span class="org-string">           :head "</span>#+TITLE: ${title}\n<span class="org-string">"</span>
+<span class="org-string">           :unnarrowed t))))</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-Rebuild%20configurations%20files" class="outline-4">
+<h4 id="Rebuild%20configurations%20files"><span class="todo TODO">TODO</span> Rebuild configurations files</h4>
+<div class="outline-text-4" id="text-Rebuild%20configurations%20files">
+<p>
+Most of my configuration files are store in my <a href="https://git.sr.ht/~vdemeester/home"><code>home</code> monorepo</a>. That said, most of those
+are actually automatically generated from litterate <code>org-mode</code> files coming from my notes.
+</p>
+
+<p>
+I want to be able to update those all in one go. Even better, I would like to make sure I
+update those before killing emacs.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org
+  <span class="org-builtin">:defer</span> 2
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">defun</span> <span class="org-function-name">vde/tangle-all-notes</span> ()
+    <span class="org-doc">"Produce files from my notes folder.</span>
+<span class="org-doc">This function will attempt to tangle all org files from `</span><span class="org-doc"><span class="org-constant">org-notes-dir</span></span><span class="org-doc">'. The</span>
+<span class="org-doc">assumption is that those will generate configuration file (in `</span><span class="org-doc"><span class="org-constant">~/src/home</span></span><span class="org-doc">'),</span>
+<span class="org-doc">and thus keeping the configuration source up-to-date"</span>
+    (mapc (<span class="org-keyword">lambda</span> (x) (org-babel-tangle-file x))
+          (<span class="org-keyword">ignore-errors</span>
+            (directory-files-recursively org-notes-dir <span class="org-string">"</span><span class="org-string"><span class="org-warning">\</span></span><span class="org-string">.org$"</span>)))))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Journaling" class="outline-3">
+<h3 id="Journaling"><span class="todo TODO">TODO</span> Journaling</h3>
+<div class="outline-text-3" id="text-Journaling">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-journal
+  <span class="org-builtin">:commands</span> (org-journal-new-entry org-capture)
+  <span class="org-builtin">:after</span> (org-capture)
+  <span class="org-builtin">:bind</span>
+  ((<span class="org-string">"C-c n j"</span> . org-journal-new-entry)
+   (<span class="org-string">"C-c o j"</span> . org-journal-new-entry))
+  <span class="org-builtin">:init</span>
+  (<span class="org-keyword">defun</span> <span class="org-function-name">org-journal-find-location</span> ()
+    <span class="org-doc">"Open today's journal, but inhibiting inserting the heading, leaving that to the template."</span>
+    (org-journal-new-entry t)
+    <span class="org-comment-delimiter">;; </span><span class="org-comment">position pont on the journal's top-level heading so that org-capture will add the new entry as a child.</span>
+    (goto-char (point-max)))
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"j"</span> <span class="org-string">"Journal"</span>))
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"jj"</span> <span class="org-string">"Journal entry"</span> entry (<span class="org-keyword">function</span> org-journal-find-location)
+                 <span class="org-string">"** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"</span>
+                 <span class="org-builtin">:empty-lines</span> 1 <span class="org-builtin">:clock-in</span> t <span class="org-builtin">:clock-resume</span> t))
+  (add-to-list 'org-capture-templates
+               `(<span class="org-string">"je"</span> <span class="org-string">"Weekly review"</span> entry (<span class="org-keyword">function</span> org-journal-find-location)
+                 (file ,(expand-file-name <span class="org-string">"etc/orgmode/weekly.org"</span> user-emacs-directory))
+                 <span class="org-builtin">:empty-lines</span> 1 <span class="org-builtin">:clock-in</span> t <span class="org-builtin">:clock-resume</span> t))
+  <span class="org-builtin">:custom</span>
+  (org-journal-date-prefix <span class="org-string">"* "</span>)
+  (org-journal-file-header <span class="org-string">"#+TITLE: %Y-v%m Journal\n\n"</span>)
+  (org-journal-file-format <span class="org-string">"%Y-%m.private.org"</span>)
+  (org-journal-file-type 'monthly)
+  (org-journal-dir org-notes-dir)
+  (org-journal-date-format <span class="org-string">"%A, %d %B %Y"</span>)
+  (org-journal-enable-agenda-integration nil))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Litterate%20programming" class="outline-3">
+<h3 id="Litterate%20programming"><span class="todo TODO">TODO</span> Litterate programming</h3>
+<div class="outline-text-3" id="text-Litterate%20programming">
+<p>
+Although not really in my &ldquo;organization&rdquo; workflow, this is related to <a href="org_mode.html">org-mode</a> so this
+leaves here for now.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgbc5acde">(use-package org-src
+  <span class="org-builtin">:after</span> (org)
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span> org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-src-window-setup 'current-window
+        org-edit-src-content-indentation 0))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-Links" class="outline-4">
+<h4 id="Links"><span class="todo TODO">TODO</span> Links</h4>
+<div class="outline-text-4" id="text-Links">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">my personal</span>
+(use-package ol-github
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-gitlab
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-ripgrep
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-rg
+  <span class="org-builtin">:disabled</span>
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-grep
+  <span class="org-builtin">:after</span> (org))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">built-in org-mode</span>
+(use-package ol-eshell
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-git-link
+  <span class="org-builtin">:defer</span> 2
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-gnus
+  <span class="org-builtin">:defer</span> 2
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-irc
+  <span class="org-builtin">:defer</span> 2
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-info
+  <span class="org-builtin">:defer</span> 2
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-man
+  <span class="org-builtin">:defer</span> 2
+  <span class="org-builtin">:after</span> (org))
+(use-package ol-notmuch
+  <span class="org-builtin">:defer</span> 2
+  <span class="org-builtin">:after</span> (org))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package orgit
+  <span class="org-builtin">:after</span> org)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Babel" class="outline-4">
+<h4 id="Babel"><span class="todo TODO">TODO</span> Babel</h4>
+<div class="outline-text-4" id="text-Babel">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ob-async
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (ob-async-org-babel-execute-src-block))
+(use-package ob-css
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:css))
+(use-package ob-dot
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:dot))
+(use-package ob-ditaa
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:ditaa)
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span> org-ditaa-jar-path <span class="org-string">"/home/vincent/.nix-profile/lib/ditaa.jar"</span>))
+(use-package ob-emacs-lisp
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:emacs-lisp org-babel-execute:elisp))
+(use-package ob-go
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:go))
+(use-package ob-gnuplot
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:gnuplot))
+(use-package ob-http
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:http))
+(use-package ob-js
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:js))
+(use-package ob-latex
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:latex))
+(use-package ob-python
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:python))
+(use-package ob-shell
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:ash
+             org-babel-execute:bash
+             org-babel-execute:csh
+             org-babel-execute:dash
+             org-babel-execute:fish
+             org-babel-execute:ksh
+             org-babel-execute:mksh
+             org-babel-execute:posh
+             org-babel-execute:sh
+             org-babel-execute:shell
+             org-babel-execute:zsh))
+(use-package ob-doc-makefile
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-babel-execute:makefile))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Diary" class="outline-3">
+<h3 id="Diary"><span class="todo TODO">TODO</span> Diary</h3>
+<div class="outline-text-3" id="text-Diary">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org3ea304c">(use-package diary-lib
+  <span class="org-builtin">:after</span> (org)
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span> diary-entry-marker <span class="org-string">"diary"</span>)
+  (<span class="org-keyword">setq</span> diary-show-holidays-flag t)
+  (<span class="org-keyword">setq</span> diary-header-line-flag nil)
+  (<span class="org-keyword">setq</span> diary-mail-days 3)
+  (<span class="org-keyword">setq</span> diary-number-of-entries 3)
+  (<span class="org-keyword">setq</span> diary-comment-start <span class="org-string">";"</span>)
+  (<span class="org-keyword">setq</span> diary-comment-end <span class="org-string">""</span>)
+  (<span class="org-keyword">setq</span> diary-date-forms
+        '((day <span class="org-string">"/"</span> month <span class="org-string">"[</span><span class="org-string"><span class="org-negation-char">^</span></span><span class="org-string">/0-9]"</span>)
+          (day <span class="org-string">"/"</span> month <span class="org-string">"/"</span> year <span class="org-string">"[</span><span class="org-string"><span class="org-negation-char">^</span></span><span class="org-string">0-9]"</span>)
+          (day <span class="org-string">" *"</span> monthname <span class="org-string">" *"</span> year <span class="org-string">"[</span><span class="org-string"><span class="org-negation-char">^</span></span><span class="org-string">0-9]"</span>)
+          (monthname <span class="org-string">" *"</span> day <span class="org-string">"[</span><span class="org-string"><span class="org-negation-char">^</span></span><span class="org-string">,0-9]"</span>)
+          (monthname <span class="org-string">" *"</span> day <span class="org-string">", *"</span> year <span class="org-string">"[</span><span class="org-string"><span class="org-negation-char">^</span></span><span class="org-string">0-9]"</span>)
+          (year <span class="org-string">"[-/]"</span> month <span class="org-string">"[-/]"</span> day <span class="org-string">"[</span><span class="org-string"><span class="org-negation-char">^</span></span><span class="org-string">0-9]"</span>)
+          (dayname <span class="org-string">"\\W"</span>))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Miscellaneous" class="outline-3">
+<h3 id="Miscellaneous"><span class="todo TODO">TODO</span> Miscellaneous</h3>
+<div class="outline-text-3" id="text-Miscellaneous">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-id
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> contrib/org-id-headlines
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span> org-id-link-to-org-use-id
+        'create-if-interactive-and-no-custom-id)
+
+  (<span class="org-keyword">defun</span> <span class="org-function-name">contrib/org-get-id</span> (<span class="org-builtin">&amp;optional</span> pom create prefix)
+    <span class="org-doc">"Get the CUSTOM_ID property of the entry at point-or-marker</span>
+<span class="org-doc">POM. If POM is nil, refer to the entry at point. If the entry</span>
+<span class="org-doc">does not have an CUSTOM_ID, the function returns nil. However,</span>
+<span class="org-doc">when CREATE is non nil, create a CUSTOM_ID if none is present</span>
+<span class="org-doc">already. PREFIX will be passed through to `</span><span class="org-doc"><span class="org-constant">org-id-new</span></span><span class="org-doc">'. In any</span>
+<span class="org-doc">case, the CUSTOM_ID of the entry is returned."</span>
+    (<span class="org-keyword">org-with-point-at</span> pom
+      (<span class="org-keyword">let</span> ((id (org-entry-get nil <span class="org-string">"CUSTOM_ID"</span>)))
+        (<span class="org-keyword">cond</span>
+         ((<span class="org-keyword">and</span> id (stringp id) (string-match <span class="org-string">"\\S-"</span> id))
+          id)
+         (create
+          (<span class="org-keyword">setq</span> id (org-id-new (concat prefix <span class="org-string">"h"</span>)))
+          (org-entry-put pom <span class="org-string">"CUSTOM_ID"</span> id)
+          (org-id-add-location id (buffer-file-name (buffer-base-buffer)))
+          id)))))
+
+  (<span class="org-keyword">defun</span> <span class="org-function-name">contrib/org-id-headlines</span> ()
+    <span class="org-doc">"Add CUSTOM_ID properties to all headlines in the current</span>
+<span class="org-doc">file which do not already have one."</span>
+    (<span class="org-keyword">interactive</span>)
+    (org-map-entries
+     (funcall 'contrib/org-get-id (point) 'create))))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-crypt
+  <span class="org-builtin">:after</span> (org)
+  <span class="org-builtin">:config</span>
+  (org-crypt-use-before-save-magic)
+  (<span class="org-keyword">setq</span> org-tags-exclude-from-inheritance '(<span class="org-string">"crypt"</span>)))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-tempo
+  <span class="org-builtin">:after</span> (org))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-attach
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span> org-link-abbrev-alist '((<span class="org-string">"att"</span> . org-attach-expand-link))))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-publish
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:commands</span> (org-publish org-publish-all org-publish-project org-publish-current-project org-publish-current-file)
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span> org-html-coding-system 'utf-8-unix))
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-Triage" class="outline-2">
+<h2 id="Triage">Triage</h2>
+<div class="outline-text-2" id="text-Triage">
+<pre class="example">
+# -*- mode: org; eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t) -*-
+</pre>
+
+<ul class="org-ul">
+<li>Remove slack from phone (or personal tablets)
+With working remote, it&rsquo;s even more important to draw the line</li>
+
+<li>Have timeboxed « slacking off » session
+by slacking off, I mean twitter, reddit, …</li>
+
+<li>Take a medium to long walk during the day
+Better in the middle, by medium to long I mean at least an hour walk</li>
+
+<li>It&rsquo;s ok to set smaller pomodoro from time to time, 25 is the &ldquo;longest&rdquo; limit, not the
+lowest one</li>
+
+<li>Apply it as much as you can (i.e. not interruption)</li>
+
+<li>Pomodoro technique</li>
+<li><a href="https://thelifelifebalance.com/pros-and-cons-of-pomodoro/">https://thelifelifebalance.com/pros-and-cons-of-pomodoro/</a></li>
+
+<li>Phone / tablet
+<ul class="org-ul">
+<li>Remove most apps</li>
+<li>Remove most notifications</li>
+<li>Grayscale most of the time</li>
+</ul></li>
+</ul>
+</div>
+
+<div id="outline-container-~org-mode~%20Workflow" class="outline-3">
+<h3 id="~org-mode~%20Workflow"><span class="todo TODO">TODO</span> <code>org-mode</code> Workflow</h3>
+<div class="outline-text-3" id="text-~org-mode~%20Workflow">
+<div class='drawer logbook'>
+<h6>Logbook</h6>
+nil</div>
+
+<p>
+This goes into <code>emacs.org</code>.
+</p>
+
+<p>
+Ideas:
+</p>
+<ul class="org-ul">
+<li>filter org file(s) with a tags &amp; co
+<ul class="org-ul">
+<li>use case: <code>journal.org</code> with weekly-review only, worklog only, …</li>
+<li>subject (go, emacs, …) to build article or gather thoughts, idea, reviews, …</li>
+</ul></li>
+<li>Heavy usage of <code>org-protocol</code> to list reviews done, and more quickly capture content
+from the browser</li>
+</ul>
+
+<p>
+The rest is deprecated 😅
+</p>
+<div class='drawer deprecated'>
+<h6>Deprecated</h6>
+<p>
+Let&rsquo;s try to think about &ldquo;TODOs&rdquo; management in the light of <code>todoist</code> <b>and</b> <code>org-mode</code>.
+Reasons to use <code>todoist</code> are :
+</p>
+
+<ul class="org-ul">
+<li>write task/todo items on-the-go on any devices — this is way harder with <code>org-mode</code>.</li>
+<li>list and mark task/todo as done from anywhere</li>
+<li>share some list with others (mainly @houbeb)</li>
+<li>have some nice stats</li>
+</ul>
+
+<p>
+Reasons to use <code>org-mode</code> are :
+</p>
+
+<ul class="org-ul">
+<li>integrated with my editor, agenda, notes, mail, …</li>
+<li>easily customizable (dashboard, agenda, search, filters, org-links, …)</li>
+<li>all text, data are own by me, replicated</li>
+<li>clock possibility (related to work, so adding some context to it)</li>
+</ul>
+
+<p>
+One idea is to be able to synchronize <code>org-mode</code> and <code>todoist</code>
+</p>
+
+<ul class="org-ul">
+<li>only part of the <code>org-mode</code> todo list (i.e. a <code>todoist.org</code> file)</li>
+<li>mainly (and at first) used <code>todoist -&gt; org-mode</code></li>
+<li>syncing two ways the means adding a new element that doesn&rsquo;t have the required
+properties in the <code>todoist.org</code> file</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-Do%20some%20writeup%20about%20org-mode%20usage%20and%20workflow" class="outline-4">
+<h4 id="Do%20some%20writeup%20about%20org-mode%20usage%20and%20workflow"><span class="todo TODO">TODO</span> Do some writeup about org-mode usage and workflow</h4>
+<div class="outline-text-4" id="text-Do%20some%20writeup%20about%20org-mode%20usage%20and%20workflow">
+<p>
+A bit à-la-howardisms
+</p>
+<ul class="org-ul">
+<li><a href="http://www.howardism.org/Technical/Emacs/getting-boxes-done.html">Getting Boxes Done</a></li>
+<li><a href="http://www.howardism.org/Technical/Emacs/getting-more-boxes-done.html">Getting Boxes Done, the Code</a></li>
+<li><a href="http://www.howardism.org/Technical/Emacs/getting-even-more-boxes-done.html">Refiling Trees to Files</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-Add%20a%20reviewing%20org-protocol%20capture%20template" class="outline-4">
+<h4 id="Add%20a%20reviewing%20org-protocol%20capture%20template"><span class="todo TODO">TODO</span> Add a reviewing org-protocol capture template</h4>
+<div class="outline-text-4" id="text-Add%20a%20reviewing%20org-protocol%20capture%20template">
+<div class='drawer properties'>
+<h6>Properties</h6>
+<p>
+:CREATED:<span class="timestamp-wrapper"><span class="timestamp">[2020-04-16 Thu 10:57]</span></span>
+</p>
+</div>
+
+<p>
+That way I track more easily the long review by just using a bookmark.
+</p>
+</div>
+</div>
+
+<div id="outline-container-Better%20worklog%20entries" class="outline-4">
+<h4 id="Better%20worklog%20entries"><span class="todo TODO">TODO</span> Better worklog entries</h4>
+<div class="outline-text-4" id="text-Better%20worklog%20entries">
+<ul class="org-ul">
+<li>Substree in a datetime tree (see if it is possible)</li>
+<li>In a separate journal ?</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-Fix%20meetings%20notes" class="outline-4">
+<h4 id="Fix%20meetings%20notes"><span class="todo TODO">TODO</span> Fix meetings notes</h4>
+<div class="outline-text-4" id="text-Fix%20meetings%20notes">
+<div class='drawer properties'>
+<h6>Properties</h6>
+<p>
+:CREATED:<span class="timestamp-wrapper"><span class="timestamp">[2020-04-02 Thu 17:41]</span></span>
+</p>
+</div>
+
+<ol class="org-ol">
+<li>Capture template doesn&rsquo;t work</li>
+<li>Can we make Actions and Decision per &ldquo;tree&rdquo; ? (if not, meeting notes might be one file
+for each meeting)</li>
+<li>Ideas
+<ul class="org-ul">
+<li>New tree</li>
+<li>Better template</li>
+<li>Stay in the capture while it&rsquo;s happening</li>
+</ul></li>
+</ol>
+
+<p>
+From: <a href="file:///home/vincent/desktop/org/projects/meetings.html#orgda0fa95">Decisions</a>
+</p>
+</div>
+</div>
+<div id="outline-container-quick%20writing%20org-mode%20template" class="outline-4">
+<h4 id="quick%20writing%20org-mode%20template"><span class="todo TODO">TODO</span> quick writing org-mode template</h4>
+<div class="outline-text-4" id="text-quick%20writing%20org-mode%20template">
+<div class='drawer logbook'>
+<h6>Logbook</h6>
+nil</div>
+<div class='drawer properties'>
+<h6>Properties</h6>
+<p>
+:CREATED:<span class="timestamp-wrapper"><span class="timestamp">[2019-12-20 Fri 10:09]</span></span>
+</p>
+</div>
+
+<ul class="org-ul">
+<li><del>blog post (in <code>src/github.com/vdemeester/blog</code>)</del></li>
+<li><del>technical post (in <code>desktop/org/technical</code>)</del></li>
+
+<li id="Meeting notes"><code>meetings.org</code> in <code>~/desktop/org/projects</code>
+See <a href="https://egli.dev/posts/using-org-mode-for-meeting-minutes/">Using org-mode for meeting minutes • egli.dev</a> for inspiration</li>
+<li id="Better notes">Make it easier to take notes
+See [[<a href="file:///home/vincent/desktop/org/projects/inbox.html">file:///home/vincent/desktop/org/projects/inbox.html</a>::*[[<a href="https://dpitt.me/blog/2020/03/zettelkasten/">https://dpitt.me/blog/2020/03/zettelkasten/</a>\][dpitt.me :: Using Emacs&rsquo;s org-mode As Your Zettelkästen]\]][dpitt.me :: Using Emacs&rsquo;s org-mode As Your Zettelkästen]]</li>
+<li id="<code>src/www</code>"><ul class="org-ul">
+<li>articles</li>
+<li>posts</li>
+</ul></li>
+<li id="<code>src/home/docs</code>"><ul class="org-ul">
+<li>for new docs ?</li>
+</ul></li>
+
+<li>Read <a href="https://orgmode.org/manual/Template-elements.html#Template-elements">Template elements (The Org Manual)</a></li>
+<li>rg:org-capture-template:/mnt/synodine/volumeUSB2/usbshare/src/github.com/vdemeester/configs
+<ul class="org-ul">
+<li><a href="/mnt/synodine/volumeUSB2/usbshare/src/github.com/vdemeester/configs/howardabrams.spacemacs.d/layers/ha-org/packages.el::master@{2020-04-02}::342">git:/mnt/synodine/volumeUSB2/usbshare/src/github.com/vdemeester/configs/howardabrams.spacemacs.d/layers/ha-org/packages.el::master@{2020-04-02}::342</a></li>
+</ul></li>
+</ul>
+
+<p>
+^^ some of those could be <i>normal</i> template instead of <code>org-mode</code> capture templates
+</p>
+</div>
+</div>
+
+<div id="outline-container-org-protocol%20support%20for%20more%20templates" class="outline-4">
+<h4 id="org-protocol%20support%20for%20more%20templates"><span class="todo TODO">TODO</span> org-protocol support for more templates</h4>
+<div class="outline-text-4" id="text-org-protocol%20support%20for%20more%20templates">
+<ul class="org-ul">
+<li>reviews, task, …</li>
+<li><a href="https://github.com/abo-abo/orca">https://github.com/abo-abo/orca</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-%3Dorg-mode%3D%20entry%20ordering" class="outline-3">
+<h3 id="%3Dorg-mode%3D%20entry%20ordering"><span class="todo TODO">TODO</span> <code>org-mode</code> entry ordering</h3>
+<div class="outline-text-3" id="text-%3Dorg-mode%3D%20entry%20ordering">
+<ul class="org-ul">
+<li>By TODO keyword, then priority</li>
+<li>Bind it to sthg (else than <code>^</code>)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-Legacy" class="outline-3">
+<h3 id="Legacy">Legacy</h3>
+<div class="outline-text-3" id="text-Legacy">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgfe09b2c">(use-package org
+  <span class="org-builtin">:defer</span> t
+  <span class="org-builtin">:config</span>
+
+  (<span class="org-keyword">defvar</span> <span class="org-variable-name">org-capture-templates</span> (list))
+  (<span class="org-keyword">setq</span> org-protocol-default-template-key <span class="org-string">"l"</span>)
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">images</span>
+  (<span class="org-keyword">setq</span> org-image-actual-width nil
+        org-startup-with-inline-images nil)
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Tasks (-&gt; inbox)</span>
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Journal</span>
+
+  (add-to-list 'ispell-skip-region-alist '(<span class="org-string">":</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">(</span></span><span class="org-string">PROPERTIES</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">|</span></span><span class="org-string">LOGBOOK</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">)</span></span><span class="org-string">:"</span> <span class="org-string">":END:"</span>))
+  (add-to-list 'ispell-skip-region-alist '(<span class="org-string">"#\\+BEGIN_SRC"</span> <span class="org-string">"#\\+END_SRC"</span>))
+  (add-to-list 'ispell-skip-region-alist '(<span class="org-string">"#\\+BEGIN_EXAMPLE"</span> <span class="org-string">"#\\+END_EXAMPLE"</span>))
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">org-links</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">from http://endlessparentheses.com/use-org-mode-links-for-absolutely-anything.html</span>
+  (org-link-set-parameters <span class="org-string">"tag"</span>
+                           <span class="org-builtin">:follow</span> #'endless/follow-tag-link)
+  (<span class="org-keyword">defun</span> <span class="org-function-name">endless/follow-tag-link</span> (tag)
+    <span class="org-doc">"Display a list of TODO headlines with tag TAG.</span>
+<span class="org-doc">With prefix argument, also display headlines without a TODO keyword."</span>
+    (org-tags-view (null current-prefix-arg) tag))
+
+  (org-link-set-parameters
+   <span class="org-string">"org"</span>
+   <span class="org-builtin">:complete</span> (<span class="org-keyword">lambda</span> () (+org-link-read-file <span class="org-string">"org"</span> org-directory))
+   <span class="org-builtin">:follow</span>   (<span class="org-keyword">lambda</span> (link) (find-file (expand-file-name link org-directory)))
+   <span class="org-builtin">:face</span>     (<span class="org-keyword">lambda</span> (link)
+               (<span class="org-keyword">if</span> (file-exists-p (expand-file-name link org-directory))
+                   'org-link
+                 'error)))
+  (<span class="org-keyword">defun</span> <span class="org-function-name">+org-link-read-file</span> (key dir)
+    (<span class="org-keyword">let</span> ((file (read-file-name (format <span class="org-string">"%s: "</span> (capitalize key)) dir)))
+      (format <span class="org-string">"%s:%s"</span>
+              key
+              (file-relative-name file dir))))
+  )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Foobar" class="outline-3">
+<h3 id="Foobar">Foobar</h3>
+<div class="outline-text-3" id="text-Foobar">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgc6e23d4">(message <span class="org-string">"foo"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgcf470ba">(message <span class="org-string">"bar"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org6356433"><span class="org-comment-delimiter">;; </span><span class="org-comment">Yo</span>
+
+&lt;&lt;foo&gt;&gt;
+&lt;&lt;bar&gt;&gt;
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-Configuration%20layout" class="outline-2">
+<h2 id="Configuration%20layout">Configuration layout</h2>
+<div class="outline-text-2" id="text-Configuration%20layout">
+<p>
+Here we define the <code>config-org</code> file that gets generated by the source blocks in our Org
+document. This is the file that actually gets loaded on startup. The placeholders in
+angled brackets correspond to the <code>NAME</code> directives above the <code>SRC</code> blocks throughout this
+document.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;;; </span><span class="org-comment">config-org.el --- -*- lexical-binding: t; -*-</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Commentary:</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Configuration of orgmode.</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Code:</span>
+
+(use-package s)
+
+&lt;&lt;constants-and-registers&gt;&gt;
+&lt;&lt;main&gt;&gt;
+&lt;&lt;agenda&gt;&gt;
+&lt;&lt;capture&gt;&gt;
+&lt;&lt;protocol&gt;&gt;
+&lt;&lt;clock&gt;&gt;
+&lt;&lt;habits&gt;&gt;
+&lt;&lt;src&gt;&gt;
+&lt;&lt;links&gt;&gt;
+&lt;&lt;babel&gt;&gt;
+&lt;&lt;notes&gt;&gt;
+&lt;&lt;journaling&gt;&gt;
+&lt;&lt;misc&gt;&gt;
+&lt;&lt;diary&gt;&gt;
+
+&lt;&lt;legacy&gt;&gt;
+
+(<span class="org-keyword">provide</span> '<span class="org-constant">config-org</span>)
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">config-org.el ends here</span>
+</pre>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

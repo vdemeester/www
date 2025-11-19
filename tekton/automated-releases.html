@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Automated releases for tektoncd projects</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="post" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/css/2022.css" />
+<link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Automated releases for tektoncd projects</h1>
+</header><p>
+<code>tektoncd/operator</code> and <code>tektoncd/cli</code> as examples. We have 2 choices:
+</p>
+<ul class="org-ul">
+<li>Use GitHub workflows for everything (easier, but…)
+<ul class="org-ul">
+<li><code>tektoncd/cli</code> is a good candidate here : build, test, build image and goreleaser are
+all super easy to do.</li>
+</ul></li>
+<li>Use GitHub workflows to send a payload to <i>dogfooding</i> (harder, but…)
+<ul class="org-ul">
+<li><code>tektoncd/operator</code> could be interesting to try out with here.</li>
+</ul></li>
+</ul>
+<section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

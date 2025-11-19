@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>On digital minimalism, Linux, NixOS and Emacs</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">On digital minimalism, Linux, NixOS and Emacs</h1>
+</header><section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+I&rsquo;ve been reading and listening about Minimalism and Digital Minimalism for a little while
+now. I&rsquo;ve watch some <a href="https://www.youtube.com/channel/UCJ24N4O0bP7LGLBDvye7oCA">Matt D&rsquo;Avella</a> youtube video (and documentary), read <a href="https://www.goodreads.com/book/show/40672036-digital-minimalism">Digital
+Minimalism</a> from <a href="https://www.goodreads.com/author/show/147891.Cal_Newport">Cal Newport</a>, and read a bunch of <a href="#Links">articles and blog posts</a>.
+</p>
+
+<p>
+I wouldn&rsquo;t say I am a minimalist, neither am I a digital minimalist <b>but</b> it is something
+that is a bit appealing and I feel I am slowly taking inspiration from those. I&rsquo;ve started
+reducing to a minimun what my <i>smart</i>-phone does, I&rsquo;ve reduced the number of <i>gadgets</i>
+I&rsquo;ve add over time. But in this posts, I am going to focus on my systems and tools — this
+means Linux distributions, Emacs and other tools.
+</p>
+</div>
+</section>
+<section id="outline-container-A%20little%20bit%20of%20history%20%28or%20context%29" class="outline-2">
+<h2 id="A%20little%20bit%20of%20history%20%28or%20context%29">A little bit of history (or context)</h2>
+<div class="outline-text-2" id="text-A%20little%20bit%20of%20history%20%28or%20context%29">
+<p>
+I&rsquo;ve been using GNU/Linux for ages now. It has been around 22 years now that I discovered
+Red Hat<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> Linux, 5.2 at the time. I&rsquo;ve use it as my primary operating system almost
+ever sync. During that time, I&rsquo;ve tried so many distribution: from <a href="https://en.wikipedia.org/wiki/Mandriva_Linux">Mandrake</a> (later
+Mandriva), to <a href="https://www.debian.org/">Debian</a> (3.0 -&gt; 9.0 on some servers) and <a href="https://www.ubuntu.com">Ubuntu</a> (on the first ever public
+release), with a long time on <a href="https://gentoo.org/">Gentoo</a> and later <a href="https://www.archlinux.org/">Archlinux</a>. I&rsquo;ve used Gnome, KDE, wmii,
+XMonad, awesome-vm. I&rsquo;ve used bash, zsh, fish, switching from one to another multiple
+times. I&rsquo;ve used Emacs, vim, IntelliJ, Eclipse, VSCode… My gentoo/archlinux days made me
+try and <i>use</i> a lot of tools (screen, tmux, …) and customization.
+</p>
+
+<p>
+I had the habit to customize everything, down to the theme and icons I use. There was a
+time where I would patch and re-package some GTK themes and icons set. <b>I had to
+customize everything</b>, that was my learning experience. I would often break things and
+have to re-install the system — and <b>it was fun</b> 😎.
+</p>
+
+<p>
+But the more I <i>grew</i>, the more I worked for different companies, the less time I had to
+do this. I was also learning a lot about tests, reproducibility at that time. My <i>will</i> to
+customization and <i>instability</i> slowly faded, I wanted to be able to focus on what
+mattered, and not loose time on silly things that I would break soon after making it.
+</p>
+</div>
+</section>
+<section id="outline-container-Minimalism%20and%20Digital%20Mininalism" class="outline-2">
+<h2 id="Minimalism%20and%20Digital%20Mininalism">Minimalism and Digital Mininalism</h2>
+<div class="outline-text-2" id="text-Minimalism%20and%20Digital%20Mininalism">
+<p>
+Let&rsquo;s try to define really quick what is minimalism and digital minimalism about.Digital
+minimalism is Minimalism in the digital world, and <a href="https://www.theminimalists.com/minimalism/">minimalism</a> can be seen as <a href="https://jamesstuber.com/minimalism-as-a-framework/">a Framework
+for Decision Making</a>.
+</p>
+
+<blockquote>
+<p>
+Every decision we make is constrained by limited resources. Money, materials, energy. Even
+the richest man in the world is limited by time, and has to make decisions accordingly.
+</p>
+
+<p>
+Here are some factors that make minimalism well suited for decision making:
+</p>
+
+<ul class="org-ul">
+<li>Practicing minimalism helps develop an improved ability to discern what’s important and
+what’s not</li>
+<li>It becomes easier to let go of ‘sort of important’ things</li>
+<li>What you choose to keep is a reflection of your values</li>
+</ul>
+</blockquote>
+
+<p>
+In a gist, Digital Minimalism is about making conscious choice of what you use and what
+you do in the digital world, a world of abundance (information, software, …).
+</p>
+
+<p>
+Let&rsquo;s take two examples: our desktops and our phones.
+</p>
+
+<p>
+On desktop, digital minimalism can be something like the follow blog post : <a href="http://neugierig.org/software/blog/2014/07/anti-dashboard-manifesto.html">Tech Notes:
+The Anti-Dashboard Manifesto</a>.
+</p>
+
+<blockquote>
+<p>
+Now take that reasoning further: It&rsquo;s not useful to reserve a portion of my screen for
+displaying which applications are running, as the things that are running are visible and
+the things that aren&rsquo;t visible can be found when necessary. There&rsquo;s no need for an icon
+displaying wifi status; if I&rsquo;m connected it&rsquo;s uninteresting and if I&rsquo;m not connected I&rsquo;ll
+surely discover it if I attempt to use the internet.
+</p>
+
+<p>
+I took this reasoning to its conclusion. I run my computers with the screen blank except
+for the apps I run, and the apps I run I configure to display a minimal amount of
+information. I think of this as being anti-dashboard: against the cognitive clutter of
+extraneous information. My computer is not a cockpit and I am at my best when I&rsquo;m only
+thinking about the single task at hand.
+</p>
+</blockquote>
+
+<p>
+This is taking things a little bit too far for me <b>but</b> it does resonate with me, and as
+you&rsquo;ll see in the following articles (and on my configuration), I share some of Evan&rsquo;s
+belief. By default, my desktop do only show a background (be an image or a color) and
+anything related to time, battery and other status is a keybinding away (the <code>Win</code> key).
+</p>
+
+<p>
+And on the phone: <a href="https://robertheaton.com/2020/03/18/yourself-happier-iphone-worse/">How to make yourself happier by making your iPhone worse | Robert Heaton</a>
+— which I followed almost word for word, but this isn&rsquo;t the subject of this post.
+</p>
+</div>
+</section>
+<section id="outline-container-Emacs%2C%20Nix%2C%20NixOS%2C%20%3Dhome-manager%3D%20and%20other%20tools" class="outline-2">
+<h2 id="Emacs%2C%20Nix%2C%20NixOS%2C%20%3Dhome-manager%3D%20and%20other%20tools">Emacs, Nix, NixOS, <code>home-manager</code> and other tools</h2>
+<div class="outline-text-2" id="text-Emacs%2C%20Nix%2C%20NixOS%2C%20%3Dhome-manager%3D%20and%20other%20tools">
+<p>
+How a GNU/Linux distribution like NixOS comes into this. First, let&rsquo;s see what I want :
+</p>
+
+<ul class="org-ul">
+<li>A system that is tailored to my needs, that makes me efficient.</li>
+<li>A system that is customizable, to answer the previous item. I want to be able to modify
+the default behavior if it doesn&rsquo;t suit me.</li>
+<li>A system that is reproductible and easy to replicate. If I change my hardware, or if I
+need to re-install my system for <i>any reason</i>.</li>
+<li>A way to share configuration on my infra. This is probably the developer speaking, but I
+want to write something once and re-use it several times.</li>
+<li>A developer environment that is reproductible, on-demand and <i>safe</i>.</li>
+<li>Use defaults of the software I use as much as possible. This one is tricky to achiev for
+several reasons:
+<ul class="org-ul">
+<li>I am used to customize everything (<i>easy to fix</i>)</li>
+<li>I use a custom keyboard layout (<a href="https://bepo.fr">bepo</a>), so if I go with default keybinding, I will have
+the wrong <i>muscle memory</i> (and they could be not optimized either)</li>
+</ul></li>
+<li>Hackable tools that I can manipulate as I want.</li>
+<li>Use the right tool at the right time, trying not to reinvent the wheel.</li>
+</ul>
+
+<p>
+As it turns out Nix and NixOS are giving all the components required for my <i>almost</i> ideal
+setup.
+</p>
+
+<p>
+If you complete that with a <i>not really minimalist</i> editor, called <a href="https://www.gnu.org/software/emacs/">GNU Emacs</a>, you&rsquo;ve got a
+pretty composable system without leaving Emacs. I&rsquo;ll dig more into my Emacs configuration
+and my NixOS setup in different posts — and on the <a href="https://vincent.demeester.fr/configurations/"><code>configurations</code></a> pages — but my take
+lately is to try to do with what is available (as built-in, in Emacs for example). After
+reading the docs, if it&rsquo;s not sufficient, I may look for an external module or tool.
+</p>
+</div>
+</section>
+<section id="outline-container-Conclusion" class="outline-2">
+<h2 id="Conclusion">Conclusion</h2>
+<div class="outline-text-2" id="text-Conclusion">
+<p>
+This was a weird post that mixes up tooling, minimalism and thoughts. It&rsquo;s definitely not
+what I initially envisioned. But I&rsquo;m hoping it introduce a bit my take on things.
+</p>
+</div>
+</section>
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+<ul class="org-ul">
+<li><a href="http://neugierig.org/software/blog/2014/07/anti-dashboard-manifesto.html">Tech Notes: The Anti-Dashboard Manifesto</a></li>
+<li><a href="https://blog.zdsmith.com/posts/digital-minimalism-for-the-working-hacker.html">Subset Park: Digital Minimalism for the Working Hacker</a></li>
+<li><a href="https://jamesstuber.com/minimalism-as-a-framework/">Minimalism as a Framework for Decision Making | JamesStuber.com</a></li>
+<li><a href="https://robertheaton.com/2020/03/18/yourself-happier-iphone-worse/">How to make yourself happier by making your iPhone worse | Robert Heaton</a></li>
+</ul>
+</div>
+</section>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+And I now work for Red Hat Inc., what a journey 😝
+</p></div></div>
+
+
+</div>
+</div></main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

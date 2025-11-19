@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenShift on VM Bare metal</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">OpenShift on VM Bare metal</h1>
+</header><p>
+Let&rsquo;s try to install OpenShift 4 on bare metal, where bare metal is virtual machine
+managed outside of OpenShift reach. We are trying to follow the <a href="https://docs.openshift.com/container-platform/4.4/installing/installing_bare_metal/installing-bare-metal.html">OpenShift Install on Bare
+metal</a> official documentation as much as possible.
+</p>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Prerequisites">Prerequisites</a></li>
+<li><a href="#Provisionning%20Machines">Provisionning Machines</a>
+<ul>
+<li><a href="#Bootstraper">Bootstraper</a></li>
+<li><a href="#Load%20balancer">Load balancer</a></li>
+<li><a href="#Master%20and%20worker%20nodes">Master and worker nodes</a></li>
+</ul>
+</li>
+<li><a href="#Links">Links</a></li>
+</ul>
+</div>
+</nav>
+<section id="outline-container-Prerequisites" class="outline-2">
+<h2 id="Prerequisites">Prerequisites</h2>
+<div class="outline-text-2" id="text-Prerequisites">
+<p>
+In my <a href="infrastructure.html">infrastructure</a> I do have at my disposal 2 machines that both have libvirt (qemu+kvm)
+enabled (with nested virtualization support even 😝).
+</p>
+
+<ul class="org-ul">
+<li>okinawa: 8 cores, 32GiB memory</li>
+<li>wakasu: 8 cores, 64GiB memory</li>
+</ul>
+
+<p>
+Because we are going to install the machine <i>bare metal</i> on virtual machine, some
+assumptions are made (see <a href="infrastructure.html">Infrastructure</a> on those).
+</p>
+
+<ul class="org-ul">
+<li>VMs are created using a pre-defined Mac address, and the DHCP server on the network
+assign them a static IP (based on the mac address).</li>
+<li>This allows to create <span class="underline">ahead</span> of time DNS entries on the network so that the bootstrap
+and the cluster can find its own by domain name.</li>
+</ul>
+
+<p>
+My <i>home</i> network is using <code>home</code> as domain name tld. So VMs will be <code>vm1.home</code>, … and for
+the ocp cluster, <i>aliased</i> with <code>ocp.home</code>. We will have 3 master and 5 workers 🙃. The
+DNS entry looks more or less like
+</p>
+
+<div class="org-src-container">
+<pre class="src src-text">;; Load balancer
+vm0.home. IN A 192.168.1.120
+api.ocp.home. IN A 192.168.1.120
+api-int.ocp.home. IN A 192.168.1.120
+*.apps.ocp.home. IN A 192.168.1.120
+
+;; Masters
+vm1.home. IN A 192.168.1.121
+master1.ocp.home. IN A 192.168.1.121
+vm2.home. IN A 192.168.1.122
+master2.ocp.home. IN A 192.168.1.122
+vm3.home. IN A 192.168.1.123
+master3.ocp.home. IN A 192.168.1.123
+
+;; Workers
+vm4.home. IN A 192.168.1.124
+worker1.ocp.home. IN A 192.168.1.124
+vm5.home. IN A 192.168.1.125
+worker2.ocp.home. IN A 192.168.1.125
+vm6.home. IN A 192.168.1.126
+worker3.ocp.home. IN A 192.168.1.126
+vm7.home. IN A 192.168.1.127
+worker4.ocp.home. IN A 192.168.1.127
+vm8.home. IN A 192.168.1.128
+worker5.ocp.home. IN A 192.168.1.128
+
+;; Bootstrap machine
+vm9.home. IN A 192.168.1.129
+bootstrap.ocp.home. IN A 192.168.1.129
+
+;; etcd records
+etcd-0.ocp.home. IN A 192.168.1.121
+etcd-1.ocp.home. IN A 192.168.1.122
+etcd-2.ocp.home. IN A 192.168.1.123
+_etcd-server-ssl._tcp.ocp.home. IN SRV 0 10 2380 etcd-0.ocp.home.
+_etcd-server-ssl._tcp.ocp.home. IN SRV 0 10 2380 etcd-1.ocp.home.
+_etcd-server-ssl._tcp.ocp.home. IN SRV 0 10 2380 etcd-2.ocp.haome.
+</pre>
+</div>
+
+<p>
+As you can see, aside from the 3 masters and the 5 workers, we will have a load-balancer
+VM as documented in the official documentation.
+</p>
+
+<p>
+For reference, VMs Mac address compared to their IP.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">MAC address</td>
+<td class="org-right">IP</td>
+<td class="org-left">Name</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:20</td>
+<td class="org-right">192.168.1.120</td>
+<td class="org-left">VM0</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:21</td>
+<td class="org-right">192.168.1.121</td>
+<td class="org-left">VM1</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:22</td>
+<td class="org-right">192.168.1.122</td>
+<td class="org-left">VM2</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:23</td>
+<td class="org-right">192.168.1.123</td>
+<td class="org-left">VM3</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:24</td>
+<td class="org-right">192.168.1.124</td>
+<td class="org-left">VM4</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:25</td>
+<td class="org-right">192.168.1.125</td>
+<td class="org-left">VM5</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:26</td>
+<td class="org-right">192.168.1.126</td>
+<td class="org-left">VM6</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:27</td>
+<td class="org-right">192.168.1.127</td>
+<td class="org-left">VM7</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:28</td>
+<td class="org-right">192.168.1.128</td>
+<td class="org-left">VM8</td>
+</tr>
+
+<tr>
+<td class="org-left">52:54:00:dd:a3:29</td>
+<td class="org-right">192.168.1.129</td>
+<td class="org-left">VM9</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Although I am tempted to use <a href="https://github.com/RedHatOfficial/ocp4-helpernode">ocp4-helpernode</a>, I am going to try to do as much as I can
+with my bare hands ✋.
+</p>
+</div>
+</section>
+<section id="outline-container-Provisionning%20Machines" class="outline-2">
+<h2 id="Provisionning%20Machines">Provisionning Machines</h2>
+<div class="outline-text-2" id="text-Provisionning%20Machines">
+<p>
+We will need to provision some machines, using <code>virsh</code>, <code>virt-install</code> or whatever works
+the best to be honest. This is also gonna be <b>heavily</b> based on
+<a href="https://github.com/RedHatOfficial/ocp4-helpernode/blob/master/docs/quickstart-static.md">ocp4-helpernode/quickstart-static.md</a>.
+</p>
+</div>
+<div id="outline-container-Bootstraper" class="outline-3">
+<h3 id="Bootstraper">Bootstraper</h3>
+<div class="outline-text-3" id="text-Bootstraper">
+<p>
+For the bootstrap VM (<code>vm9</code>), we can go with any system but, let&rsquo;s follow closely the
+quistart and use Centos EL8. The boostraper machine will be on <code>wakasu</code> so we will need to
+target the libvirt daemon from there.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">export QEMU_URI=qemu+ssh://vincent@wakasu.home/system
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-bootstrap" --vcpus=4 --ram=8192 \
+             --disk path=/var/lib/libvirt/images/ocp-bootstrap.qcow2,bus=virtio,size=120 \
+             --boot menu=on --print-xml &gt; ocp4-bootstrap.xml
+virsh --connect=${QEMU_URI} \
+      define --file ocp4-bootstrap.xml
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Load%20balancer" class="outline-3">
+<h3 id="Load%20balancer">Load balancer</h3>
+</div>
+
+<div id="outline-container-Master%20and%20worker%20nodes" class="outline-3">
+<h3 id="Master%20and%20worker%20nodes">Master and worker nodes</h3>
+<div class="outline-text-3" id="text-Master%20and%20worker%20nodes">
+<p>
+Let&rsquo;s group machines between wakasu and okinawa. There will be 2 masters on wakasu and one
+on okinawa, 3 workers on wakasu, and 2 on okinawa.
+</p>
+
+<ul class="org-ul">
+<li><p>
+<code>wakasu</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">export QEMU_URI=qemu+ssh://vincent@wakasu.home/system
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-master1" --vcpus=4 --ram=12288 \
+             --disk path=/var/lib/libvirt/images/ocp4-master1.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:21 \
+             --boot menu=on --print-xml &gt; ocp4-wakasu-master1.xml
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-master2" --vcpus=4 --ram=12288 \
+             --disk path=/var/lib/libvirt/images/ocp4-master2.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:22 \
+             --boot menu=on --print-xml &gt; ocp4-wakasu-master2.xml
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-worker1" --vcpus=4 --ram=8192 \
+             --disk path=/var/lib/libvirt/images/ocp4-worker1.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:24 \
+             --boot menu=on --print-xml &gt; ocp4-wakasu-worker1.xml
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-worker2" --vcpus=4 --ram=8192 \
+             --disk path=/var/lib/libvirt/images/ocp4-worker2.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:25 \
+             --boot menu=on --print-xml &gt; ocp4-wakasu-worker2.xml
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-worker3" --vcpus=4 --ram=8192 \
+             --disk path=/var/lib/libvirt/images/ocp4-worker3.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:26 \
+             --boot menu=on --print-xml &gt; ocp4-wakasu-worker3.xml
+for f in ocp4-wakasu-*.xml; do
+    virsh --connect=${QEMU_URI} define \
+          --file $f
+done
+</pre>
+</div>
+
+<p>
+Domain ocp4-master1 defined from ocp4-wakasu-master1.xml
+</p>
+
+<p>
+Domain ocp4-master2 defined from ocp4-wakasu-master2.xml
+</p>
+
+<p>
+Domain ocp4-worker1 defined from ocp4-wakasu-worker1.xml
+</p>
+
+<p>
+Domain ocp4-worker2 defined from ocp4-wakasu-worker2.xml
+</p>
+
+<p>
+Domain ocp4-worker3 defined from ocp4-wakasu-worker3.xml
+</p></li>
+</ul>
+
+
+
+<ul class="org-ul">
+<li><p>
+<code>okinawa</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">export QEMU_URI=qemu+ssh://vincent@okinawa.home/system
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-master3" --vcpus=4 --ram=12288 \
+             --disk path=/var/lib/libvirt/images/ocp4-master3.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:23 \
+             --boot menu=on --print-xml &gt; ocp4-okinawa-master1.xml
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-worker4" --vcpus=4 --ram=8192 \
+             --disk path=/var/lib/libvirt/images/ocp4-worker4.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:27 \
+             --boot menu=on --print-xml &gt; ocp4-okinawa-worker1.xml
+virt-install --connect=${QEMU_URI} \
+             --name="ocp4-worker5" --vcpus=4 --ram=8192 \
+             --disk path=/var/lib/libvirt/images/ocp4-worker5.qcow2,bus=virtio,size=120 \
+             --os-variant rhel8.0 \
+             --network bridge=br1,mac.address=52:54:00:dd:a3:28 \
+             --boot menu=on --print-xml &gt; ocp4-okinawa-worker2.xml
+for f in ocp4-okinawa-*.xml; do
+    virsh --connect=${QEMU_URI} define \
+          --file $f
+done
+
+</pre>
+</div>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Domain</td>
+<td class="org-left">ocp4-master3</td>
+<td class="org-left">defined</td>
+<td class="org-left">from</td>
+<td class="org-left">ocp4-okinawa-master1.xml</td>
+</tr>
+
+<tr>
+<td class="org-left">Domain</td>
+<td class="org-left">ocp4-worker4</td>
+<td class="org-left">defined</td>
+<td class="org-left">from</td>
+<td class="org-left">ocp4-okinawa-worker1.xml</td>
+</tr>
+
+<tr>
+<td class="org-left">Domain</td>
+<td class="org-left">ocp4-worker5</td>
+<td class="org-left">defined</td>
+<td class="org-left">from</td>
+<td class="org-left">ocp4-okinawa-worker2.xml</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+<ul class="org-ul">
+<li><a href="https://github.com/RedHatOfficial/ocp4-helpernode">ocp4-helpernode</a></li>
+<li><a href="https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart">OpenShift 4 Bare metal quickstart</a> blog post</li>
+<li><a href="https://docs.openshift.com/container-platform/4.4/installing/installing_bare_metal/installing-bare-metal.html">OpenShift Install on Bare metal</a> official doc</li>
+</ul>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

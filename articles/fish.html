@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fish shell notes</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Fish shell notes</h1>
+</header><p>
+I recently (2017) switch to <a href="https://fishshell.com/">fish</a> shell as my interactive shell. There
+is a few reason for it:
+</p>
+
+<ul class="org-ul">
+<li>the defaults are really good and there is a little to configure to
+achieve what I was trying to do with zsh,</li>
+<li>the autosuggestion feature is quite cool (I even went to reproduce
+that in <code>eshell</code>),</li>
+<li>the syntax highlighting feature is also killer as it easier to see
+problems in the command-line before hitting enter,</li>
+<li><p>
+it auto-generates completion from parsing man pages <code>&lt;3</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">$ fish_update_completions
+Parsing man pages and writing completions to /home/vincent/.local/share/fish/generated_completions/
+  1793 / 1793 : zramctl.8.gz
+</pre>
+</div></li>
+</ul>
+
+<p>
+At the begining, I used <a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a> as a simple way in.
+</p>
+
+<blockquote>
+<p>
+Oh My Fish provides core infrastructure to allow you to install
+packages which extend or modify the look of your shell. It&rsquo;s fast,
+extensible and easy to use.
+</p>
+</blockquote>
+
+<p>
+<a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a> is pretty cool but I tend to use only a few plugin and I
+almost have more hand-written configuration files for fish than what
+oh-my-fish gives me. So I&rsquo;m now using <a href="https://fishshell.com/">fish</a> shell <i>bare-naked</i> with my
+own configurations.
+</p>
+
+<p>
+According to the <a href="https://fishshell.com/docs/current/index.html#initialization">documentation</a>, fish will load files from the
+following folder (in order):
+</p>
+
+<ul class="org-ul">
+<li>Configuration shipped with fish, which should not be edited, in
+<code>$__fish_datadir/config.fish</code> (usually <code>/usr/share/fish/config.fish</code>).</li>
+<li>System-wide configuration files, where administrators can include
+initialization that should be run for all users on the system -
+similar to <code>/etc/profile</code> for POSIX-style shells - in
+<code>$__fish_sysconfdir</code> (usually <code>/etc/fish/config.fish</code>);</li>
+<li><p>
+Configuration snippets in files ending in <code>.fish</code>, in the directories:
+</p>
+<ul class="org-ul">
+<li><code>$XDG_CONFIG_HOME/fish/conf.d</code> (by default, <code>~/.config/fish/conf.d/</code>)</li>
+<li><code>$__fish_sysconfdir/conf.d</code> (by default, <code>/etc/fish/conf.d</code>)</li>
+<li><code>/usr/share/fish/vendor_conf.d</code> (set at compile time; by default,
+<code>$__fish_datadir/conf.d</code>)</li>
+</ul>
+<p>
+If there are multiple files with the same name in these directories,
+only the first will be executed. They are executed in order of their
+filename, sorted (like globs) in a natural order (i.e. &ldquo;01&rdquo; sorts
+before &ldquo;2&rdquo;).
+</p></li>
+<li>User initialization, usually in <code>~/.config/fish/config.fish</code>
+(controlled by the <code>XDG_CONFIG_HOME</code> environment variable).</li>
+</ul>
+
+<p>
+Fish will also automatically loads functions from the following folder
+(in order):
+</p>
+
+<ul class="org-ul">
+<li>A directory for end-users to keep their own functions, usually
+<code>~/.config/fish/functions</code> (controlled by the <code>XDG_CONFIG_HOME</code>
+environment variable).</li>
+<li>A directory for systems administrators to install functions for all
+users on the system, usually <code>/etc/fish/functions</code>.</li>
+<li>A directory for third-party software vendors to ship their own
+functions for their software, usually
+<code>/usr/share/fish/vendor_functions.d</code>.</li>
+<li>The functions shipped with fish, usually installed in
+<code>/usr/share/fish/functions</code>.</li>
+</ul>
+
+<blockquote>
+<p>
+An autoloaded function becomes available automatically to all
+running shells. If the function definition is changed, all running
+shells will automatically reload the altered version. Startup time and
+memory usage is improved, etc.
+</p>
+</blockquote>
+
+<p>
+I&rsquo;m also using <a href="https://nixos.org/">nixos</a> which have some specificities but we&rsquo;ll see that
+later. One specificity though about my setup is the, I may want some
+fish function/helper to be available for all users on a server (when
+using nixos) or only a user (mainly, when using nixpkgs without nixos,
+on Mac OSX or another linux or on Windows with WSL).
+</p>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

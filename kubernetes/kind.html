@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>kind</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="post" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/css/2022.css" />
+<link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">kind</h1>
+</header><p>
+<a href="https://kind.sigs.k8s.io/"><code>kind</code></a> runs <a href="kubernetes.html">Kubernetes</a> in <a href="docker.html">Docker</a> containers, and maybe more in the future.
+</p>
+<section id="outline-container-Multi-node%20setup" class="outline-2">
+<h2 id="Multi-node%20setup">Multi-node setup</h2>
+<div class="outline-text-2" id="text-Multi-node%20setup">
+<p>
+I am using the following configuration to be able to run a <code>kind</code> cluster on one of my local
+server and target it from my laptop.
+</p>
+
+<div class='drawer note'>
+<h6>Note</h6>
+<p>
+wakasu.home IP is <code>192.168.1.77</code>
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-yaml">kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  apiServerAddress: "192.168.1.77"
+  apiServerPort: 8443
+containerdConfigPatches:
+- |-
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5000"]
+    endpoint = ["http://sakhalin.home:5000"]
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker
+- role: worker
+</pre>
+</div>
+
+<p>
+Then, to provision this and get the configuration file, it&rsquo;s a matter of 2 commands.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">ssh wakasu.home kind create cluster --config ~/var/kind/wakasu.kind.yaml --name wakasu
+ssh wakasu.home kind get kubeconfig --name wakasu &gt; ~/.kube/config.wakasu.kind
+cat &lt;&lt;EOF | kubectl --kubeconfig=$<span class="org-variable-name">HOME</span>/.kube/config.wakasu.kind apply -f -
+<span class="org-sh-heredoc">apiVersion: v1</span>
+<span class="org-sh-heredoc">kind: ConfigMap</span>
+<span class="org-sh-heredoc">metadata:</span>
+<span class="org-sh-heredoc">  name: local-registry-hosting</span>
+<span class="org-sh-heredoc">  namespace: kube-public</span>
+<span class="org-sh-heredoc">data:</span>
+<span class="org-sh-heredoc">  localRegistryHosting.v1: |</span>
+<span class="org-sh-heredoc">    host: "localhost:5000"</span>
+<span class="org-sh-heredoc">    help: "https://kind.sigs.k8s.io/docs/user/local-registry/"</span>
+<span class="org-sh-heredoc">EOF</span>
+</pre>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenShift Commons</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">OpenShift Commons</h1>
+<p class="subtitle" role="doc-subtitle">Support for OpenShift Commons calls &amp; demos</p>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h:a5228f76-91f1-4e30-93a9-fe704230a561">Openshift Pipelines</a></li>
+</ul>
+</div>
+</nav>
+
+<section id="outline-container-h:a5228f76-91f1-4e30-93a9-fe704230a561" class="outline-2">
+<h2 id="h:a5228f76-91f1-4e30-93a9-fe704230a561">Openshift Pipelines</h2>
+<div class="outline-text-2" id="text-h:a5228f76-91f1-4e30-93a9-fe704230a561">
+<p>
+OpenShift Pipelines is a cloud-native, continuous integration and delivery (CI/CD)
+solution for building pipelines using [Tekton](<a href="https://tekton.dev">https://tekton.dev</a>). Tekton is a flexible,
+Kubernetes-native, open-source CI/CD framework that enables automating deployments across
+multiple platforms (Kubernetes, serverless, VMs, etc) by abstracting away the underlying
+details.
+</p>
+
+<p>
+OpenShift Pipelines features:
+</p>
+<ul class="org-ul">
+<li>Standard CI/CD pipeline definition based on Tekton</li>
+<li>Build images with Kubernetes tools such as S2I, Buildah, Buildpacks, Kaniko, etc</li>
+<li>Deploy applications to multiple platforms such as Kubernetes, serverless and VMs</li>
+<li>Easy to extend and integrate with existing tools</li>
+<li>Scale pipelines on-demand</li>
+<li>Portable across any Kubernetes platform</li>
+<li>Designed for microservices and decentralized teams</li>
+<li>Integrated with the OpenShift Developer Console</li>
+</ul>
+</div>
+
+<div id="outline-container-h:509fe8c1-2619-496f-b109-dfd67c0e47a1" class="outline-3">
+<h3 id="h:509fe8c1-2619-496f-b109-dfd67c0e47a1">Prerequisite</h3>
+<div class="outline-text-3" id="text-h:509fe8c1-2619-496f-b109-dfd67c0e47a1">
+<p>
+You need an OpenShift 4 cluster in order to complete this tutorial. If you don&rsquo;t have an
+existing cluster, go to <a href="http://try.openshift.com">http://try.openshift.com</a> and register for free in order to get an
+OpenShift 4 cluster up and running on AWS within minutes.
+</p>
+
+<p>
+You will also use the Tekton CLI (<code>tkn</code>) through out this tutorial. Download the Tekton
+CLI and copy it to a location on your <code>PATH</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h:d958ae3b-de56-4b7c-9355-988579b57389" class="outline-3">
+<h3 id="h:d958ae3b-de56-4b7c-9355-988579b57389">Concepts</h3>
+<div class="outline-text-3" id="text-h:d958ae3b-de56-4b7c-9355-988579b57389">
+<p>
+Tekton defines a number of <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Kubernetes custom resources</a> as building blocks in order to
+standardize pipeline concepts and provide a terminology that is consistent across CI/CD
+solutions. These custom resources (CR) are an extension of Kubernetes that let users
+create and interact with these objects using <code>kubectl</code> and other Kubernetes tools.
+</p>
+
+<p>
+The custom resources needed to define a pipeline are:
+</p>
+<ul class="org-ul">
+<li><code>Task</code>: a reusable, loosely coupled number of steps that perform a specific task (e.g., building a container image)</li>
+<li><code>Pipeline</code>: the definition of the pipeline and the ~Task~s that it should perform</li>
+<li><code>PipelineResource</code>: inputs (e.g., git repository) and outputs (e.g., image registry) to and out of a pipeline or task</li>
+<li><code>TaskRun</code>: the result of running an instance of task</li>
+<li><code>PipelineRun</code>: the result of running an instance of pipeline, which includes a number of ~TaskRun~s</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:d1d116fb-34e7-43d1-bf1b-2a4a8c3bcb65" class="outline-3">
+<h3 id="h:d1d116fb-34e7-43d1-bf1b-2a4a8c3bcb65">Deploy sample application</h3>
+<div class="outline-text-3" id="text-h:d1d116fb-34e7-43d1-bf1b-2a4a8c3bcb65">
+</div>
+<div id="outline-container-h:b7952df1-d635-4276-8186-b1c209aea268" class="outline-4">
+<h4 id="h:b7952df1-d635-4276-8186-b1c209aea268">Create the project</h4>
+<div class="outline-text-4" id="text-h:b7952df1-d635-4276-8186-b1c209aea268">
+<p>
+We are creating a project, <code>openshift-comons</code>. Building container images using build tools
+such as S2I, Buildah, Kaniko, etc require privileged access to the cluster. OpenShift
+default security settings do not allow privileged containers unless specifically
+configured. Create a service account for running pipelines and enable it to run privileged
+pods for building images.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">oc new-project pipeline-demo
+oc create serviceaccount pipeline
+oc adm policy add-scc-to-user privileged -z pipeline
+oc adm policy add-role-to-user edit -z pipeline
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:070d48bb-7bfd-4cff-b709-60a825f0cab4" class="outline-4">
+<h4 id="h:070d48bb-7bfd-4cff-b709-60a825f0cab4">The application</h4>
+<div class="outline-text-4" id="text-h:070d48bb-7bfd-4cff-b709-60a825f0cab4">
+<p>
+We will use the <a href="https://github.com/spring-projects/spring-petclinic">Spring PetClinic</a> sample application during this tutorial, which is a
+simple Spring Boot application.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: image.openshift.io/v1
+<span class="org-variable-name">kind</span>: ImageStream
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">labels</span>:
+    <span class="org-variable-name">app</span>: spring-petclinic
+  <span class="org-variable-name">name</span>: spring-petclinic
+<span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: apps.openshift.io/v1
+<span class="org-variable-name">kind</span>: DeploymentConfig
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">labels</span>:
+    <span class="org-variable-name">app</span>: spring-petclinic
+  <span class="org-variable-name">name</span>: spring-petclinic
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">replicas</span>: 1
+  <span class="org-variable-name">revisionHistoryLimit</span>: 10
+  <span class="org-variable-name">selector</span>:
+    <span class="org-variable-name">app</span>: spring-petclinic
+    <span class="org-variable-name">deploymentconfig</span>: spring-petclinic
+  <span class="org-variable-name">strategy</span>:
+    <span class="org-variable-name">activeDeadlineSeconds</span>: 21600
+    <span class="org-variable-name">resources</span>: {<span class="org-variable-name">}</span>
+<span class="org-variable-name">    rollingParams</span>:
+      <span class="org-variable-name">intervalSeconds</span>: 1
+      <span class="org-variable-name">maxSurge</span>: 25%
+      <span class="org-variable-name">maxUnavailable</span>: 25%
+      <span class="org-variable-name">timeoutSeconds</span>: 600
+      <span class="org-variable-name">updatePeriodSeconds</span>: 1
+    <span class="org-variable-name">type</span>: Rolling
+  <span class="org-variable-name">template</span>:
+    <span class="org-variable-name">metadata</span>:
+      <span class="org-variable-name">labels</span>:
+        <span class="org-variable-name">app</span>: spring-petclinic
+        <span class="org-variable-name">deploymentconfig</span>: spring-petclinic
+    <span class="org-variable-name">spec</span>:
+      <span class="org-variable-name">containers</span>:
+      - <span class="org-variable-name">image</span>: spring-petclinic:latest
+        <span class="org-variable-name">imagePullPolicy</span>: Always
+        <span class="org-variable-name">livenessProbe</span>:
+          <span class="org-variable-name">failureThreshold</span>: 3
+          <span class="org-variable-name">httpGet</span>:
+            <span class="org-variable-name">path</span>: /
+            <span class="org-variable-name">port</span>: 8080
+            <span class="org-variable-name">scheme</span>: HTTP
+          <span class="org-variable-name">initialDelaySeconds</span>: 45
+          <span class="org-variable-name">periodSeconds</span>: 10
+          <span class="org-variable-name">successThreshold</span>: 1
+          <span class="org-variable-name">timeoutSeconds</span>: 1
+        <span class="org-variable-name">name</span>: spring-petclinic
+        <span class="org-variable-name">ports</span>:
+        - <span class="org-variable-name">containerPort</span>: 8080
+          <span class="org-variable-name">protocol</span>: TCP
+        - <span class="org-variable-name">containerPort</span>: 8443
+          <span class="org-variable-name">protocol</span>: TCP
+        - <span class="org-variable-name">containerPort</span>: 8778
+          <span class="org-variable-name">protocol</span>: TCP
+        <span class="org-variable-name">readinessProbe</span>:
+          <span class="org-variable-name">failureThreshold</span>: 3
+          <span class="org-variable-name">httpGet</span>:
+            <span class="org-variable-name">path</span>: /
+            <span class="org-variable-name">port</span>: 8080
+            <span class="org-variable-name">scheme</span>: HTTP
+          <span class="org-variable-name">initialDelaySeconds</span>: 45
+          <span class="org-variable-name">periodSeconds</span>: 10
+          <span class="org-variable-name">successThreshold</span>: 1
+          <span class="org-variable-name">timeoutSeconds</span>: 5
+        <span class="org-variable-name">resources</span>: {<span class="org-variable-name">}</span>
+<span class="org-variable-name">        terminationMessagePath</span>: /dev/termination-log
+        <span class="org-variable-name">terminationMessagePolicy</span>: File
+      <span class="org-variable-name">dnsPolicy</span>: ClusterFirst
+      <span class="org-variable-name">restartPolicy</span>: Always
+      <span class="org-variable-name">schedulerName</span>: default-scheduler
+      <span class="org-variable-name">securityContext</span>: {<span class="org-variable-name">}</span>
+<span class="org-variable-name">      terminationGracePeriodSeconds</span>: 30
+  <span class="org-variable-name">test</span>: <span class="org-constant">false</span>
+  <span class="org-variable-name">triggers</span>:
+  - <span class="org-variable-name">imageChangeParams</span>:
+      <span class="org-variable-name">containerNames</span>:
+      - spring-petclinic
+      <span class="org-variable-name">from</span>:
+        <span class="org-variable-name">kind</span>: ImageStreamTag
+        <span class="org-variable-name">name</span>: spring-petclinic:latest
+        <span class="org-variable-name">namespace</span>: pipeline-demo
+    <span class="org-variable-name">type</span>: ImageChange
+<span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: v1
+<span class="org-variable-name">kind</span>: Service
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">labels</span>:
+    <span class="org-variable-name">app</span>: spring-petclinic
+  <span class="org-variable-name">name</span>: spring-petclinic
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">ports</span>:
+  - <span class="org-variable-name">name</span>: 8080-tcp
+    <span class="org-variable-name">port</span>: 8080
+    <span class="org-variable-name">protocol</span>: TCP
+    <span class="org-variable-name">targetPort</span>: 8080
+  - <span class="org-variable-name">name</span>: 8443-tcp
+    <span class="org-variable-name">port</span>: 8443
+    <span class="org-variable-name">protocol</span>: TCP
+    <span class="org-variable-name">targetPort</span>: 8443
+  - <span class="org-variable-name">name</span>: 8778-tcp
+    <span class="org-variable-name">port</span>: 8778
+    <span class="org-variable-name">protocol</span>: TCP
+    <span class="org-variable-name">targetPort</span>: 8778
+  <span class="org-variable-name">selector</span>:
+    <span class="org-variable-name">app</span>: spring-petclinic
+    <span class="org-variable-name">deploymentconfig</span>: spring-petclinic
+  <span class="org-variable-name">sessionAffinity</span>: None
+  <span class="org-variable-name">type</span>: ClusterIP
+<span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: route.openshift.io/v1
+<span class="org-variable-name">kind</span>: Route
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">labels</span>:
+    <span class="org-variable-name">app</span>: spring-petclinic
+  <span class="org-variable-name">name</span>: spring-petclinic
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">port</span>:
+    <span class="org-variable-name">targetPort</span>: 8080-tcp
+  <span class="org-variable-name">to</span>:
+    <span class="org-variable-name">kind</span>: Service
+    <span class="org-variable-name">name</span>: spring-petclinic
+    <span class="org-variable-name">weight</span>: 100
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:9abbbf9d-553a-40a6-b9b1-bee2fc250f4e" class="outline-4">
+<h4 id="h:9abbbf9d-553a-40a6-b9b1-bee2fc250f4e">The tasks</h4>
+<div class="outline-text-4" id="text-h:9abbbf9d-553a-40a6-b9b1-bee2fc250f4e">
+<ul class="org-ul">
+<li><p>
+<code>openshift-client</code> from the <a href="https://github.com/tektoncd/catalog/">upstream catalog</a> (see <a href="https://raw.githubusercontent.com/tektoncd/catalog/658c021e86ce45c9396031a98df32ee50d2dc19e/openshift-client/openshift-client-task.yaml">here</a>)
+</p>
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Task
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: openshift-client
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">inputs</span>:
+    <span class="org-variable-name">params</span>:
+      - <span class="org-variable-name">name</span>: ARGS
+        <span class="org-variable-name">description</span>: The OpenShift CLI arguments to run
+        <span class="org-variable-name">default</span>: help
+  <span class="org-variable-name">steps</span>:
+    - <span class="org-variable-name">name</span>: oc
+      <span class="org-variable-name">image</span>: quay.io/openshift-pipeline/openshift-cli:0.5.0
+      <span class="org-variable-name">command</span>: [<span class="org-string">"/usr/local/bin/oc"</span>]
+      <span class="org-variable-name">args</span>:
+        - <span class="org-string">"${inputs.params.ARGS}"</span>
+</pre>
+</div></li>
+
+<li><p>
+<code>s2i-java</code> from our <a href="https://github.com/openshift/pipelines-catalog/">downstream catalog</a> (see <a href="https://raw.githubusercontent.com/openshift/pipelines-catalog/master/s2i-java-8/s2i-java-8-task.yaml">here</a>)
+</p>
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Task
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: s2i-java-8
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">inputs</span>:
+    <span class="org-variable-name">resources</span>:
+      - <span class="org-variable-name">name</span>: source
+        <span class="org-variable-name">type</span>: git
+    <span class="org-variable-name">params</span>:
+      - <span class="org-variable-name">name</span>: PATH_CONTEXT
+        <span class="org-variable-name">description</span>: The location of the path to run s2i from.
+        <span class="org-variable-name">default</span>: .
+      - <span class="org-variable-name">name</span>: TLSVERIFY
+        <span class="org-variable-name">description</span>: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+        <span class="org-variable-name">default</span>: <span class="org-string">"true"</span>
+  <span class="org-variable-name">outputs</span>:
+    <span class="org-variable-name">resources</span>:
+      - <span class="org-variable-name">name</span>: image
+        <span class="org-variable-name">type</span>: image
+  <span class="org-variable-name">steps</span>:
+    - <span class="org-variable-name">name</span>: generate
+      <span class="org-variable-name">image</span>: quay.io/openshift-pipeline/s2i
+      <span class="org-variable-name">workingdir</span>: /workspace/source
+      <span class="org-variable-name">command</span>: [<span class="org-string">'s2i'</span>, <span class="org-string">'build'</span>, <span class="org-string">'${inputs.params.PATH_CONTEXT}'</span>, <span class="org-string">'registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift'</span>, <span class="org-string">'--image-scripts-url'</span>, <span class="org-string">'image:///usr/local/s2i'</span>, <span class="org-string">'--as-dockerfile'</span>, <span class="org-string">'/gen-source/Dockerfile.gen'</span>]
+      <span class="org-variable-name">volumeMounts</span>:
+        - <span class="org-variable-name">name</span>: gen-source
+          <span class="org-variable-name">mountPath</span>: /gen-source
+    - <span class="org-variable-name">name</span>: build
+      <span class="org-variable-name">image</span>: quay.io/buildah/stable
+      <span class="org-variable-name">workingdir</span>: /gen-source
+      <span class="org-variable-name">command</span>: [<span class="org-string">'buildah'</span>, <span class="org-string">'bud'</span>, <span class="org-string">'--tls-verify=${inputs.params.TLSVERIFY}'</span>, <span class="org-string">'--layers'</span>, <span class="org-string">'-f'</span>, <span class="org-string">'/gen-source/Dockerfile.gen'</span>, <span class="org-string">'-t'</span>, <span class="org-string">'${outputs.resources.image.url}'</span>, <span class="org-string">'.'</span>]
+      <span class="org-variable-name">volumeMounts</span>:
+        - <span class="org-variable-name">name</span>: varlibcontainers
+          <span class="org-variable-name">mountPath</span>: /var/lib/containers
+        - <span class="org-variable-name">name</span>: gen-source
+          <span class="org-variable-name">mountPath</span>: /gen-source
+      <span class="org-variable-name">securityContext</span>:
+        <span class="org-variable-name">privileged</span>: <span class="org-constant">true</span>
+    - <span class="org-variable-name">name</span>: push
+      <span class="org-variable-name">image</span>: quay.io/buildah/stable
+      <span class="org-variable-name">command</span>: [<span class="org-string">'buildah'</span>, <span class="org-string">'push'</span>, <span class="org-string">'--tls-verify=${inputs.params.TLSVERIFY}'</span>, <span class="org-string">'${outputs.resources.image.url}'</span>, <span class="org-string">'docker://${outputs.resources.image.url}'</span>]
+      <span class="org-variable-name">volumeMounts</span>:
+        - <span class="org-variable-name">name</span>: varlibcontainers
+          <span class="org-variable-name">mountPath</span>: /var/lib/containers
+      <span class="org-variable-name">securityContext</span>:
+        <span class="org-variable-name">privileged</span>: <span class="org-constant">true</span>
+  <span class="org-variable-name">volumes</span>:
+    - <span class="org-variable-name">name</span>: varlibcontainers
+      <span class="org-variable-name">emptyDir</span>: {<span class="org-variable-name">}</span>
+<span class="org-variable-name">    - name</span>: gen-source
+      <span class="org-variable-name">emptyDir</span>: {}
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:6d4e1c61-9ae8-46f9-8917-e4a99ae59d2b" class="outline-4">
+<h4 id="h:6d4e1c61-9ae8-46f9-8917-e4a99ae59d2b">The pipeline</h4>
+<div class="outline-text-4" id="text-h:6d4e1c61-9ae8-46f9-8917-e4a99ae59d2b">
+<p>
+A pipeline defines a number of tasks that should be executed and how they interact with
+each other via their inputs and outputs.
+</p>
+
+<p>
+Here is the YAML file that represents the above pipeline:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Pipeline
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: petclinic-deploy-pipeline
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">resources</span>:
+  - <span class="org-variable-name">name</span>: app-git
+    <span class="org-variable-name">type</span>: git
+  - <span class="org-variable-name">name</span>: app-image
+    <span class="org-variable-name">type</span>: image
+  <span class="org-variable-name">tasks</span>:
+  - <span class="org-variable-name">name</span>: build
+    <span class="org-variable-name">taskRef</span>:
+      <span class="org-variable-name">name</span>: s2i-java-8
+    <span class="org-variable-name">params</span>:
+      - <span class="org-variable-name">name</span>: TLSVERIFY
+        <span class="org-variable-name">value</span>: <span class="org-string">"false"</span>
+    <span class="org-variable-name">resources</span>:
+      <span class="org-variable-name">inputs</span>:
+      - <span class="org-variable-name">name</span>: source
+        <span class="org-variable-name">resource</span>: app-git
+      <span class="org-variable-name">outputs</span>:
+      - <span class="org-variable-name">name</span>: image
+        <span class="org-variable-name">resource</span>: app-image
+  - <span class="org-variable-name">name</span>: deploy
+    <span class="org-variable-name">taskRef</span>:
+      <span class="org-variable-name">name</span>: openshift-client
+    <span class="org-variable-name">runAfter</span>:
+      - build
+    <span class="org-variable-name">params</span>:
+    - <span class="org-variable-name">name</span>: ARGS
+      <span class="org-variable-name">value</span>: <span class="org-string">"rollout latest spring-petclinic"</span>
+</pre>
+</div>
+
+<p>
+This pipeline performs the following:
+</p>
+<ol class="org-ol">
+<li>Clones the source code of the application from a Git repository (<code>app-git</code> resource)</li>
+<li>Builds the container image using the <code>s2i-java-8</code> task that generates a Dockerfile for the application and uses <a href="https://buildah.io/">Buildah</a> to build the image</li>
+<li>The application image is pushed to an image registry (<code>app-image</code> resource)</li>
+<li>The new application image is deployed on OpenShift using the <code>openshift-cli</code></li>
+</ol>
+
+<p>
+You might have noticed that there are no references to the PetClinic Git repository and
+its image in the registry. That&rsquo;s because ~Pipeline~s in Tekton are designed to be
+generic and re-usable across environments and stages through the application&rsquo;s
+lifecycle. ~Pipeline~s abstract away the specifics of the Git source repository and image
+to be produced as ~resource~s. When triggering a pipeline, you can provide different Git
+repositories and image registries to be used during pipeline execution. Be patient! You
+will do that in a little bit in the next section.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h:3f4a9686-427f-455d-9fd3-aa3741bf089d" class="outline-4">
+<h4 id="h:3f4a9686-427f-455d-9fd3-aa3741bf089d">The resources</h4>
+<div class="outline-text-4" id="text-h:3f4a9686-427f-455d-9fd3-aa3741bf089d">
+<p>
+Now that the pipeline is created, you can trigger it to execute the tasks specified in the
+pipeline. Triggering pipelines is an area that is under development and in the next
+release it will be possible to be done via the OpenShift web console and Tekton CLI. In
+this tutorial, you will trigger the pipeline through creating the Kubernetes objects (the
+hard way!) in order to learn the mechanics of triggering.
+</p>
+
+<p>
+First, you should create a number of ~PipelineResource~s that contain the specifics of the
+Git repository and image registry to be used in the pipeline during execution. Expectedly,
+these are also reusable across multiple pipelines.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: PipelineResource
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: petclinic-image
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">type</span>: image
+  <span class="org-variable-name">params</span>:
+  - <span class="org-variable-name">name</span>: url
+    <span class="org-variable-name">value</span>: image-registry.openshift-image-registry.svc:5000/pipeline-demo/spring-petclinic
+<span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: PipelineResource
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: petclinic-git
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">type</span>: git
+  <span class="org-variable-name">params</span>:
+  - <span class="org-variable-name">name</span>: url
+    <span class="org-variable-name">value</span>: https://github.com/spring-projects/spring-petclinic
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:c3372a6a-f189-4029-a5ba-a40193dd42bd" class="outline-4">
+<h4 id="h:c3372a6a-f189-4029-a5ba-a40193dd42bd">Run the pipeline</h4>
+<div class="outline-text-4" id="text-h:c3372a6a-f189-4029-a5ba-a40193dd42bd">
+<p>
+A <code>PipelineRun</code> is how you can start a pipeline and tie it to the Git and image resources
+that should be used for this specific invocation. You can start the pipeline using the
+CLI:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">tkn pipeline start petclinic-deploy-pipeline <span class="org-sh-escaped-newline">\</span>
+          -r app-git=petclinic-git <span class="org-sh-escaped-newline">\</span>
+          -r app-image=petclinic-image <span class="org-sh-escaped-newline">\</span>
+          -s pipeline
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:d33b093d-e6f0-4601-a9e6-0a669a4dcc2c" class="outline-4">
+<h4 id="h:d33b093d-e6f0-4601-a9e6-0a669a4dcc2c"><code>tkn</code> features</h4>
+<div class="outline-text-4" id="text-h:d33b093d-e6f0-4601-a9e6-0a669a4dcc2c">
+<div class="org-src-container">
+<pre class="src src-bash">tkn pipeline logs -f
+tkn pipeline start petclinic-deploy-pipeline --last
+
+tkn resource list
+tkn task list
+tkn taskrun list
+tkn pipeline list
+tkn pipelinerun list
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">same with logs, descibe, &#8230;</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:dc6a9055-eefc-4029-97c1-aab98f2147a0" class="outline-3">
+<h3 id="h:dc6a9055-eefc-4029-97c1-aab98f2147a0">Additionnals Tasks and Pipeline</h3>
+<div class="outline-text-3" id="text-h:dc6a9055-eefc-4029-97c1-aab98f2147a0">
+</div>
+<div id="outline-container-h:b5add1e6-379f-4442-87b9-d8800ef38481" class="outline-4">
+<h4 id="h:b5add1e6-379f-4442-87b9-d8800ef38481">Tasks</h4>
+<div class="outline-text-4" id="text-h:b5add1e6-379f-4442-87b9-d8800ef38481">
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Task
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: golangci-lint
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">inputs</span>:
+    <span class="org-variable-name">params</span>:
+    - <span class="org-variable-name">name</span>: package
+      <span class="org-variable-name">description</span>: base package (and its children) under validation
+    - <span class="org-variable-name">name</span>: flags
+      <span class="org-variable-name">description</span>: flags to use for the test command
+      <span class="org-variable-name">default</span>: --verbose
+    - <span class="org-variable-name">name</span>: version
+      <span class="org-variable-name">default</span>: golangci-lint version to use
+      <span class="org-variable-name">default</span>: <span class="org-string">"v1.17.1"</span>
+    - <span class="org-variable-name">name</span>: GOOS
+      <span class="org-variable-name">description</span>: <span class="org-string">"running operating system target"</span>
+      <span class="org-variable-name">default</span>: linux
+    - <span class="org-variable-name">name</span>: GOARCH
+      <span class="org-variable-name">description</span>: <span class="org-string">"running architecture target"</span>
+      <span class="org-variable-name">default</span>: amd64
+    - <span class="org-variable-name">name</span>: GO111MODULE
+      <span class="org-variable-name">description</span>: <span class="org-string">"value of module support"</span>
+      <span class="org-variable-name">default</span>: auto
+    <span class="org-variable-name">resources</span>:
+    - <span class="org-variable-name">name</span>: source
+      <span class="org-variable-name">type</span>: git
+      <span class="org-variable-name">targetPath</span>: src/${inputs.params.package}
+  <span class="org-variable-name">steps</span>:
+  - <span class="org-variable-name">name</span>: lint
+    <span class="org-variable-name">image</span>: golangci/golangci-lint:${inputs.params.version}
+    <span class="org-variable-name">workingdir</span>: /workspace/src/${inputs.params.package}
+    <span class="org-variable-name">command</span>:
+    - /bin/bash
+    <span class="org-variable-name">args</span>:
+    - -c
+    - <span class="org-string">"golangci-lint run ${inputs.params.flags}"</span>
+    <span class="org-variable-name">env</span>:
+    - <span class="org-variable-name">name</span>: GOPATH
+      <span class="org-variable-name">value</span>: /workspace
+    - <span class="org-variable-name">name</span>: GOOS
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GOOS}"</span>
+    - <span class="org-variable-name">name</span>: GOARCH
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GOARCH}"</span>
+    - <span class="org-variable-name">name</span>: GO111MODULE
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GO111MODULE}"</span>
+<span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Task
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: golang-test
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">inputs</span>:
+    <span class="org-variable-name">params</span>:
+    - <span class="org-variable-name">name</span>: package
+      <span class="org-variable-name">description</span>: package (and its children) under test
+    - <span class="org-variable-name">name</span>: packages
+      <span class="org-variable-name">description</span>: <span class="org-string">"packages to test (default: ./...)"</span>
+      <span class="org-variable-name">default</span>: <span class="org-string">"./..."</span>
+    - <span class="org-variable-name">name</span>: version
+      <span class="org-variable-name">description</span>: golang version to use for tests
+      <span class="org-variable-name">default</span>: <span class="org-string">"1.12"</span>
+    - <span class="org-variable-name">name</span>: flags
+      <span class="org-variable-name">description</span>: flags to use for the test command
+      <span class="org-variable-name">default</span>: -race -cover -v
+    - <span class="org-variable-name">name</span>: GOOS
+      <span class="org-variable-name">description</span>: <span class="org-string">"running program's operating system target"</span>
+      <span class="org-variable-name">default</span>: linux
+    - <span class="org-variable-name">name</span>: GOARCH
+      <span class="org-variable-name">description</span>: <span class="org-string">"running program's architecture target"</span>
+      <span class="org-variable-name">default</span>: amd64
+    - <span class="org-variable-name">name</span>: GO111MODULE
+      <span class="org-variable-name">description</span>: <span class="org-string">"value of module support"</span>
+      <span class="org-variable-name">default</span>: auto
+    <span class="org-variable-name">resources</span>:
+    - <span class="org-variable-name">name</span>: source
+      <span class="org-variable-name">type</span>: git
+      <span class="org-variable-name">targetPath</span>: src/${inputs.params.package}
+  <span class="org-variable-name">steps</span>:
+  - <span class="org-variable-name">name</span>: unit-test
+    <span class="org-variable-name">image</span>: golang:${inputs.params.version}
+    <span class="org-variable-name">workingdir</span>: /workspace/src/${inputs.params.package}
+    <span class="org-variable-name">command</span>:
+    - /bin/bash
+    <span class="org-variable-name">args</span>:
+    - -c
+    - <span class="org-string">"go test ${inputs.params.flags} ${inputs.params.packages}"</span>
+    <span class="org-variable-name">env</span>:
+    - <span class="org-variable-name">name</span>: GOPATH
+      <span class="org-variable-name">value</span>: /workspace
+    - <span class="org-variable-name">name</span>: GOOS
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GOOS}"</span>
+    - <span class="org-variable-name">name</span>: GOARCH
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GOARCH}"</span>
+    - <span class="org-variable-name">name</span>: GO111MODULE
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GO111MODULE}"</span>
+<span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Task
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: golang-build
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">inputs</span>:
+    <span class="org-variable-name">params</span>:
+    - <span class="org-variable-name">name</span>: package
+      <span class="org-variable-name">description</span>: base package to build in
+    - <span class="org-variable-name">name</span>: packages
+      <span class="org-variable-name">description</span>: <span class="org-string">"packages to build (default: ./cmd/...)"</span>
+      <span class="org-variable-name">default</span>: <span class="org-string">"./cmd/..."</span>
+    - <span class="org-variable-name">name</span>: version
+      <span class="org-variable-name">description</span>: golang version to use for builds
+      <span class="org-variable-name">default</span>: <span class="org-string">"1.12"</span>
+    - <span class="org-variable-name">name</span>: flags
+      <span class="org-variable-name">description</span>: flags to use for the test command
+      <span class="org-variable-name">default</span>: -v
+    - <span class="org-variable-name">name</span>: GOOS
+      <span class="org-variable-name">description</span>: <span class="org-string">"running program's operating system target"</span>
+      <span class="org-variable-name">default</span>: linux
+    - <span class="org-variable-name">name</span>: GOARCH
+      <span class="org-variable-name">description</span>: <span class="org-string">"running program's architecture target"</span>
+      <span class="org-variable-name">default</span>: amd64
+    - <span class="org-variable-name">name</span>: GO111MODULE
+      <span class="org-variable-name">description</span>: <span class="org-string">"value of module support"</span>
+      <span class="org-variable-name">default</span>: auto
+    <span class="org-variable-name">resources</span>:
+    - <span class="org-variable-name">name</span>: source
+      <span class="org-variable-name">type</span>: git
+      <span class="org-variable-name">targetPath</span>: src/${inputs.params.package}
+  <span class="org-variable-name">steps</span>:
+  - <span class="org-variable-name">name</span>: build
+    <span class="org-variable-name">image</span>: golang:${inputs.params.version}
+    <span class="org-variable-name">workingdir</span>: /workspace/src/${inputs.params.package}
+    <span class="org-variable-name">command</span>:
+    - /bin/bash
+    <span class="org-variable-name">args</span>:
+    - -c
+    - <span class="org-string">"go build ${inputs.params.flags} ${inputs.params.packages}"</span>
+    <span class="org-variable-name">env</span>:
+    - <span class="org-variable-name">name</span>: GOPATH
+      <span class="org-variable-name">value</span>: /workspace
+    - <span class="org-variable-name">name</span>: GOOS
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GOOS}"</span>
+    - <span class="org-variable-name">name</span>: GOARCH
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GOARCH}"</span>
+    - <span class="org-variable-name">name</span>: GO111MODULE
+      <span class="org-variable-name">value</span>: <span class="org-string">"${inputs.params.GO111MODULE}"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:d29b2a8c-c139-49ec-9d1c-8c40ffd7983e" class="outline-4">
+<h4 id="h:d29b2a8c-c139-49ec-9d1c-8c40ffd7983e">Pipelines</h4>
+<div class="outline-text-4" id="text-h:d29b2a8c-c139-49ec-9d1c-8c40ffd7983e">
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Pipeline
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: cli-build-pipeline
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">params</span>:
+  - <span class="org-variable-name">name</span>: package
+    <span class="org-variable-name">description</span>: package to release
+    <span class="org-variable-name">default</span>: github.com/tektoncd/cli
+  <span class="org-variable-name">resources</span>:
+  - <span class="org-variable-name">name</span>: source-repo
+    <span class="org-variable-name">type</span>: git
+  <span class="org-variable-name">tasks</span>:
+    - <span class="org-variable-name">name</span>: lint
+      <span class="org-variable-name">taskRef</span>:
+        <span class="org-variable-name">name</span>: golangci-lint
+      <span class="org-variable-name">params</span>:
+        - <span class="org-variable-name">name</span>: package
+          <span class="org-variable-name">value</span>: ${params.package}
+        - <span class="org-variable-name">name</span>: flags
+          <span class="org-variable-name">value</span>: -v
+      <span class="org-variable-name">resources</span>:
+        <span class="org-variable-name">inputs</span>:
+          - <span class="org-variable-name">name</span>: source
+            <span class="org-variable-name">resource</span>: source-repo
+    - <span class="org-variable-name">name</span>: unit-tests
+      <span class="org-variable-name">runAfter</span>: [lint]
+      <span class="org-variable-name">taskRef</span>:
+        <span class="org-variable-name">name</span>: golang-test
+      <span class="org-variable-name">params</span>:
+        - <span class="org-variable-name">name</span>: package
+          <span class="org-variable-name">value</span>: ${params.package}
+      <span class="org-variable-name">resources</span>:
+        <span class="org-variable-name">inputs</span>:
+          - <span class="org-variable-name">name</span>: source
+            <span class="org-variable-name">resource</span>: source-repo
+    - <span class="org-variable-name">name</span>: build
+      <span class="org-variable-name">runAfter</span>: [lint]
+      <span class="org-variable-name">taskRef</span>:
+        <span class="org-variable-name">name</span>: golang-build
+      <span class="org-variable-name">params</span>:
+        - <span class="org-variable-name">name</span>: package
+          <span class="org-variable-name">value</span>: ${params.package}
+      <span class="org-variable-name">resources</span>:
+        <span class="org-variable-name">inputs</span>:
+          - <span class="org-variable-name">name</span>: source
+            <span class="org-variable-name">resource</span>: source-repo
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:04951c0d-64e7-43b7-aac4-37a383ad18e5" class="outline-4">
+<h4 id="h:04951c0d-64e7-43b7-aac4-37a383ad18e5">Resources</h4>
+<div class="outline-text-4" id="text-h:04951c0d-64e7-43b7-aac4-37a383ad18e5">
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: PipelineResource
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: tektoncd-cli-git
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">type</span>: git
+  <span class="org-variable-name">params</span>:
+  - <span class="org-variable-name">name</span>: revision
+    <span class="org-variable-name">value</span>: master
+  - <span class="org-variable-name">name</span>: url
+    <span class="org-variable-name">value</span>: https://github.com/tektoncd/cli
+</pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

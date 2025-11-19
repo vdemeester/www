@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>emacs: Managing projects</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">emacs: Managing projects</h1>
+</header><p>
+Working on <b>project</b> a key part of my workflow when using <a href="emacs.html">GNU/Emacs</a>. Almost everything I
+work on can be part of a project. It might be simpler to give examples:
+<a href="https://github.com/tektoncd/pipeline"><code>tektoncd/pipeline</code></a> checked out is a project, my <code>~/desktop/org</code> is another project. There
+is only a handful of buffer in Emacs that I do not consider of any project, one example is
+the <a href="org_mode.html">org-mode</a> agenda.
+</p>
+
+<p>
+In a <b>project</b>, I want to be able to:
+</p>
+
+<ul class="org-ul">
+<li>List <b>all</b> files in that project
+<ul class="org-ul">
+<li><i>optionally</i> spiking the files from <code>.gitignore</code></li>
+</ul></li>
+<li>Search in all <b>project</b> files
+<ul class="org-ul">
+<li>using <code>ripgrep</code> or something else</li>
+<li>possibly to a search and replace</li>
+</ul></li>
+<li>Run commands on the project <span class="underline">root</span> folder
+<ul class="org-ul">
+<li>could be a compilation, some tests, some random commands</li>
+</ul></li>
+<li>Manage the version control (using <code>magit</code>)
+<ul class="org-ul">
+<li>adding files, switch branches, …</li>
+</ul></li>
+<li>Switch between project buffers</li>
+</ul>
+
+<p>
+Emacs 27.1 ships with a <code>project</code> library that has some useful function. But prior to this,
+the <a href="https://github.com/bbatsov/projectile"><code>projectile</code></a> project has been the way to go for managing projects in
+<a href="emacs.html">GNU/Emacs</a>. <a href="https://github.com/bbatsov/projectile"><code>projectile</code></a> is also quite extensible and integrates relatively well with a
+bunch of other libraries.
+</p>
+
+<p>
+The <i>mnemonics</i> key for the <b>project</b> is <code>C-c p</code>, and thus, any project command will start with
+that prefix.
+</p>
+
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Projectile">Projectile</a>
+<ul>
+<li><a href="#Custom%20project%20types">Custom project types</a>
+<ul>
+<li><a href="#%3Dko%3D"><span class="todo TODO">TODO</span> <code>ko</code></a></li>
+<li><a href="#Others"><span class="todo TODO">TODO</span> Others</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Configuration%20layout">Configuration layout</a></li>
+</ul>
+</div>
+</nav>
+
+<section id="outline-container-Projectile" class="outline-2">
+<h2 id="Projectile">Projectile</h2>
+<div class="outline-text-2" id="text-Projectile">
+<p>
+Let&rsquo;s configure <code>projectile</code> using <code>use-package</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org10b55c6">(use-package projectile
+  <span class="org-builtin">:commands</span>
+  (projectile-ack
+   projectile-ag
+   projectile-compile-project
+   projectile-configure-project
+   projectile-package-project
+   projectile-install-project
+   projectile-test-project
+   projectile-run-project
+   projectile-dired
+   projectile-find-dir
+   projectile-find-file
+   projectile-find-file-dwim
+   projectile-find-file-in-directory
+   projectile-find-tag
+   projectile-test-project
+   projectile-grep
+   projectile-invalidate-cache
+   projectile-kill-buffers
+   projectile-multi-occur
+   projectile-project-p
+   projectile-project-root
+   projectile-recentf
+   projectile-regenerate-tags
+   projectile-replace
+   projectile-replace-regexp
+   projectile-run-async-shell-command-in-root
+   projectile-run-shell-command-in-root
+   projectile-switch-project
+   projectile-switch-to-buffer
+   projectile-vc
+   projectile-commander)
+  <span class="org-builtin">:bind-keymap</span> (<span class="org-string">"C-c p"</span> . projectile-command-map)
+  <span class="org-builtin">:config</span>
+  &lt;&lt;projectile-completion&gt;&gt;
+  &lt;&lt;projectile-variables&gt;&gt;
+  &lt;&lt;projectile-compilation&gt;&gt;
+  &lt;&lt;projectile-known-projects&gt;&gt;
+  &lt;&lt;projectile-commander-methods&gt;&gt;
+  &lt;&lt;projectile-custom-types&gt;&gt;
+  (projectile-mode))
+</pre>
+</div>
+
+<p>
+First thing first, let&rsquo;s tell <code>projectile</code> to use the default completion system instead of
+<code>ivy</code>, or <code>helm</code>, or …
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgde12c8e">(<span class="org-keyword">setq-default</span> projectile-completion-system 'default)
+</pre>
+</div>
+
+<p>
+Let&rsquo;s also configure some <code>projectile</code> behavior.
+</p>
+
+<ul class="org-ul">
+<li>The default action when switch to a project should be the <code>commander</code>, as it allows to do
+different actions. This is done by setting <code>projectile-command</code> to
+<code>project-switch-project-action</code>.</li>
+<li>When switching to tests (<code>C-c p t</code>), if there is no test files, create one. This is done
+by setting <code>projectile-create-missing-test-files</code>.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgfa1a302">(<span class="org-keyword">setq-default</span> projectile-switch-project-action #'projectile-commander
+              projectile-create-missing-test-files t)
+</pre>
+</div>
+
+<p>
+In order to make sure we can have a <i>living</i> compilation per project, we need to modify the
+buffer name to include the project name. This is easily do-able by writing a function for
+<code>compilation-buffer-name-function</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org7dccd1f">(<span class="org-keyword">setq-default</span> compilation-buffer-name-function (<span class="org-keyword">lambda</span> (mode) (concat <span class="org-string">"*"</span> (downcase mode) <span class="org-string">": "</span> (projectile-project-name) <span class="org-string">"*"</span>)))
+</pre>
+</div>
+
+<p>
+Do not track known projects automatically, instead call projectile-add-known-project
+Remove dead projects when Emacs is idle
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgc9691a9">(<span class="org-keyword">setq-default</span> projectile-track-known-projects-automatically nil)
+(run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org9967408">(def-projectile-commander-method ?s
+  <span class="org-string">"Open a *shell* buffer for the project"</span>
+  (projectile-run-eshell nil))
+(def-projectile-commander-method ?c
+  <span class="org-string">"Run `</span><span class="org-string"><span class="org-constant">compile</span></span><span class="org-string">' in the project"</span>
+  (projectile-compile-project nil))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-Custom%20project%20types" class="outline-3">
+<h3 id="Custom%20project%20types">Custom project types</h3>
+<div class="outline-text-3" id="text-Custom%20project%20types">
+<p>
+ <a href="https://github.com/bbatsov/projectile"><code>projectile</code></a> allows to add custom project type, in addition to the built-in project
+types. See <a href="https://projectile.readthedocs.io/en/latest/projects/">Projects - Projectile: The Project Interaction Library for Emacs</a> for a little
+bit more detail. It should be possible to configure the <code>configure</code>, <code>compile</code>, <code>package</code>,
+<code>install</code> and <code>test</code> commands. One a the hope of this section is to be able to define highly
+customized project types so that doing <code>C-p u</code> on, let&rsquo;s say, <code>tektoncd/pipeline</code> does the
+right thing by default.
+</p>
+
+<p>
+An example of custom project type is the following.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">Ruby + RSpec</span>
+(projectile-register-project-type 'ruby-rspec '(<span class="org-string">"Gemfile"</span> <span class="org-string">"lib"</span> <span class="org-string">"spec"</span>)
+                                  <span class="org-builtin">:project-file</span> <span class="org-string">"Gemfile"</span>
+                                  <span class="org-builtin">:compile</span> <span class="org-string">"bundle exec rake"</span>
+                                  <span class="org-builtin">:src-dir</span> <span class="org-string">"lib/"</span>
+                                  <span class="org-builtin">:test</span> <span class="org-string">"bundle exec rspec"</span>
+                                  <span class="org-builtin">:test-dir</span> <span class="org-string">"spec/"</span>
+                                  <span class="org-builtin">:test-suffix</span> <span class="org-string">"_spec"</span>)
+</pre>
+</div>
+
+<p>
+One nice aspect of <code>:compile</code> (and some others) is that it can take a symbolic reference to
+a function, which means, you can define dynamic behavior. Based on the doc this works for
+<code>:compile</code>, <code>:configure</code>, <code>:compilation-dir</code> and <code>:run</code> (but <i>my hope is it would work for <code>:test</code>
+and that a <code>:package</code> and an <code>:install</code> would exist</i>).
+</p>
+</div>
+
+<div id="outline-container-%3Dko%3D" class="outline-4">
+<h4 id="%3Dko%3D"><span class="todo TODO">TODO</span> <code>ko</code></h4>
+<div class="outline-text-4" id="text-%3Dko%3D">
+<p>
+First thing first, what makes a <code>ko</code> project. In most cases, a <code>.ko.yaml</code> will be present (at
+the root folder of the project). Let&rsquo;s also define a function do detect if a it&rsquo;s a <code>ko</code>
+project that uses the <i>standard</i> <code>config</code> folder for yamls.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-project-p</span> ()
+  <span class="org-doc">"Check if a project contains a .ko.yaml file."</span>
+  (projectile-verify-file <span class="org-string">".ko.yaml"</span>))
+(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-with-config-project-p</span> ()
+  <span class="org-doc">"Check if a project is a ko project and has a config/ folder full of yaml"</span>
+  (<span class="org-keyword">and</span> (projectile-ko-project-p)
+       (projectile-verify-file-wildcard <span class="org-string">"config/*.yaml"</span>)))
+</pre>
+</div>
+
+<p>
+Let&rsquo;s register the <code>ko</code> project (with config). Long-term, the idea is to make different
+function for <code>ko</code> and <code>ko-with-config</code> projects.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(projectile-register-project-type 'ko-with-config #'projectile-ko-with-config-project-p
+                                  <span class="org-builtin">:project-file</span> <span class="org-string">".ko.yaml"</span> <span class="org-comment-delimiter">; </span><span class="org-comment">might not be required</span>
+                                  <span class="org-builtin">:configure</span> 'projectile-ko-configure-command
+                                  <span class="org-builtin">:compile</span> 'projectile-ko-compile-command
+                                  <span class="org-builtin">:test</span> 'projectile-ko-test-command
+                                  <span class="org-builtin">:run</span> 'projectile-ko-run-command
+                                  <span class="org-builtin">:package</span> 'projectile-ko-package-command
+                                  <span class="org-builtin">:install</span> 'projectile-ko-install-command)
+</pre>
+</div>
+
+
+<p>
+Let&rsquo;s now dig a little bit more into the configure, compile, test, run, package and
+install commands. As we can pass it a function, we can define behaviour depending on the
+current opened buffer, etc. One assumption that we can make is that a <code>ko</code> project is also a
+<code>go</code> project.
+</p>
+
+<dl class="org-dl">
+<dt>configure</dt><dd><p>
+configure stands for <code>./configure</code> scripts usually. Let&rsquo;s see what it could
+be for <code>ko</code> project. Most likely related to file generations.
+</p>
+<ul class="org-ul">
+<li>default to <code>./hack/update-codegen.sh</code> if it is present.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-configure-command</span> ()
+  <span class="org-doc">"define a configure command for a ko project, depending on the opened file"</span>
+  (<span class="org-keyword">cond</span>
+   ((projectile-file-exists-p <span class="org-string">"hack/update-codegen.sh"</span>) <span class="org-string">"./hack/update-codegen.sh"</span>)))
+</pre>
+</div></dd>
+<dt>compile</dt><dd><p>
+compile might be slightly different depending on the current major mode we
+are in, and maybe also depending on the folder.
+</p>
+
+<ul class="org-ul">
+<li>default to <code>go build -v ./...</code></li>
+<li><code>go</code> file (<code>go-mode</code>)
+<ul class="org-ul">
+<li>default to build the current package</li>
+<li>if it is a test file, tests the current package</li>
+</ul></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-compile-command</span> ()
+  <span class="org-doc">"define a compile command for a ko project, depending on the openend file "</span>
+  (<span class="org-keyword">cond</span>
+   ((eq major-mode 'go-mode) (projectile-ko-compile-command-go))
+   ((eq major-mode 'yaml-mode) <span class="org-string">"yamllint ."</span>)
+   (t <span class="org-string">"go build -v ./..."</span>)
+   ))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-compile-command-go</span> ()
+  <span class="org-doc">"compile command for a ko project if in a go file"</span>
+  (<span class="org-keyword">let*</span> ((current-file (buffer-file-name (current-buffer)))
+         (relative-current-file (file-relative-name current-file (projectile-project-root)))
+         (relative-current-folder (file-name-directory relative-current-file)))
+    (message relative-current-file)
+    (<span class="org-keyword">cond</span>
+     ((string-suffix-p <span class="org-string">"_test.go"</span> relative-current-file) (format <span class="org-string">"go test -c -v ./%s"</span> relative-current-folder))
+     (t (format <span class="org-string">"go build -v ./%s"</span> relative-current-folder)))))
+</pre>
+</div></dd>
+<dt>test</dt><dd><p>
+test might be slightly different depending on the current major mode we are in,
+and might depend on the folder.
+</p>
+
+<ul class="org-ul">
+<li>default to <code>go test -v ./...</code></li>
+<li><code>go</code> file (<code>go-mode</code>)
+<ul class="org-ul">
+<li>default to run tests on the current package</li>
+<li>if it is a test file, tests the current file (like <code>go-test-current-file</code> or
+<code>gotest-ui-current-file</code>)</li>
+</ul></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-test-command</span> ()
+  <span class="org-doc">"define a test command for a ko project, depending on the openend file"</span>
+  (<span class="org-keyword">cond</span>
+   ((eq major-mode 'go-mode) (projectile-ko-test-command-go))
+   (t <span class="org-string">"go test -v ./..."</span>)))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-test-command-go</span> ()
+  <span class="org-doc">"test command for a ko project if in a go file"</span>
+  (<span class="org-keyword">let*</span> ((current-file (buffer-file-name (current-buffer)))
+         (relative-current-file (file-relative-name current-file (projectile-project-root)))
+         (relative-current-folder (file-name-directory relative-current-file)))
+    (<span class="org-keyword">cond</span>
+     ((string-suffix-p <span class="org-string">"_test.go"</span> relative-current-file) (projectile-ko-command-go-test relative-current-file))
+     (t (format <span class="org-string">"go test -v ./%s"</span> relative-current-folder)))))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-command-go-test</span> (current-file)
+  <span class="org-doc">"get the command for a go test"</span>
+  (<span class="org-keyword">cond</span>
+   ((gotest-module-available-p) (projectile-ko-command-go-test-gotest current-file))
+   (t (format <span class="org-string">"go test -v ./%s"</span> current-file))))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-command-go-test-gotest</span> (current-file)
+  <span class="org-doc">"get the command for a go test with gotest module enabled"</span>
+  (message default-directory)
+  (<span class="org-keyword">let</span> ((data (go-test--get-current-file-testing-data)))
+    (format <span class="org-string">"go test -run='</span><span class="org-string"><span class="org-constant">%s</span></span><span class="org-string">' -v ./%s"</span> data (file-name-directory current-file))))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">gotest-module-available-p</span> ()
+  <span class="org-doc">"is go-test module available"</span>
+  (fboundp 'go-test--get-current-file-data))
+</pre>
+</div></dd>
+<dt>run</dt><dd><p>
+run is usually about running the project binary or something.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-run-command</span> ()
+  <span class="org-doc">"define a run command for a ko project, depending on the openend file "</span>
+  (<span class="org-keyword">cond</span>
+   ((eq major-mode 'go-mode) (projectile-ko-run-command-go))
+   <span class="org-comment-delimiter">;; </span><span class="org-comment">nothing by default ?</span>
+   ))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-run-command-go</span> ()
+  <span class="org-doc">"test command for a ko project if in a go file"</span>
+  (<span class="org-keyword">let*</span> ((current-file (buffer-file-name (current-buffer)))
+         (relative-current-file (file-relative-name current-file (projectile-project-root)))
+         (relative-current-folder (file-name-directory relative-current-file)))
+    (<span class="org-keyword">cond</span>
+     ((string-prefix-p <span class="org-string">"cmd/"</span> relative-current-file) (format <span class="org-string">"go run ./%s"</span> relative-current-folder)))))
+</pre>
+</div></dd>
+<dt>package</dt><dd><p>
+package is usually about generating a package, for a maven project this would
+be <code>mvn package</code>, for a project with a <code>Dockerfile</code>, this could be build the image(s). For a
+<code>ko</code> project this is about building and pushing the images that are going to be
+deployed. This is achieved by doing a <code>ko resolve</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-package-command</span> ()
+  <span class="org-doc">"define a package command for a ko project, depending on the openend file "</span>
+  (<span class="org-keyword">cond</span>
+   ((eq major-mode 'go-mode) (projectile-ko-package-command-go))
+   (t <span class="org-string">"ko resolve --push=false --oci-layout-path=/tmp/oci -f config"</span>)
+   ))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-package-command-go</span> ()
+  <span class="org-doc">"package command for a ko project if in a go file"</span>
+  (<span class="org-keyword">let*</span> ((current-file (buffer-file-name (current-buffer)))
+         (relative-current-file (file-relative-name current-file (projectile-project-root)))
+         (relative-current-folder (file-name-directory relative-current-file)))
+    (<span class="org-keyword">cond</span>
+     ((string-prefix-p <span class="org-string">"cmd/"</span> relative-current-file) (format <span class="org-string">"ko publish --push=false ./%s"</span> relative-current-folder)))))
+</pre>
+</div></dd>
+<dt>install</dt><dd><p>
+install is about installing the project artifact somewhere (usually <code>make install</code>)
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">projectile-ko-install-command</span> ()
+  <span class="org-doc">"define a install command for a ko project, depending on the openend file "</span>
+  <span class="org-string">"ko apply -f config/"</span>)
+</pre>
+</div></dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-Others" class="outline-4">
+<h4 id="Others"><span class="todo TODO">TODO</span> Others</h4>
+<div class="outline-text-4" id="text-Others">
+<ul class="org-ul">
+<li>Detect project type
+<ul class="org-ul">
+<li><code>.ko.yaml</code> =&gt; run is <code>ko apply -f …</code></li>
+<li>is there a <code>Makefile</code> ?</li>
+<li><code>tkn</code> and <code>tekton</code> file</li>
+<li><code>home</code> detection: <code>systems</code>, <code>users</code>, <code>ci.nix</code>, <code>shell.nix</code>,
+<code>hosts.nix</code>, <code>systems.nix</code>
+<ul class="org-ul">
+<li>if in <code>pkgs</code>, run <code>nix-build pkgs -A …</code>, and try to detect the file derivations</li>
+<li>if in <code>tools/emacs</code> (elisp), tangle files from <code>~/desktop/org/notes</code></li>
+<li>detect <code>hostname</code> and act based on it:
+<ul class="org-ul">
+<li><code>naruhodo</code>: <code>make home-switch</code>, …</li>
+<li><code>wakasu</code>: <code>make switch</code>, …</li>
+<li>Could also detect using <code>nixos-version</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Hook projectile run/compile/test to multi-compile
+Group things together, so that I can either choose from a list of different compile
+options <b>or</b> run my command</li>
+</ul>
+
+<p>
+<a href="https://github.com/asok/projectile-rails">asok/projectile-rails: Emacs Rails mode based on projectile</a> is also quite interesting.
+</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="outline-container-Configuration%20layout" class="outline-2">
+<h2 id="Configuration%20layout">Configuration layout</h2>
+<div class="outline-text-2" id="text-Configuration%20layout">
+<p>
+Here we define the <code>config-projects.el</code> file that gets generated by the source blocks in our Org
+document. This is the file that actually gets loaded on startup. The placeholders in
+angled brackets correspond to the <code>NAME</code> directives above the <code>SRC</code> blocks throughout this
+document.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;;; </span><span class="org-comment">config-projects.el --- -*- lexical-binding: t; -*-</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Commentary:</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Project related configuration.</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">This is mainly using projectile now, but built-in projects module seems promising for long-term.</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Note: this file is autogenerated from an org-mode file.</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Code:</span>
+
+&lt;&lt;projectile&gt;&gt;
+
+(<span class="org-keyword">provide</span> '<span class="org-constant">config-projects</span>)
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">config-projects.el ends here</span>
+</pre>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

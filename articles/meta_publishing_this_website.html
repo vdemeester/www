@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>meta: publishing this website</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">meta: publishing this website</h1>
+</header><p>
+This is a <b>always up-to-date</b> version of my initial <a href="https://vincent.demeester.fr/posts/2020-03-22-org-mode-website.html">post</a> about publishing this website
+using <a href="org_mode.html">org-mode</a>. This uses the <a href="https://orgmode.org/manual/Extracting-Source-Code.html">tangle</a> feature of <code>org-mode</code> and will span from the
+<code>Makefile</code> of the <a href="https://git.sr.ht/~vdemeester/www">repository</a> to any <a href="elisp.html">emacs-lisp</a> code required.
+</p>
+
+<p>
+This is part of the <a href="meta_meta.html">Meta</a> entry.
+</p>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Parts%20of%20the%20website">Parts of the website</a></li>
+<li><a href="#Publishing">Publishing</a>
+<ul>
+<li><a href="#%2FMake%2F%20it%20happen"><i>Make</i> it happen</a>
+<ul>
+<li><a href="#Building%20%3Dpublic%2F%3D%20and%20publishing%20it">Building <code>public/</code> and publishing it</a></li>
+<li><a href="#Local%20server">Local server</a></li>
+<li><a href="#Final%20nits%20of%20the%20%3DMakefile%3D">Final nits of the <code>Makefile</code></a></li>
+</ul>
+</li>
+<li><a href="#The%20%2Fpublish%2F%20scrits">The <i>publish</i> scrits</a>
+<ul>
+<li><a href="#%3Dpublish.el%3D"><code>publish.el</code></a></li>
+<li><a href="#%3Dpublish-common.el%3D"><code>publish-common.el</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+
+<section id="outline-container-Parts%20of%20the%20website" class="outline-2">
+<h2 id="Parts%20of%20the%20website">Parts of the website</h2>
+<div class="outline-text-2" id="text-Parts%20of%20the%20website">
+<p>
+Let&rsquo;s look at the different part of the website and for each where I do get the
+information I want to publish.
+</p>
+
+<dl class="org-dl">
+<dt><code>/</code></dt><dd>this is just a file (<code>index.org</code>) that I maintain manually.</dd>
+<dt><code>/posts</code></dt><dd>this is what we call <i>blog</i> these days : short to medium article that are valid
+at a point of time, as may contain <i>deprecated</i> content, or content that do not reflect
+my views at a later point in time.</dd>
+<dt><code>/articles</code></dt><dd>medium to long article about a topic. Those should be up-to-date or
+explicitly mark as deprecated or invalid. This is my <b>ready for the public</b> knowledge
+database, a bit like <a href="https://braindump.jethro.dev/">Jethro&rsquo;s Braindump</a>. It is managed using <a href="org_roam.html">org-roam</a> and I just need to
+get the latests somewhere to publish it.</dd>
+<dt><code>/configurations</code></dt><dd>medium to long article about my configurations. Those are base
+sources for my <code>home</code> <i>configuration</i> mono-repository, and usually follow literate
+programming principles. The are managed using <a href="org_roam.html">org-roam</a> with the <code>config:</code> prefix.</dd>
+<dt><code>/files</code></dt><dd>a dump of random files, it is actually on another domain name, completely
+unmanaged by this.</dd>
+<dt><code>/about</code></dt><dd>an about page about the author of the website (aka <a href="https://vincent.demeester.fr">me</a>), linking external
+contributions (GitHub/Gitlab/… profiles, Talks, …).</dd>
+</dl>
+
+<p>
+In a nutshell, the folder hierarchy is something like :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">src/www
+|-- about           <span class="org-comment-delimiter"># </span><span class="org-comment">the about folder (with one index.org)</span>
+|-- articles        <span class="org-comment-delimiter"># </span><span class="org-comment">&lt;- comes from ~/desktop/org/notes~</span>
+|-- css             <span class="org-comment-delimiter"># </span><span class="org-comment">the css</span>
+|-- images          <span class="org-comment-delimiter"># </span><span class="org-comment">the images</span>
+|-- index.org       <span class="org-comment-delimiter"># </span><span class="org-comment">the index &#127881;</span>
+|-- posts           <span class="org-comment-delimiter"># </span><span class="org-comment">the posts (format YYYY-MM-DD-{title}.org)</span>
+<span class="org-sh-quoted-exec">`-- public          # the output that get deployed later on</span>
+</pre>
+</div>
+</div>
+</section>
+
+<section id="outline-container-Publishing" class="outline-2">
+<h2 id="Publishing">Publishing</h2>
+<div class="outline-text-2" id="text-Publishing">
+</div>
+<div id="outline-container-%2FMake%2F%20it%20happen" class="outline-3">
+<h3 id="%2FMake%2F%20it%20happen"><i>Make</i> it happen</h3>
+<div class="outline-text-3" id="text-%2FMake%2F%20it%20happen">
+<p>
+In order to publish this website, I am using <a href="make.html">make</a>. In a nutshell, I am going to define a
+few target to get the content from my notes, export org files into html and copy more or
+less everything to the <code>public</code> folder. I will also define a clean and a publish target.
+</p>
+
+<p>
+The first part of my <code>Makefile</code> will be to define some constants that I want to use later
+on. Those are mainly to easily change where to look for the notes or where the emacs
+configuration is.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-variable-name">EMACS</span> =
+ifndef EMACS
+<span class="org-variable-name">EMACS</span> = <span class="org-string">"emacs"</span>
+endif
+
+<span class="org-variable-name">DOTEMACS</span> =
+ifndef DOTEMACS
+<span class="org-variable-name">DOTEMACS</span> = <span class="org-string">"~/.config/emacs"</span>
+endif
+
+<span class="org-variable-name">PUBLISH</span> =
+ifndef PUBLISH
+<span class="org-variable-name">PUBLISH</span> = vincent.demeester.fr
+endif
+
+<span class="org-variable-name">NOTES</span> = ~/desktop/org/notes
+</pre>
+</div>
+
+<p>
+The default target will be name <code>build</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-makefile-targets">all</span>: build
+</pre>
+</div>
+</div>
+
+<div id="outline-container-Building%20%3Dpublic%2F%3D%20and%20publishing%20it" class="outline-4">
+<h4 id="Building%20%3Dpublic%2F%3D%20and%20publishing%20it">Building <code>public/</code> and publishing it</h4>
+<div class="outline-text-4" id="text-Building%20%3Dpublic%2F%3D%20and%20publishing%20it">
+<p>
+To build the website, we will be using <a href="emacs.html">Emacs</a> in batch mode, with some shared library <b>and</b>
+the actual <a href="#The%20%2Fpublish%2F%20scrits">publish</a> script.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-makefile-targets">.PHONY</span>: build
+<span class="org-makefile-targets">build</span>: publish.el publish-common.el build-articles
+        <span class="org-type">@</span><span class="org-makefile-shell">echo </span><span class="org-string"><span class="org-makefile-shell">"Publishing... with current Emacs configurations."</span></span>
+        ${<span class="org-variable-name">EMACS</span>} --debug-init --batch --directory $(<span class="org-variable-name">DOTEMACS</span>)/lisp/ --directory $(<span class="org-variable-name">DOTEMACS</span>)/lisp/vorg/ \
+                --load publish-common.el --load publish.el \
+                --funcall org-publish-all
+
+<span class="org-makefile-targets">.PHONY</span>: build-articles
+<span class="org-makefile-targets">build-articles</span>: $(<span class="org-variable-name">NOTES</span>)
+        rsync -arv --delete --copy-links --exclude=<span class="org-string">'*.private.org'</span> --exclude=<span class="org-string">'*.db'</span> $(<span class="org-variable-name">NOTES</span>)/ articles/
+
+<span class="org-makefile-targets">$(</span><span class="org-variable-name"><span class="org-makefile-targets">NOTES</span></span><span class="org-makefile-targets">)</span>:
+        $(<span class="org-variable-name">error</span> $(<span class="org-variable-name">NOTES</span>) doesn<span class="org-string">'t exists&#8230;)</span>
+</pre>
+</div>
+
+<p>
+The <code>publish</code> target is gonna be really simple: I just need to copy the content to
+<code>~/desktop/sites</code> on the current machine, and the rest is automated.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-comment-delimiter">#</span><span class="org-comment">rsync -a --progress --copy-links --delete public/assets/.fancyindex/ ~/desktop/sites/dl.sbr.pm/.fancyindex/</span>
+<span class="org-comment-delimiter">#</span><span class="org-comment">rsync -a --progress --copy-links --delete public/ ~/desktop/sites/${</span><span class="org-comment"><span class="org-variable-name">PUBLISH</span></span><span class="org-comment">}/</span>
+<span class="org-makefile-targets">.PHONY</span>: publish
+<span class="org-makefile-targets">publish</span>: build
+        <span class="org-makefile-targets">rsync -ave ssh --progress --copy-links --delete public/assets/.fancyindex/ kerkouane.vpn</span>:/var/www/dl.sbr.pm/.fancyindex/
+        <span class="org-makefile-targets">rsync -ave ssh --progress --copy-links --delete public/ kerkouane.vpn</span>:/var/www/${<span class="org-variable-name">PUBLISH</span>}/
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Local%20server" class="outline-4">
+<h4 id="Local%20server">Local server</h4>
+<div class="outline-text-4" id="text-Local%20server">
+<p>
+Let&rsquo;s use <code>miniserve</code> (using <a href="nix.html">Nix</a> with <code>nix-shell</code>) to serve the static website locally to
+validate my changes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-makefile-targets">.PHONY</span>: serve
+<span class="org-makefile-targets">serve</span>:
+        nix-shell -p miniserve --command <span class="org-string">"miniserve --port=8181 --index=index.html public/"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Final%20nits%20of%20the%20%3DMakefile%3D" class="outline-4">
+<h4 id="Final%20nits%20of%20the%20%3DMakefile%3D">Final nits of the <code>Makefile</code></h4>
+<div class="outline-text-4" id="text-Final%20nits%20of%20the%20%3DMakefile%3D">
+<p>
+One of the final step is to install the git hooks if any. I tend to have this target in all my
+personal <code>Makefile</code> at least. Let&rsquo;s also define a <code>pre-commit</code> target that will hold
+anything we need to do at <code>pre-commit</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-makefile-targets">.PHONY</span>: install-hooks
+<span class="org-makefile-targets">install-hooks</span>:
+        if [ -e .git ]; then nix-shell -p git --run <span class="org-string">'git config core.hooksPath .githooks'</span>; fi
+
+<span class="org-makefile-targets">.PHONY</span>: pre-commit
+<span class="org-makefile-targets">pre-commit</span>: README.md
+</pre>
+</div>
+
+<p>
+And the final target is the <code>clean</code> one. This will remove any compile emacs-lisp file
+(<code>*.elc</code>), the <code>public</code> folder, and some org-mode metadata.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-makefile-targets">.PHONY</span>: clean
+<span class="org-makefile-targets">clean</span>:
+        <span class="org-type">@</span><span class="org-makefile-shell">echo </span><span class="org-string"><span class="org-makefile-shell">"Cleaning up.."</span></span>
+        <span class="org-type">@-</span><span class="org-makefile-shell">rm -rvf *.elc</span>
+        <span class="org-type">@-</span><span class="org-makefile-shell">rm -rvf public</span>
+        <span class="org-type">@-</span><span class="org-makefile-shell">rm -rv ~/.org-timestamps/*</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-The%20%2Fpublish%2F%20scrits" class="outline-3">
+<h3 id="The%20%2Fpublish%2F%20scrits">The <i>publish</i> scrits</h3>
+<div class="outline-text-3" id="text-The%20%2Fpublish%2F%20scrits">
+<p>
+I&rsquo;ve imported the script directly in here, I&rsquo;ll slowly split this and document it.
+</p>
+</div>
+
+<div id="outline-container-%3Dpublish.el%3D" class="outline-4">
+<h4 id="%3Dpublish.el%3D"><code>publish.el</code></h4>
+<div class="outline-text-4" id="text-%3Dpublish.el%3D">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;;; </span><span class="org-comment">publish.el --- Publish www project -*- lexical-binding: t; -*-</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Author: Vincent Demeester <a href="mailto:vincent%40sbr.pm">&lt;vincent@sbr.pm&gt;</a></span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Commentary:</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">This script will convert the org-mode files in this directory into</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">html.</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Code:</span>
+(<span class="org-keyword">require</span> '<span class="org-constant">package</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">publish-common</span>)
+
+(<span class="org-keyword">setq</span> org-publish-project-alist
+      `((<span class="org-string">"posts"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"posts"</span>
+         <span class="org-builtin">:base-extension</span> <span class="org-string">"org"</span>
+         <span class="org-builtin">:recursive</span> t
+         <span class="org-builtin">:publishing-function</span> org-html-publish-to-html
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/posts"</span>
+         <span class="org-builtin">:exclude</span> ,(regexp-opt '(<span class="org-string">"README.org"</span> <span class="org-string">"draft"</span>))
+         <span class="org-builtin">:auto-sitemap</span> t
+         <span class="org-builtin">:with-footnotes</span> t
+         <span class="org-builtin">:with-toc</span> nil
+         <span class="org-builtin">:with-drawers</span> t
+         <span class="org-builtin">:sitemap-filename</span> <span class="org-string">"index.org"</span>
+         <span class="org-builtin">:sitemap-title</span> <span class="org-string">"Posts"</span>
+         <span class="org-builtin">:sitemap-format-entry</span> sbr/org-sitemap-format-entry
+         <span class="org-builtin">:sitemap-style</span> list
+         <span class="org-builtin">:sitemap-sort-files</span> anti-chronologically
+         <span class="org-builtin">:sitemap-function</span> sbr/org-publish-sitemap
+         <span class="org-builtin">:html-head-include-scripts</span> nil
+         <span class="org-builtin">:html-head-include-default-style</span> nil
+         <span class="org-builtin">:html-head</span> ,sbr-website-html-head
+         <span class="org-builtin">:html-preamble</span> sbr-website-html-preamble
+         <span class="org-builtin">:html-postamble</span> ,sbr-website-html-postamble)
+        (<span class="org-string">"posts-rss"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"posts"</span>
+         <span class="org-builtin">:base-extension</span> <span class="org-string">"org"</span>
+         <span class="org-builtin">:recursive</span> t
+         <span class="org-builtin">:html-link-home</span> <span class="org-string">"https://vincent.demeester.fr/"</span>
+         <span class="org-builtin">:rss-link-home</span> <span class="org-string">"https://vincent.demeester.fr/posts/"</span>
+         <span class="org-builtin">:html-link-use-abs-url</span> t
+         <span class="org-builtin">:rss-extension</span> <span class="org-string">"xml"</span>
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public"</span>
+         <span class="org-builtin">:publishing-function</span> (sbr/org-rss-publish-to-rss)
+         <span class="org-builtin">:section-number</span> nil
+         <span class="org-builtin">:exclude</span> <span class="org-string">".*"</span>
+         <span class="org-builtin">:include</span> (<span class="org-string">"index.org"</span>))
+        (<span class="org-string">"articles"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"articles"</span>
+         <span class="org-builtin">:base-extension</span> <span class="org-string">"org"</span>
+         <span class="org-builtin">:recursive</span> t
+         <span class="org-builtin">:publishing-function</span> org-html-publish-to-html
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/articles"</span>
+         <span class="org-builtin">:exclude</span> ,(regexp-opt '(<span class="org-string">"README.org"</span> <span class="org-string">"draft"</span>))
+         <span class="org-builtin">:auto-sitemap</span> t
+         <span class="org-builtin">:with-footnotes</span> t
+         <span class="org-builtin">:with-toc</span> nil
+         <span class="org-builtin">:with-drawers</span> t
+         <span class="org-builtin">:sitemap-filename</span> <span class="org-string">"sitemap.org"</span>
+         <span class="org-builtin">:sitemap-title</span> <span class="org-string">"Articles"</span>
+         <span class="org-builtin">:sitemap-style</span> tree
+         <span class="org-builtin">:sitemap-sort-files</span> anti-chronologically
+         <span class="org-comment-delimiter">;;</span><span class="org-comment">:sitemap-format-entry sbr/org-sitemap-format-entry</span>
+         <span class="org-comment-delimiter">;;</span><span class="org-comment">:sitemap-function sbr/org-publish-sitemap</span>
+         <span class="org-builtin">:html-head-include-scripts</span> nil
+         <span class="org-builtin">:html-head-include-default-style</span> nil
+         <span class="org-builtin">:html-head</span> ,sbr-website-html-head
+         <span class="org-builtin">:html-preamble</span> sbr-website-html-preamble
+         <span class="org-builtin">:html-postamble</span> ,sbr-website-html-postamble)
+        (<span class="org-string">"articles-assets"</span>
+         <span class="org-builtin">:exclude</span> ,(regexp-opt '(<span class="org-string">"*.org"</span>))
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"articles"</span>
+         <span class="org-builtin">:base-extension</span> ,site-attachments
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/articles"</span>
+         <span class="org-builtin">:publishing-function</span> org-publish-attachment
+         <span class="org-builtin">:recursive</span> t)
+        (<span class="org-string">"about"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"about"</span>
+         <span class="org-builtin">:base-extension</span> <span class="org-string">"org"</span>
+         <span class="org-builtin">:exclude</span> ,(regexp-opt '(<span class="org-string">"README.org"</span> <span class="org-string">"draft"</span>))
+         <span class="org-builtin">:index-filename</span> <span class="org-string">"index.org"</span>
+         <span class="org-builtin">:recursive</span> nil
+         <span class="org-builtin">:with-footnotes</span> t
+         <span class="org-builtin">:with-toc</span> nil
+         <span class="org-builtin">:with-drawers</span> t
+         <span class="org-builtin">:publishing-function</span> org-html-publish-to-html
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/about"</span>
+         <span class="org-builtin">:html-head-include-scripts</span> nil
+         <span class="org-builtin">:html-head-include-default-style</span> nil
+         <span class="org-builtin">:html-head</span> ,sbr-website-html-head
+         <span class="org-builtin">:html-preamble</span> sbr-website-html-preamble
+         <span class="org-builtin">:html-postamble</span> ,sbr-website-html-postamble)
+        (<span class="org-string">"index"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">""</span>
+         <span class="org-builtin">:base-extension</span> <span class="org-string">"org"</span>
+         <span class="org-builtin">:exclude</span> ,(regexp-opt '(<span class="org-string">"README.org"</span> <span class="org-string">"draft"</span>))
+         <span class="org-builtin">:index-filename</span> <span class="org-string">"index.org"</span>
+         <span class="org-builtin">:recursive</span> nil
+         <span class="org-builtin">:with-footnotes</span> t
+         <span class="org-builtin">:with-toc</span> nil
+         <span class="org-builtin">:with-drawers</span> t
+         <span class="org-builtin">:with-title</span> nil
+         <span class="org-builtin">:publishing-function</span> org-html-publish-to-html
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public"</span>
+         <span class="org-builtin">:html-head-include-scripts</span> nil
+         <span class="org-builtin">:html-head-include-default-style</span> nil
+         <span class="org-builtin">:html-head</span> ,sbr-website-html-head
+         <span class="org-builtin">:html-preamble</span> sbr-website-html-preamble
+         <span class="org-builtin">:html-postamble</span> ,sbr-website-html-postamble)
+        (<span class="org-string">"css"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"./css"</span>
+         <span class="org-builtin">:base-extension</span> ,site-attachments
+         <span class="org-builtin">:recursive</span> t
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/css"</span>
+         <span class="org-builtin">:publishing-function</span> org-publish-attachment
+         <span class="org-builtin">:recursive</span> t)
+        (<span class="org-string">"images"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"./images"</span>
+         <span class="org-builtin">:base-extension</span> ,site-attachments
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/images"</span>
+         <span class="org-builtin">:publishing-function</span> org-publish-attachment
+         <span class="org-builtin">:recursive</span> t)
+        (<span class="org-string">"assets"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"./assets"</span>
+         <span class="org-builtin">:base-extension</span> ,site-attachments
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/assets"</span>
+         <span class="org-builtin">:publishing-function</span> org-publish-attachment
+         <span class="org-builtin">:recursive</span> t)
+        (<span class="org-string">"legacy"</span>
+         <span class="org-builtin">:base-directory</span> <span class="org-string">"./legacy"</span>
+         <span class="org-builtin">:base-extension</span> ,site-attachments
+         <span class="org-builtin">:publishing-directory</span> <span class="org-string">"./public/"</span>
+         <span class="org-builtin">:publishing-function</span> org-publish-attachment
+         <span class="org-builtin">:recursive</span> t)
+        (<span class="org-string">"all"</span> <span class="org-builtin">:components</span> (<span class="org-string">"posts"</span> <span class="org-string">"about"</span> <span class="org-string">"index"</span> <span class="org-string">"articles"</span> <span class="org-string">"articles-assets"</span> <span class="org-string">"css"</span> <span class="org-string">"images"</span> <span class="org-string">"assets"</span> <span class="org-string">"legacy"</span> <span class="org-string">"posts-rss"</span>))))
+
+(<span class="org-keyword">provide</span> '<span class="org-constant">publish</span>)
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">publish.el ends here</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-%3Dpublish-common.el%3D" class="outline-4">
+<h4 id="%3Dpublish-common.el%3D"><code>publish-common.el</code></h4>
+<div class="outline-text-4" id="text-%3Dpublish-common.el%3D">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;;; </span><span class="org-comment">publish-common.el --- Commons code for www publishing projects -*- lexical-binding: t; -*-</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Author: Vincent Demeester <a href="mailto:vincent%40sbr.pm">&lt;vincent@sbr.pm&gt;</a></span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Commentary:</span>
+<span class="org-comment-delimiter">;;</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Code:</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">load org</span>
+(<span class="org-keyword">require</span> '<span class="org-constant">org</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">dash</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">load org export functions</span>
+(<span class="org-keyword">require</span> '<span class="org-constant">ox-publish</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">ox-rss</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">ox-html</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">load org link functions</span>
+(<span class="org-keyword">require</span> '<span class="org-constant">ol-man</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">ol-git-link</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Those are mine</span>
+(<span class="org-keyword">require</span> '<span class="org-constant">ol-github</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">ol-gitlab</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">org-attach</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">load additional libraries</span>
+(<span class="org-keyword">require</span> '<span class="org-constant">go-mode</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">css-mode</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">yaml-mode</span>)
+(<span class="org-keyword">require</span> '<span class="org-constant">nix-mode</span>)
+
+(<span class="org-keyword">require</span> '<span class="org-constant">s</span>)
+
+(<span class="org-keyword">setq</span> org-export-use-babel nil)
+(<span class="org-keyword">setq</span> org-link-abbrev-alist '((<span class="org-string">"att"</span> . org-attach-expand-link)))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">setting to nil, avoids "Author: x" at the bottom</span>
+(<span class="org-keyword">setq</span> org-export-with-section-numbers nil
+      org-export-with-smart-quotes t
+      org-export-with-toc nil)
+
+(<span class="org-keyword">defvar</span> <span class="org-variable-name">sbr-date-format</span> <span class="org-string">"%b %d, %Y"</span>)
+
+(<span class="org-keyword">setq</span> org-html-divs '((preamble <span class="org-string">"header"</span> <span class="org-string">"top"</span>)
+                      (content <span class="org-string">"main"</span> <span class="org-string">"content"</span>)
+                      (postamble <span class="org-string">"footer"</span> <span class="org-string">"postamble"</span>))
+      org-html-container-element <span class="org-string">"section"</span>
+      org-html-metadata-timestamp-format sbr-date-format
+      org-html-checkbox-type 'unicode
+      org-html-html5-fancy t
+      org-html-doctype <span class="org-string">"html5"</span>
+      org-html-htmlize-output-type 'css
+      org-html-htmlize-font-prefix <span class="org-string">"org-"</span>
+      org-src-fontify-natively t
+      org-html-coding-system 'utf-8-unix)
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">sbr/org-export-format-drawer</span> (name content)
+  <span class="org-doc">"HTML export of drawer with NAME and CONTENT.</span>
+<span class="org-doc">name is the name of the drawer, that will be used as class.</span>
+<span class="org-doc">content is the content of the drawer"</span>
+  (format <span class="org-string">"&lt;div class='drawer %s'&gt;\n&lt;h6&gt;%s&lt;/h6&gt;\n%s&lt;/div&gt;"</span>
+          (downcase name)
+          (capitalize name)
+          content))
+(<span class="org-keyword">setq</span> org-html-format-drawer-function 'sbr/org-export-format-drawer)
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">read-file</span> (filePath)
+  <span class="org-doc">"Return FILEPATH's file content."</span>
+  (<span class="org-keyword">with-temp-buffer</span>
+    (insert-file-contents filePath)
+    (buffer-string)))
+
+(<span class="org-keyword">defvar</span> <span class="org-variable-name">sbr-website-html-head</span>
+  <span class="org-string">"&lt;link rel='</span><span class="org-string"><span class="org-constant">icon</span></span><span class="org-string">' type='</span><span class="org-string"><span class="org-constant">image/x-icon</span></span><span class="org-string">' href='</span><span class="org-string"><span class="org-constant">/images/favicon.ico</span></span><span class="org-string">'/&gt;</span>
+<span class="org-string">&lt;meta name='</span><span class="org-string"><span class="org-constant">viewport</span></span><span class="org-string">' content='width=device-width, initial-scale=1'&gt;</span>
+<span class="org-string">&lt;link rel='</span><span class="org-string"><span class="org-constant">stylesheet</span></span><span class="org-string">' href='</span><span class="org-string"><span class="org-constant">/css/new.css</span></span><span class="org-string">' type='</span><span class="org-string"><span class="org-constant">text/css</span></span><span class="org-string">'/&gt;</span>
+<span class="org-string">&lt;link rel='</span><span class="org-string"><span class="org-constant">stylesheet</span></span><span class="org-string">' href='</span><span class="org-string"><span class="org-constant">/css/syntax.css</span></span><span class="org-string">' type='</span><span class="org-string"><span class="org-constant">text/css</span></span><span class="org-string">'/&gt;</span>
+<span class="org-string">&lt;link href='</span><span class="org-string"><span class="org-constant">/index.xml</span></span><span class="org-string">' rel='</span><span class="org-string"><span class="org-constant">alternate</span></span><span class="org-string">' type='</span><span class="org-string"><span class="org-constant">application/rss+xml</span></span><span class="org-string">' title='Vincent Demeester' /&gt;"</span>)
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">sbr-website-html-preamble</span> (plist)
+  <span class="org-doc">"PLIST: An entry."</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Skip adding subtitle to the post if :KEYWORDS don't have '</span><span class="org-comment"><span class="org-constant">post</span></span><span class="org-comment">' has a</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">keyword</span>
+  (<span class="org-keyword">when</span> (string-match-p <span class="org-string">"post"</span> (format <span class="org-string">"%s"</span> (plist-get plist <span class="org-builtin">:keywords</span>)))
+    (plist-put plist
+               <span class="org-builtin">:subtitle</span> (format <span class="org-string">"Published on %s by %s."</span>
+                                 (org-export-get-date plist sbr-date-format)
+                                 (car (plist-get plist <span class="org-builtin">:author</span>)))))
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Below content will be added anyways</span>
+  <span class="org-string">"&lt;nav&gt;</span>
+<span class="org-string">&lt;img src=\"/images/favicon.ico\" id=\"sitelogo\"/&gt; &lt;a href='</span><span class="org-string"><span class="org-constant">/</span></span><span class="org-string">'&gt;home&lt;/a&gt; /</span>
+<span class="org-string">&lt;a href='</span><span class="org-string"><span class="org-constant">/posts/</span></span><span class="org-string">'&gt;posts&lt;/a&gt; (&lt;a href='</span><span class="org-string"><span class="org-constant">/index.xml</span></span><span class="org-string">'&gt;rss&lt;/a&gt;) /</span>
+<span class="org-string">&lt;a href='</span><span class="org-string"><span class="org-constant">/articles/</span></span><span class="org-string">'&gt;articles&lt;/a&gt; /</span>
+<span class="org-string">&lt;a href='</span><span class="org-string"><span class="org-constant">https://dl.sbr.pm/</span></span><span class="org-string">'&gt;files&lt;/a&gt; /</span>
+<span class="org-string">&lt;a href='</span><span class="org-string"><span class="org-constant">/about/</span></span><span class="org-string">'&gt;about&lt;/a&gt;&lt;/li&gt;</span>
+<span class="org-string">&lt;/nav&gt;"</span>)
+
+(<span class="org-keyword">defvar</span> <span class="org-variable-name">sbr-website-html-postamble</span>
+  <span class="org-string">"&lt;footer&gt;</span>
+<span class="org-string">     &lt;span class='</span><span class="org-string"><span class="org-constant">questions</span></span><span class="org-string">'&gt;Questions, comments ? Please use my &lt;a href=\"https://lists.sr.ht/~vdemeester/public-inbox\"&gt;public inbox&lt;/a&gt; by sending a plain-text email to &lt;a href=\"mailto:~vdemeester/public-inbox@lists.sr.ht\"&gt;~vdemeester/public-inbox@lists.sr.ht&lt;/a&gt;.&lt;/span&gt;</span>
+<span class="org-string">     &lt;span class='</span><span class="org-string"><span class="org-constant">opinions</span></span><span class="org-string">'&gt;Opinions stated here are my own and do not express the views of my employer, spouse, children, pets, neighbors, secret crushes, favorite authors, or anyone else who is not me. And maybe not even me, depending on how old this is.&lt;/span&gt;</span>
+<span class="org-string">     &lt;span class='</span><span class="org-string"><span class="org-constant">copyright</span></span><span class="org-string">'&gt;</span>
+<span class="org-string">      Content and design by Vincent Demeester</span>
+<span class="org-string">      (&lt;a rel='</span><span class="org-string"><span class="org-constant">licence</span></span><span class="org-string">' href='</span><span class="org-string"><span class="org-constant">http://creativecommons.org/licenses/by-nc-sa/3.0/</span></span><span class="org-string">'&gt;Some rights reserved&lt;/a&gt;)</span>
+<span class="org-string">    &lt;/span&gt;&lt;br /&gt;</span>
+<span class="org-string">    &lt;span class='</span><span class="org-string"><span class="org-constant">engine</span></span><span class="org-string">'&gt;</span>
+<span class="org-string">      Powered by &lt;a href='</span><span class="org-string"><span class="org-constant">https://www.gnu.org/software/emacs/</span></span><span class="org-string">'&gt;Gnu Emacs&lt;/a&gt; and &lt;a href='</span><span class="org-string"><span class="org-constant">https://orgmode.org</span></span><span class="org-string">'&gt;orgmode&lt;/a&gt;</span>
+<span class="org-string">    &lt;/span&gt;</span>
+<span class="org-string">&lt;/footer&gt;"</span>)
+(<span class="org-keyword">defvar</span> <span class="org-variable-name">site-attachments</span>
+  (regexp-opt '(<span class="org-string">"jpg"</span> <span class="org-string">"jpeg"</span> <span class="org-string">"gif"</span> <span class="org-string">"png"</span> <span class="org-string">"svg"</span>
+                <span class="org-string">"ico"</span> <span class="org-string">"cur"</span> <span class="org-string">"css"</span> <span class="org-string">"js"</span> <span class="org-string">"woff"</span> <span class="org-string">"html"</span> <span class="org-string">"pdf"</span> <span class="org-string">"otf"</span>))
+  <span class="org-doc">"File types that are published as static files."</span>)
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">sbr/org-sitemap-format-entry</span> (entry style project)
+  <span class="org-doc">"Format posts with author and published data in the index page.</span>
+
+<span class="org-doc">ENTRY: file-name</span>
+<span class="org-doc">STYLE:</span>
+<span class="org-doc">PROJECT: `posts in this case."</span>
+  (<span class="org-keyword">cond</span> ((not (directory-name-p entry))
+         (format <span class="org-string">"%s &#8212; [[file:%s][%s]]</span>
+<span class="org-string">                 :PROPERTIES:</span>
+<span class="org-string">                 :PUBDATE: [%s]</span>
+<span class="org-string">                 :END:"</span>
+                 (format-time-string <span class="org-string">"%Y-%m-%d"</span>
+                                     (org-publish-find-date entry project))
+                 entry
+                 (org-publish-find-title entry project)
+                 (format-time-string <span class="org-string">"%Y-%m-%d"</span>
+                                     (org-publish-find-date entry project))))
+        ((eq style 'tree) (file-name-nondirectory (directory-file-name entry)))
+        (t entry)))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">sbr/org-publish-sitemap</span> (title list)
+  <span class="org-doc">""</span>
+  (concat <span class="org-string">"#+TITLE: "</span> title <span class="org-string">"\n\n"</span>
+          (org-list-to-subtree list)))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">sbr/org-get-first-paragraph</span> (file)
+  <span class="org-doc">"Get string content of first paragraph of file."</span>
+  (<span class="org-keyword">ignore-errors</span>
+    (<span class="org-keyword">with-temp-buffer</span>
+    (insert-file-contents file)
+    (goto-char (point-min))
+    (show-all)
+    (<span class="org-keyword">let</span> ((first-begin (<span class="org-keyword">progn</span>
+                         (org-forward-heading-same-level 1)
+                         (next-line)
+                         (point)))
+          (first-end (<span class="org-keyword">progn</span>
+                       (org-next-visible-heading 1)
+                       (point))))
+      (buffer-substring first-begin first-end)))))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">sbr/org-rss-publish-to-rss</span> (plist filename pub-dir)
+  <span class="org-doc">"Prepare rss.org file before exporting."</span>
+  (<span class="org-keyword">let*</span> ((postsdir (plist-get plist <span class="org-builtin">:base-directory</span>)))
+    (<span class="org-keyword">with-current-buffer</span> (find-file filename)
+      (erase-buffer)
+      (insert <span class="org-string">"#+TITLE: Posts\n"</span>)
+      (insert <span class="org-string">"#+AUTHOR: Vincent Demeester\n"</span>)
+      (insert <span class="org-string">"#+OPTIONS: toc:nil\n"</span>)
+      (<span class="org-keyword">let*</span> ((files-all
+              (reverse (directory-files <span class="org-string">"."</span> nil
+                                        <span class="org-string">"[0-9-]+.*\\.org$"</span>)))
+             (files (seq-subseq files-all 0 (min (length files-all) 30))))
+        (message (format <span class="org-string">"foo: %s"</span> filename))
+        (<span class="org-keyword">dolist</span> (post files)
+          (<span class="org-keyword">let*</span> ((post-file post)
+                 (post-title (org-publish-find-title post-file plist))
+                 (preview-str (sbr/org-get-first-paragraph post-file))
+                 (date (replace-regexp-in-string
+                        <span class="org-string">"</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">(</span></span><span class="org-string">[0-9]\\{</span><span class="org-string"><span class="org-variable-name">4\\</span></span><span class="org-string">}-[0-9]\\{</span><span class="org-string"><span class="org-variable-name">2\\</span></span><span class="org-string">}-[0-9]\\{</span><span class="org-string"><span class="org-variable-name">2\\</span></span><span class="org-string">}</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">)</span></span><span class="org-string">-.*"</span>
+                        <span class="org-string">"\\1"</span> post)))
+            (insert (concat <span class="org-string">"* [[file:"</span> postsdir <span class="org-string">"/"</span> post <span class="org-string">"]["</span> post-title <span class="org-string">"]]\n\n"</span>))
+            (org-set-property <span class="org-string">"ID"</span> post)
+            (org-set-property <span class="org-string">"RSS_TITLE"</span> post-title)
+            <span class="org-comment-delimiter">;; </span><span class="org-comment">ox-rss prepends html-link-home to permalink</span>
+            (org-set-property <span class="org-string">"RSS_PERMALINK"</span>
+                              (concat postsdir <span class="org-string">"/"</span>
+                                      (file-name-sans-extension post)
+                                      <span class="org-string">".html"</span>))
+            (org-set-property
+             <span class="org-string">"PUBDATE"</span>
+             (format-time-string
+              <span class="org-string">"&lt;%Y-%m-%d %a %H:%M&gt;"</span>
+              (org-time-string-to-time
+               (replace-regexp-in-string
+                <span class="org-string">"</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">(</span></span><span class="org-string">[0-9]\\{</span><span class="org-string"><span class="org-variable-name">4\\</span></span><span class="org-string">}-[0-9]\\{</span><span class="org-string"><span class="org-variable-name">2\\</span></span><span class="org-string">}-[0-9]\\{</span><span class="org-string"><span class="org-variable-name">2\\</span></span><span class="org-string">}</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">)</span></span><span class="org-string">-.*"</span>
+                <span class="org-string">"\\1"</span> post))))
+            (insert preview-str)
+            (newline 1)
+            (insert (concat <span class="org-string">"[[file:"</span> postsdir <span class="org-string">"/"</span> post <span class="org-string">"][(Read more)]]\n\n"</span>))))
+        (save-buffer))))
+  (<span class="org-keyword">let</span> ((user-mail-address <span class="org-string">"t"</span>)
+        (org-export-with-broken-links t)
+        (org-rss-use-entry-url-as-guid nil))
+    (org-rss-publish-to-rss plist filename pub-dir)))
+
+(advice-add #'org-export-get-reference <span class="org-builtin">:override</span> #'unpackaged/org-export-get-reference)
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">unpackaged/org-export-get-reference</span> (datum info)
+  <span class="org-doc">"Like `</span><span class="org-doc"><span class="org-constant">org-export-get-reference</span></span><span class="org-doc">', except uses heading titles instead of random numbers."</span>
+  (<span class="org-keyword">let</span> ((cache (plist-get info <span class="org-builtin">:internal-references</span>)))
+    (<span class="org-keyword">or</span> (car (rassq datum cache))
+        (<span class="org-keyword">let*</span> ((crossrefs (plist-get info <span class="org-builtin">:crossrefs</span>))
+               (cells (org-export-search-cells datum))
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">Preserve any pre-existing association between</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">a search cell and a reference, i.e., when some</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">previously published document referenced a location</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">within current file (see</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">`</span><span class="org-comment"><span class="org-constant">org-publish-resolve-external-link</span></span><span class="org-comment">').</span>
+               <span class="org-comment-delimiter">;;</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">However, there is no guarantee that search cells are</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">unique, e.g., there might be duplicate custom ID or</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">two headings with the same title in the file.</span>
+               <span class="org-comment-delimiter">;;</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">As a consequence, before re-using any reference to</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">an element or object, we check that it doesn't refer</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">to a previous element or object.</span>
+               (new (<span class="org-keyword">or</span> (cl-some
+                         (<span class="org-keyword">lambda</span> (cell)
+                           (<span class="org-keyword">let</span> ((stored (cdr (assoc cell crossrefs))))
+                             (<span class="org-keyword">when</span> stored
+                               (<span class="org-keyword">let</span> ((old (org-export-format-reference stored)))
+                                 (<span class="org-keyword">and</span> (not (assoc old cache)) stored)))))
+                         cells)
+                        (<span class="org-keyword">when</span> (org-element-property <span class="org-builtin">:raw-value</span> datum)
+                          <span class="org-comment-delimiter">;; </span><span class="org-comment">Heading with a title</span>
+                          (unpackaged/org-export-new-title-reference datum cache))
+                        <span class="org-comment-delimiter">;; </span><span class="org-comment">NOTE: This probably breaks some Org Export</span>
+                        <span class="org-comment-delimiter">;; </span><span class="org-comment">feature, but if it does what I need, fine.</span>
+                        (org-export-format-reference
+                         (org-export-new-reference cache))))
+               (reference-string new))
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">Cache contains both data already associated to</span>
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">a reference and in-use internal references, so as to make</span>
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">unique references.</span>
+          (<span class="org-keyword">dolist</span> (cell cells) (<span class="org-keyword">push</span> (cons cell new) cache))
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">Retain a direct association between reference string and</span>
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">DATUM since (1) not every object or element can be given</span>
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">a search cell (2) it permits quick lookup.</span>
+          (<span class="org-keyword">push</span> (cons reference-string datum) cache)
+          (plist-put info <span class="org-builtin">:internal-references</span> cache)
+          reference-string))))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">unpackaged/org-export-new-title-reference</span> (datum cache)
+  <span class="org-doc">"Return new reference for DATUM that is unique in CACHE."</span>
+  (<span class="org-keyword">cl-macrolet</span> ((inc-suffixf (place)
+                             `(<span class="org-keyword">progn</span>
+                                (string-match (<span class="org-keyword">rx</span> bos
+                                                  (minimal-match (group (1+ anything)))
+                                                  (optional <span class="org-string">"--"</span> (group (1+ digit)))
+                                                  eos)
+                                              ,place)
+                                <span class="org-comment-delimiter">;; </span><span class="org-comment">HACK: `</span><span class="org-comment"><span class="org-constant">s1</span></span><span class="org-comment">' instead of a gensym.</span>
+                                (<span class="org-keyword">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                                                           (match-string 2 ,place)))
+                                        (suffix (<span class="org-keyword">if</span> suffix
+                                                    (string-to-number suffix)
+                                                  0)))
+                                  (<span class="org-keyword">setf</span> ,place (format <span class="org-string">"%s--%s"</span> s1 (<span class="org-keyword">cl-incf</span> suffix)))))))
+    (<span class="org-keyword">let*</span> ((title (org-element-property <span class="org-builtin">:raw-value</span> datum))
+           (ref (url-hexify-string (substring-no-properties title)))
+           (parent (org-element-property <span class="org-builtin">:parent</span> datum)))
+      (<span class="org-keyword">while</span> (<span class="org-keyword">--any</span> (equal ref (car it))
+                    cache)
+        <span class="org-comment-delimiter">;; </span><span class="org-comment">Title not unique: make it so.</span>
+        (<span class="org-keyword">if</span> parent
+            <span class="org-comment-delimiter">;; </span><span class="org-comment">Append ancestor title.</span>
+            (<span class="org-keyword">setf</span> title (concat (org-element-property <span class="org-builtin">:raw-value</span> parent)
+                                <span class="org-string">"--"</span> title)
+                  ref (url-hexify-string (substring-no-properties title))
+                  parent (org-element-property <span class="org-builtin">:parent</span> parent))
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">No more ancestors: add and increment a number.</span>
+          (inc-suffixf ref)))
+      ref)))
+
+(<span class="org-keyword">provide</span> '<span class="org-constant">publish-common</span>)
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">publish-common.el ends here</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span class="org-comment-delimiter"># </span><span class="org-comment">-*- mode: org; eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t) -*-</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

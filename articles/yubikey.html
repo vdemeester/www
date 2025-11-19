@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yubikey setup on Linux</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Yubikey setup on Linux</h1>
+<p class="subtitle" role="doc-subtitle">Trying to use yubikey to its full potential on Linux</p>
+</header><p>
+A YubiKey is a hardware authentication device that can be used for various one-time
+password (OTP) and authentication methods. This article explains how I setup my yubikey
+and operating system (most likely only different GNU/Linux distribution) for it.
+</p>
+
+<p>
+The goal is to use the yubikey for:
+</p>
+<ul class="org-ul">
+<li>GnuPG subkeys for signing and encrypting</li>
+<li>Main SSH key (using <code>gpg-agent</code>, …)</li>
+<li>Dual authentication using OTP (time-based, event-based)</li>
+</ul>
+
+<p>
+The yubikey manual<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> (at least the version that seem to refer the yubikey neo I have)
+is the base read but there is plenty of useful article on the subject. This is also based
+on my usage of the yubikey, so it might vary from your usage.
+</p>
+
+<section id="outline-container-h:168c7019-2c6b-4872-84d2-7535a3a38f91" class="outline-2">
+<h2 id="h:168c7019-2c6b-4872-84d2-7535a3a38f91"><span class="todo TODO">TODO</span> GnuPG</h2>
+<div class="outline-text-2" id="text-h:168c7019-2c6b-4872-84d2-7535a3a38f91">
+<p>
+Some assumptions are made in this section:
+</p>
+
+<ul class="org-ul">
+<li>You know a tiny bit of GnuPG and the <code>gpg</code> command (at least the basics)</li>
+<li>You have a backup of your GnuPG configuration (usually <code>$HOME/.gnupg</code>) — just in case 👼</li>
+<li>You have an existing GnuPG key (private/public)</li>
+</ul>
+
+<p>
+We are going to use GnuPG subkeys (for security, as we won&rsquo;t have the <i>master</i> key
+anywhere on the machines, only offline). If you are interested in how it works and how to
+configure it, here is a <a href="https://blog.tinned-software.net/create-gnupg-key-with-sub-keys-to-sign-encrypt-authenticate/">guide</a>. The following is a mere <i>rip-off</i> of the yubikey developer
+article : <a href="https://developers.yubico.com/PGP/Importing_keys.html">Importing keys</a>.
+</p>
+
+<p>
+Let&rsquo;s first see if our gpg version supports our yubikey.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">$ gpg-connect-agent --hex <span class="org-string">"scd apdu 00 f1 00 00"</span> /bye
+D[0000]  01 00 05 90 00                                     .....
+OK
+</pre>
+</div>
+
+<p>
+We need to have our secret key on the machine we are using to setup the yubikey. Once the
+setup is done, we will reset the <code>.gnupg</code> so that the machine doesn&rsquo;t have the main key
+(or even the subkey for that matter).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">$ gpg --list-secret-keys
+<span class="org-comment-delimiter"># </span><span class="org-comment">[&#8230;]</span>
+--------------------------------
+sec   rsa2048 2013-05-19 [SC]
+      8C4E8DDA04C18C6B503BD2DBB7E7CF1C634256FA
+uid           [ultimate] Vincent Demeester (vdemeester) <a href="mailto:vincent%40demeester.fr">&lt;vincent@demeester.fr&gt;</a>
+uid           [ultimate] Vincent Demeester <a href="mailto:vincent%40sbr.pm">&lt;vincent@sbr.pm&gt;</a>
+uid           [ultimate] Vincent Demeester <a href="mailto:vdemeest%40redhat.com">&lt;vdemeest@redhat.com&gt;</a>
+uid           [ultimate] [jpeg image of size 4711]
+ssb&gt;  rsa2048 2013-05-19 [E]
+ssb   rsa4096 2019-04-07 [S] [expires: 2022-04-06]
+ssb&gt;  rsa2048 2019-07-02 [S]
+ssb&gt;  rsa2048 2019-07-02 [A]
+</pre>
+</div>
+</div>
+</section>
+
+
+
+<section id="outline-container-h:55406d2f-0f1f-4ef7-9ec1-634d9fcaaedc" class="outline-2">
+<h2 id="h:55406d2f-0f1f-4ef7-9ec1-634d9fcaaedc"><span class="todo TODO">TODO</span> SSH</h2>
+<div class="outline-text-2" id="text-h:55406d2f-0f1f-4ef7-9ec1-634d9fcaaedc">
+<p>
+We are using a GnuPG key as ssh key, and we are storing this into the yubikey (in the
+<code>Authentication Key</code> slot).
+</p>
+</div>
+</section>
+
+<section id="outline-container-h:f3ecbc48-0c51-4dcd-b075-0575b06fff7b" class="outline-2">
+<h2 id="h:f3ecbc48-0c51-4dcd-b075-0575b06fff7b"><span class="todo TODO">TODO</span> Dual authentication</h2>
+<div class="outline-text-2" id="text-h:f3ecbc48-0c51-4dcd-b075-0575b06fff7b">
+</div>
+</section>
+
+<section id="outline-container-h:8398bd8f-12ca-4167-84ae-6c9a63aa41e6" class="outline-2">
+<h2 id="h:8398bd8f-12ca-4167-84ae-6c9a63aa41e6"><span class="todo TODO">TODO</span> Some more automation</h2>
+<div class="outline-text-2" id="text-h:8398bd8f-12ca-4167-84ae-6c9a63aa41e6">
+</div>
+</section>
+
+<section id="outline-container-h:ec8f52e7-9b54-42da-95f8-ff5c44445118" class="outline-2">
+<h2 id="h:ec8f52e7-9b54-42da-95f8-ff5c44445118">References</h2>
+<div class="outline-text-2" id="text-h:ec8f52e7-9b54-42da-95f8-ff5c44445118">
+<ul class="org-ul">
+<li><a href="https://fedoraproject.org/wiki/Using_Yubikeys_with_Fedora">https://fedoraproject.org/wiki/Using_Yubikeys_with_Fedora</a></li>
+<li><a href="https://fedoraproject.org/wiki/Infrastructure/Yubikey">https://fedoraproject.org/wiki/Infrastructure/Yubikey</a></li>
+<li><a href="https://fedoramagazine.org/using-the-yubikey4-with-fedora/">https://fedoramagazine.org/using-the-yubikey4-with-fedora/</a></li>
+<li><a href="https://developers.yubico.com/PGP/Importing_keys.html">https://developers.yubico.com/PGP/Importing_keys.html</a></li>
+<li><a href="https://developers.yubico.com/">https://developers.yubico.com/</a></li>
+<li><a href="https://github.com/fedora-infra/ssh-gpg-smartcard-config/">https://github.com/fedora-infra/ssh-gpg-smartcard-config/</a>
+<ul class="org-ul">
+<li><a href="https://github.com/fedora-infra/ssh-gpg-smartcard-config/blob/master/Linux.md">https://github.com/fedora-infra/ssh-gpg-smartcard-config/blob/master/Linux.md</a></li>
+</ul></li>
+<li><a href="https://www.gnupg.org/gph/en/manual/x110.html">https://www.gnupg.org/gph/en/manual/x110.html</a></li>
+<li><a href="https://github.com/cornelinux/yubikey-luks">https://github.com/cornelinux/yubikey-luks</a></li>
+<li><a href="https://rzetterberg.github.io/yubikey-gpg-nixos.html">https://rzetterberg.github.io/yubikey-gpg-nixos.html</a></li>
+<li><a href="https://github.com/drduh/YubiKey-Guide">https://github.com/drduh/YubiKey-Guide</a></li>
+<li><a href="https://blog.tinned-software.net/create-gnupg-key-with-sub-keys-to-sign-encrypt-authenticate/">https://blog.tinned-software.net/create-gnupg-key-with-sub-keys-to-sign-encrypt-authenticate/</a></li>
+<li><a href="https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS">https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS</a></li>
+<li><a href="https://suchsecurity.com/gpg-and-ssh-with-yubikey-on-windows.html">https://suchsecurity.com/gpg-and-ssh-with-yubikey-on-windows.html</a></li>
+<li><a href="https://codingnest.com/how-to-use-gpg-with-yubikey-wsl/">https://codingnest.com/how-to-use-gpg-with-yubikey-wsl/</a></li>
+<li><a href="https://metebalci.com/blog/using-u2f-at-linux-login/">https://metebalci.com/blog/using-u2f-at-linux-login/</a></li>
+<li><a href="https://0day.work/locking-the-screen-when-removing-a-yubikey/">https://0day.work/locking-the-screen-when-removing-a-yubikey/</a></li>
+<li><a href="https://gist.github.com/jhass/070207e9d22b314d9992">https://gist.github.com/jhass/070207e9d22b314d9992</a></li>
+<li><a href="https://wiki.realmofespionage.xyz/distros:fedora_workstation_gnome">https://wiki.realmofespionage.xyz/distros:fedora_workstation_gnome</a></li>
+</ul>
+</div>
+</section>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<a href="https://www.yubico.com/wp-content/uploads/2015/03/YubiKeyManual_v3.4.pdf">https://www.yubico.com/wp-content/uploads/2015/03/YubiKeyManual_v3.4.pdf</a>
+</p></div></div>
+
+
+</div>
+</div></main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

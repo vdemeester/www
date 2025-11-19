@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kubernetes</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="post" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="./css/2022.css" />
+<link rel="stylesheet" type="text/css" href="./css/syntax.css" />
+<link rel='icon' type='image/x-icon' href='./images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Kubernetes</h1>
+</header><ul class="org-ul">
+<li><a href="knative.html">Knative</a> notes</li>
+</ul>
+<section id="outline-container-Provisioning" class="outline-2">
+<h2 id="Provisioning">Provisioning</h2>
+<div class="outline-text-2" id="text-Provisioning">
+<p>
+There is a bunch of ways to provision Kubernetes, but you need to take few elements into
+account:
+</p>
+<ul class="org-ul">
+<li>is it a &ldquo;throwable&rdquo; cluster, for development or tests purposes</li>
+<li>is it a local cluster (not exposed to the public)</li>
+<li>is it a production grade cluster (exposed to the public)</li>
+</ul>
+
+<p>
+For the <i>throwable</i> case, there is a bunch of possibilities, from running VMs to running
+kubernetes in containers.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://github.com/saschagrunert/kubernix">kubernix</a> for <a href="nixos.html">NixOS</a> specific.</li>
+<li><a href="kubernetes/minikube.html">minikube</a></li>
+<li><a href="kubernetes/kind.html">kind</a></li>
+<li>microk8s</li>
+</ul>
+
+<p>
+For the local cluster part, you can rely on <a href="https://github.com/kelseyhightower/kubernetes-the-hard-way/"><i>the hard way</i></a> or on tools from the community,
+depending on your system.
+</p>
+
+<ul class="org-ul">
+<li>I am trying to use <a href="nixos.html">NixOS</a> for this : <a href="kubernetes/kubernetes_on_nixos.html">Kubernetes on NixOS</a>.</li>
+<li>In parallel, I&rsquo;m gonna setup k8s using <a href="microk8s.html">microk8s</a> on VMs too, so that I can test with a
+Ubuntu host.</li>
+</ul>
+
+<p>
+For the production grade cluster, <i>well</i>, I am not there yet, but best advice, use GKE or
+<a href="openshift.html">OpenShift</a>.
+</p>
+</div>
+</section>
+<section id="outline-container-Configuration" class="outline-2">
+<h2 id="Configuration">Configuration</h2>
+<div class="outline-text-2" id="text-Configuration">
+</div>
+<div id="outline-container-Extract%20configuration%20context%20to%20its%20own%20file" class="outline-3">
+<h3 id="Extract%20configuration%20context%20to%20its%20own%20file">Extract configuration context to its own file</h3>
+<div class="outline-text-3" id="text-Extract%20configuration%20context%20to%20its%20own%20file">
+<div class="org-src-container">
+<pre class="src src-shell">kubectl config view --minify --flatten <span class="org-sh-escaped-newline">\</span>
+        --context=put-the-context-here &gt; ~/.kube/config.context
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+</div>
+<div id="outline-container-%5B%5Bhttp%3A%2F%2Fboringis.cool%2F%5D%5Bboring%20is%20cool%20%7C%20advocacy%20site%20for%20boring%20technology%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttp%3A%2F%2Fboringis.cool%2F%5D%5Bboring%20is%20cool%20%7C%20advocacy%20site%20for%20boring%20technology%5D%5D"><a href="http://boringis.cool/">boring is cool | advocacy site for boring technology</a></h3>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fahmet.im%2Fblog%2Fmastering-kubeconfig%2F%5D%5BMastering%20the%20KUBECONFIG%20file%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fahmet.im%2Fblog%2Fmastering-kubeconfig%2F%5D%5BMastering%20the%20KUBECONFIG%20file%5D%5D"><a href="https://ahmet.im/blog/mastering-kubeconfig/">Mastering the KUBECONFIG file</a></h3>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fchristine.website%2Fblog%2Fdrone-kubernetes-cd-2020-07-10%5D%5BContinuous%20Deployment%20to%20Kubernetes%20with%20Gitea%20and%20Drone%20-%20Christine%20Dodrill%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fchristine.website%2Fblog%2Fdrone-kubernetes-cd-2020-07-10%5D%5BContinuous%20Deployment%20to%20Kubernetes%20with%20Gitea%20and%20Drone%20-%20Christine%20Dodrill%5D%5D"><a href="https://christine.website/blog/drone-kubernetes-cd-2020-07-10">Continuous Deployment to Kubernetes with Gitea and Drone - Christine Dodrill</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fchristine.website%2Fblog%2Fdrone-kubernetes-cd-2020-07-10%5D%5BContinuous%20Deployment%20to%20Kubernetes%20with%20Gitea%20and%20Drone%20-%20Christine%20Dodrill%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-07-11 Sat 14:30]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmedium.com%2Fflant-com%2Fkubectl-commands-and-tips-7b33de0c5476%5D%5BReady-to-use%20commands%20and%20tips%20for%20kubectl%20%7C%20by%20Flant%20staff%20%7C%20Flant%20%7C%20Aug%2C%202020%20%7C%20Medium%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmedium.com%2Fflant-com%2Fkubectl-commands-and-tips-7b33de0c5476%5D%5BReady-to-use%20commands%20and%20tips%20for%20kubectl%20%7C%20by%20Flant%20staff%20%7C%20Flant%20%7C%20Aug%2C%202020%20%7C%20Medium%5D%5D"><a href="https://medium.com/flant-com/kubectl-commands-and-tips-7b33de0c5476">Ready-to-use commands and tips for kubectl | by Flant staff | Flant | Aug, 2020 | Medium</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmedium.com%2Fflant-com%2Fkubectl-commands-and-tips-7b33de0c5476%5D%5BReady-to-use%20commands%20and%20tips%20for%20kubectl%20%7C%20by%20Flant%20staff%20%7C%20Flant%20%7C%20Aug%2C%202020%20%7C%20Medium%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-10 Thu 13:24]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.dave.tf%2Fpost%2Fnew-kubernetes%2F%5D%5BA%20better%20Kubernetes%2C%20from%20the%20ground%20up%20%C2%B7%20blog.dave.tf%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.dave.tf%2Fpost%2Fnew-kubernetes%2F%5D%5BA%20better%20Kubernetes%2C%20from%20the%20ground%20up%20%C2%B7%20blog.dave.tf%5D%5D"><a href="https://blog.dave.tf/post/new-kubernetes/">A better Kubernetes, from the ground up · blog.dave.tf</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.dave.tf%2Fpost%2Fnew-kubernetes%2F%5D%5BA%20better%20Kubernetes%2C%20from%20the%20ground%20up%20%C2%B7%20blog.dave.tf%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-11-30 Mon 19:05]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Faporcupine.com%2F2020%2F03%2Fpi4-kubernetes-cluster%2F%5D%5B%F0%9F%A4%96%20Setting%20Up%20a%20Raspberry%20Pi%204%20Kubernetes%20Cluster%20%7C%20A_Porcupine%20-%20A%20Blog%20about%20technology%20and%20other%20such%20geekery%21%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Faporcupine.com%2F2020%2F03%2Fpi4-kubernetes-cluster%2F%5D%5B%F0%9F%A4%96%20Setting%20Up%20a%20Raspberry%20Pi%204%20Kubernetes%20Cluster%20%7C%20A_Porcupine%20-%20A%20Blog%20about%20technology%20and%20other%20such%20geekery%21%5D%5D"><a href="https://aporcupine.com/2020/03/pi4-kubernetes-cluster/">🤖 Setting Up a Raspberry Pi 4 Kubernetes Cluster | A<sub>Porcupine</sub> - A Blog about technology and other such geekery!</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Faporcupine.com%2F2020%2F03%2Fpi4-kubernetes-cluster%2F%5D%5B%F0%9F%A4%96%20Setting%20Up%20a%20Raspberry%20Pi%204%20Kubernetes%20Cluster%20%7C%20A_Porcupine%20-%20A%20Blog%20about%20technology%20and%20other%20such%20geekery%21%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-09 Wed 16:34]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fdbafromthecold.com%2F2020%2F11%2F30%2Fbuilding-a-raspberry-pi-cluster-to-run-azure-sql-edge-on-kubernetes%2F%5D%5BBuilding%20a%20Raspberry%20Pi%20cluster%20to%20run%20Azure%20SQL%20Edge%20on%20Kubernetes%20%7C%20DBA%20From%20The%20Cold%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fdbafromthecold.com%2F2020%2F11%2F30%2Fbuilding-a-raspberry-pi-cluster-to-run-azure-sql-edge-on-kubernetes%2F%5D%5BBuilding%20a%20Raspberry%20Pi%20cluster%20to%20run%20Azure%20SQL%20Edge%20on%20Kubernetes%20%7C%20DBA%20From%20The%20Cold%5D%5D"><a href="https://dbafromthecold.com/2020/11/30/building-a-raspberry-pi-cluster-to-run-azure-sql-edge-on-kubernetes/">Building a Raspberry Pi cluster to run Azure SQL Edge on Kubernetes | DBA From The Cold</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fdbafromthecold.com%2F2020%2F11%2F30%2Fbuilding-a-raspberry-pi-cluster-to-run-azure-sql-edge-on-kubernetes%2F%5D%5BBuilding%20a%20Raspberry%20Pi%20cluster%20to%20run%20Azure%20SQL%20Edge%20on%20Kubernetes%20%7C%20DBA%20From%20The%20Cold%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-09 Wed 16:45]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fdbafromthecold.com%2F2020%2F12%2F03%2Fupdating-my-kubernetes-raspberry-pi-cluster-to-containerd%2F%5D%5BUpdating%20my%20Kubernetes%20Raspberry%20Pi%20Cluster%20to%20containerd%20%7C%20DBA%20From%20The%20Cold%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fdbafromthecold.com%2F2020%2F12%2F03%2Fupdating-my-kubernetes-raspberry-pi-cluster-to-containerd%2F%5D%5BUpdating%20my%20Kubernetes%20Raspberry%20Pi%20Cluster%20to%20containerd%20%7C%20DBA%20From%20The%20Cold%5D%5D"><a href="https://dbafromthecold.com/2020/12/03/updating-my-kubernetes-raspberry-pi-cluster-to-containerd/">Updating my Kubernetes Raspberry Pi Cluster to containerd | DBA From The Cold</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fdbafromthecold.com%2F2020%2F12%2F03%2Fupdating-my-kubernetes-raspberry-pi-cluster-to-containerd%2F%5D%5BUpdating%20my%20Kubernetes%20Raspberry%20Pi%20Cluster%20to%20containerd%20%7C%20DBA%20From%20The%20Cold%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-09 Wed 16:47]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgeektechstuff.com%2F2020%2F11%2F18%2Fkubernetes-cluster-on-raspberry-pi%2F%5D%5BKubernetes%20Cluster%20On%20Raspberry%20Pi%20%E2%80%93%20Geek%20Tech%20Stuff%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgeektechstuff.com%2F2020%2F11%2F18%2Fkubernetes-cluster-on-raspberry-pi%2F%5D%5BKubernetes%20Cluster%20On%20Raspberry%20Pi%20%E2%80%93%20Geek%20Tech%20Stuff%5D%5D"><a href="https://geektechstuff.com/2020/11/18/kubernetes-cluster-on-raspberry-pi/">Kubernetes Cluster On Raspberry Pi – Geek Tech Stuff</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgeektechstuff.com%2F2020%2F11%2F18%2Fkubernetes-cluster-on-raspberry-pi%2F%5D%5BKubernetes%20Cluster%20On%20Raspberry%20Pi%20%E2%80%93%20Geek%20Tech%20Stuff%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-09 Wed 16:47]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmarcusnoble.co.uk%2F2022-07-04-managing-kubernetes-without-losing-your-cool%2F%5D%5B%27Managing%20Kubernetes%20without%20losing%20your%20cool%27%20by%20Marcus%20Noble%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmarcusnoble.co.uk%2F2022-07-04-managing-kubernetes-without-losing-your-cool%2F%5D%5B%27Managing%20Kubernetes%20without%20losing%20your%20cool%27%20by%20Marcus%20Noble%5D%5D"><a href="https://marcusnoble.co.uk/2022-07-04-managing-kubernetes-without-losing-your-cool/">&rsquo;Managing Kubernetes without losing your cool&rsquo; by Marcus Noble</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmarcusnoble.co.uk%2F2022-07-04-managing-kubernetes-without-losing-your-cool%2F%5D%5B%27Managing%20Kubernetes%20without%20losing%20your%20cool%27%20by%20Marcus%20Noble%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-07-05 Tue 15:19]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fune-tasse-de.cafe%2Fblog%2Ftalos%2F%5D%5BTalos%20-%20Un%20OS%20immuable%20pour%20Kubernetes%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fune-tasse-de.cafe%2Fblog%2Ftalos%2F%5D%5BTalos%20-%20Un%20OS%20immuable%20pour%20Kubernetes%5D%5D"><a href="https://une-tasse-de.cafe/blog/talos/">Talos - Un OS immuable pour Kubernetes</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fune-tasse-de.cafe%2Fblog%2Ftalos%2F%5D%5BTalos%20-%20Un%20OS%20immuable%20pour%20Kubernetes%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2024-05-25 Sat 09:52]</span></span>
+</p>
+
+<p>
+A kubernetes &ldquo;optimized&rdquo; operating system.
+</p>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

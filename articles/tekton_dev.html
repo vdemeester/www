@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tekton development environment</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Tekton development environment</h1>
+</header>
+<section id="outline-container-h:07626b12-f046-4671-87cd-858ebde959b9" class="outline-2">
+<h2 id="h:07626b12-f046-4671-87cd-858ebde959b9">Basic development environment setup</h2>
+<div class="outline-text-2" id="text-h:07626b12-f046-4671-87cd-858ebde959b9">
+</div>
+
+<div id="outline-container-h:29af1f1c-bb22-4f51-96b2-a217279e5b04" class="outline-3">
+<h3 id="h:29af1f1c-bb22-4f51-96b2-a217279e5b04">Requirements</h3>
+<div class="outline-text-3" id="text-h:29af1f1c-bb22-4f51-96b2-a217279e5b04">
+<ul class="org-ul">
+<li><code>go</code> : installation depends on your operating system</li>
+<li><code>ko</code> : <code>go get -u github.com/google/go-containerregistry/cmd/ko</code></li>
+<li><code>kubernetes</code>
+<ul class="org-ul">
+<li><code>minikube</code></li>
+<li><code>minishift</code></li>
+<li>…</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:8a457dfb-5144-4bd2-bc16-4a18d7bb54f6" class="outline-3">
+<h3 id="h:8a457dfb-5144-4bd2-bc16-4a18d7bb54f6"><code>Minikube</code></h3>
+<div class="outline-text-3" id="text-h:8a457dfb-5144-4bd2-bc16-4a18d7bb54f6">
+<div class="org-src-container">
+<pre class="src src-bash">$ minikube profile tektoncd
+$ minikube config set kubernetes-version <span class="org-string">"v1.13.2"</span>
+$ minikube config set memory <span class="org-string">"8192"</span>
+$ minikube config set cpus <span class="org-string">"4"</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">linux-only with libvirt, qemu-kvm</span>
+$ minikube config set vm-driver <span class="org-string">"kvm2"</span>
+$ minikube start
+&#9989;  minikube profile was successfully set to tektoncd
+&#9888;&#65039;  These changes will take effect upon a minikube delete and then a minikube start
+&#9888;&#65039;  These changes will take effect upon a minikube delete and then a minikube start
+&#9888;&#65039;  These changes will take effect upon a minikube delete and then a minikube start
+&#128516;  minikube v0.35.0 on linux (amd64)
+&#128293;  Creating kvm2 VM (<span class="org-variable-name">CPUs</span>=4, <span class="org-variable-name">Memory</span>=8192MB, <span class="org-variable-name">Disk</span>=20000MB) ...
+&#128246;  <span class="org-string">"tektoncd"</span> IP address is 192.168.39.241
+&#128051;  Configuring Docker as the container runtime ...
+&#10024;  Preparing Kubernetes environment ...
+&#128668;  Pulling images required by Kubernetes v1.13.2 ...
+&#128640;  Launching Kubernetes v1.13.2 using kubeadm ...
+&#8987;  Waiting for pods: apiserver proxy etcd scheduler controller addon-manager dns
+&#128273;  Configuring cluster permissions ...
+&#129300;  Verifying component health .....
+&#128151;  kubectl is now configured to use <span class="org-string">"tektoncd"</span>
+&#127940;  Done! Thank you for using minikube!
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:b6e6a6cd-6130-4d8a-828e-41e609f66c19" class="outline-3">
+<h3 id="h:b6e6a6cd-6130-4d8a-828e-41e609f66c19"><code>Minishift</code></h3>
+<div class="outline-text-3" id="text-h:b6e6a6cd-6130-4d8a-828e-41e609f66c19">
+<div class="org-src-container">
+<pre class="src src-bash">$ minishift profile set tektoncd
+$ minishift config set openshift-version <span class="org-string">"v3.11.0"</span>
+$ minishift config set memory <span class="org-string">"8192"</span>
+$ minishift config set cpus <span class="org-string">"4"</span>
+$ minishift config set image-caching <span class="org-string">"true"</span>
+$ minishift addons enable admin-user
+$ minishift addons enable anyuid
+$ minishift start
+-- Starting profile <span class="org-string">'tektoncd'</span>
+-- Check if deprecated options are used ... OK
+-- Checking if https://github.com is reachable ... OK
+-- Checking if requested OpenShift version <span class="org-string">'v3.11.0'</span> is valid ... OK
+-- Checking if requested OpenShift version <span class="org-string">'v3.11.0'</span> is supported ... OK
+-- Checking if requested hypervisor <span class="org-string">'kvm'</span> is supported on this platform ... OK
+-- Checking if KVM driver is installed ...
+<span class="org-comment-delimiter"># </span><span class="org-comment">[&#8230;]</span>
+-- Starting the OpenShift cluster using <span class="org-string">'kvm'</span> hypervisor ...
+-- Minishift VM will be configured with ...
+   Memory:    8 GB
+   vCPUs :    4
+   Disk size: 20 GB
+<span class="org-comment-delimiter"># </span><span class="org-comment">[&#8230;]</span>
+   -- Starting OpenShift cluster ...........
+
+Creating initial project <span class="org-string">"myproject"</span> ...
+Server Information ...
+OpenShift server started.
+
+The server is accessible via web console at:
+    https://192.168.42.95:8443/console
+
+You are logged<span class="org-keyword"> in</span> as:
+    User:     developer
+    Password: &lt;any value&gt;
+
+To login as administrator:
+    oc login -u system:admin
+
+
+-- Applying addon <span class="org-string">'admin-user'</span>:..
+-- Applying addon <span class="org-string">'anyuid'</span>:.
+<span class="org-comment-delimiter"># </span><span class="org-comment">[&#8230;]</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:4ca1bd38-6613-4b44-a276-f40680d89310" class="outline-3">
+<h3 id="h:4ca1bd38-6613-4b44-a276-f40680d89310">Environments</h3>
+<div class="outline-text-3" id="text-h:4ca1bd38-6613-4b44-a276-f40680d89310">
+<p>
+We need to configure <code>ko</code> (using <code>KO_DOCKER_REPO</code>) so that it can deploy the working copy
+code into our development cluster.
+</p>
+
+<ul class="org-ul">
+<li><code>minikube</code> (or <code>minishift</code>) with <code>docker</code> as container runtime
+<ol class="org-ol">
+<li><p>
+Make sure your local <code>docker</code> command-line points to the VM daemon
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span class="org-builtin">eval</span> $(minikube docker-env)
+<span class="org-comment-delimiter"># </span><span class="org-comment">eval $(minishift docker-env) # for minishift</span>
+</pre>
+</div></li>
+<li><p>
+Use <code>ko.local</code> as <code>KO_DOCKER_REPO</code> — it&rsquo;s a special case handled by <code>ko</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span class="org-builtin">export</span> <span class="org-variable-name">KO_DOCKER_REPO</span>=ko.local
+</pre>
+</div></li>
+</ol></li>
+<li>for any cluster using another runtime (or a remote cluster), you need to use a registry
+that will be accessible from the cluster (<code>gcr.io</code> or your own – the docker hub doesn&rsquo;t
+work with <code>ko</code>).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:f8a6a774-f886-492c-a268-2d896cf0918d" class="outline-3">
+<h3 id="h:f8a6a774-f886-492c-a268-2d896cf0918d">Deploy <code>tektoncd/pipeline</code></h3>
+<div class="outline-text-3" id="text-h:f8a6a774-f886-492c-a268-2d896cf0918d">
+<ol class="org-ol">
+<li><p>
+<code>tektoncd/pipeline</code> needs to sit on the right place in your <code>GOPATH</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ echo $<span class="org-variable-name">GOPATH</span>
+/home/vincent
+$ pwd
+/home/vincent/src/github.com/tektoncd/pipeline
+</pre>
+</div></li>
+
+<li><p>
+Deploy 💃
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ ko apply -f ./config
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/webhook
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/gsutil
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/controller
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/nop
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/creds-init
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/git-init
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/kubeconfigwriter
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/bash
+2019/03/13 10:49:22 Building github.com/tektoncd/pipeline/cmd/entrypoint
+namespace/tekton-pipelines created
+clusterrole.rbac.authorization.k8s.io/tekton-pipelines-admin created
+serviceaccount/tekton-pipelines-controller created
+clusterrolebinding.rbac.authorization.k8s.io/tekton-pipelines-controller-admin created
+2019/03/13 10:49:23 Using base index.docker.io/library/busybox:latest for github.com/tektoncd/pipeline/cmd/entrypoint
+2019/03/13 10:49:23 Using base gcr.io/distroless/static:latest for github.com/tektoncd/pipeline/cmd/nop
+<span class="org-comment-delimiter"># </span><span class="org-comment">[&#8230;]</span>
+deployment.apps/tekton-pipelines-controller created
+deployment.apps/tekton-pipelines-webhook created
+</pre>
+</div></li>
+
+<li><p>
+Enjoy 🔥
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ kubectl get all -n tekton-pipelines
+NAME                                               READY     STATUS    RESTARTS   AGE
+pod/tekton-pipelines-controller-5875857cf5-k9njx   1/1       Running   0          3m18s
+pod/tekton-pipelines-webhook-54785c88f4-jbkqr      1/1       Running   0          3m18s
+
+NAME                                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/tekton-pipelines-controller   ClusterIP   10.104.145.40   &lt;none&gt;        9090/TCP   4m31s
+service/tekton-pipelines-webhook      ClusterIP   10.97.9.56      &lt;none&gt;        443/TCP    4m31s
+
+NAME                                          READY     UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/tekton-pipelines-controller   1/1       1            1           3m18s
+deployment.apps/tekton-pipelines-webhook      1/1       1            1           3m18s
+
+NAME                                                     DESIRED   CURRENT   READY     AGE
+replicaset.apps/tekton-pipelines-controller-5875857cf5   1         1         1         3m18s
+replicaset.apps/tekton-pipelines-webhook-54785c88f4      1         1         1         3m18s
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h:99cb715a-3807-414e-9b73-2d60bacbe583" class="outline-3">
+<h3 id="h:99cb715a-3807-414e-9b73-2d60bacbe583">An example</h3>
+<div class="outline-text-3" id="text-h:99cb715a-3807-414e-9b73-2d60bacbe583">
+<p>
+Let&rsquo;s validate it works by running a simple example
+</p>
+
+<div class="org-src-container">
+<pre class="src src-yaml"><span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: Task
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: build-simple
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">steps</span>:
+  - <span class="org-variable-name">name</span>: build-simple
+    <span class="org-variable-name">image</span>: docker.io/library/busybox
+    <span class="org-variable-name">command</span>:
+    - /bin/sh
+    <span class="org-variable-name">args</span>:
+    - -c
+    - <span class="org-string">"echo hello world"</span>
+<span class="org-comment">---</span>
+<span class="org-variable-name">apiVersion</span>: tekton.dev/v1alpha1
+<span class="org-variable-name">kind</span>: TaskRun
+<span class="org-variable-name">metadata</span>:
+  <span class="org-variable-name">name</span>: build-simple
+<span class="org-variable-name">spec</span>:
+  <span class="org-variable-name">taskRef</span>:
+    <span class="org-variable-name">name</span>: build-simple
+  <span class="org-variable-name">trigger</span>:
+    <span class="org-variable-name">type</span>: manual
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ kubectl apply -f ./test.yaml
+task.tekton.dev/build-simple created
+taskrun.tekton.dev/build-simple created
+</pre>
+</div>
+
+<p>
+Let&rsquo;s now look at what&rsquo;s in our namespace
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ kubectl get all
+NAME                          READY     STATUS      RESTARTS   AGE
+pod/build-simple-pod-ada879   0/2       Completed   0          10s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   26m
+
+NAME                           AGE
+task.tekton.dev/build-simple   10s
+
+NAME                              AGE
+taskrun.tekton.dev/build-simple   10s
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-h:89f26869-04b1-402f-af3a-77946dec25b2" class="outline-2">
+<h2 id="h:89f26869-04b1-402f-af3a-77946dec25b2">Development workflow</h2>
+<div class="outline-text-2" id="text-h:89f26869-04b1-402f-af3a-77946dec25b2">
+<p>
+When you&rsquo;re working on <code>pipeline</code>, usually you want :
+</p>
+
+<ol class="org-ol">
+<li>make sure it compiles : <code>go build -v ./..</code></li>
+<li>Running unit tests : <code>go test ./...</code> (bonus use <a href="https://github.com/vdemeester/ram"><code>ram</code></a> for continuous testing)</li>
+<li><p>
+End-to-end tests : <code>go test -tags e2e ./...</code> (or simply using `./test/` package)
+</p>
+
+<p>
+<b>Make sure you re-deploy before running the e2e tests</b> using <code>ko apply -f ./config</code>,
+otherwise you&rsquo;re testing the wrong code.
+</p></li>
+</ol>
+</div>
+</section>
+
+<section id="outline-container-h:0964e161-7ddd-40f9-a224-207e68b941fe" class="outline-2">
+<h2 id="h:0964e161-7ddd-40f9-a224-207e68b941fe">Code walkthrough</h2>
+<div class="outline-text-2" id="text-h:0964e161-7ddd-40f9-a224-207e68b941fe">
+<p>
+Let&rsquo;s look into <code>tektoncd/pipeline</code> sources
+</p>
+
+<ul class="org-ul">
+<li>Go packages
+<ul class="org-ul">
+<li><code>cmd</code></li>
+<li><code>pkg</code>
+<ul class="org-ul">
+<li><code>apis</code> : api types</li>
+<li><code>client</code> : generated client</li>
+<li><code>reconcilier</code> : core of the pipeline controller</li>
+</ul></li>
+</ul></li>
+<li>Tests</li>
+<li>CI related files</li>
+</ul>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

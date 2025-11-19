@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nix run aliases</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Nix run aliases</h1>
+</header><section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+I use <a href="https://nixos.org/"><code>NixOS</code></a> each and every day, everywhere. One really cool feature of <code>nix</code> is
+<code>nix-shell</code> and more recently (with <code>nix</code> &gt;= <code>2.0.0</code>), <code>nix run</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-man">Usage: nix run &lt;FLAGS&gt;... &lt;INSTALLABLES&gt;...
+
+Summary: run a shell in which the specified packages are available.
+
+Flags:
+      --arg &lt;NAME&gt; &lt;EXPR&gt;         argument to be passed to Nix functions
+      --argstr &lt;NAME&gt; &lt;STRING&gt;    string-valued argument to be passed to Nix functions
+  -c, --command &lt;COMMAND&gt; &lt;ARGS&gt;  command and arguments to be executed; defaults to 'bash'
+  -f, --file &lt;FILE&gt;               evaluate FILE rather than the default
+  -i, --ignore-environment        clear the entire environment (except those specified with --keep)
+  -I, --include &lt;PATH&gt;            add a path to the list of locations used to look up &lt;...&gt; file names
+  -k, --keep &lt;NAME&gt;               keep specified environment variable
+  -u, --unset &lt;NAME&gt;              unset specified environment variable
+
+Examples:
+
+  To start a shell providing GNU Hello from NixOS 17.03:
+  $ nix run -f channel:nixos-17.03 hello
+
+  To start a shell providing youtube-dl from your 'nixpkgs' channel:
+  $ nix run nixpkgs.youtube-dl
+
+  To run GNU Hello:
+  $ nix run nixpkgs.hello -c hello --greeting 'Hi everybody!'
+
+  To run GNU Hello in a chroot store:
+  $ nix run --store ~/my-nix nixpkgs.hello -c hello
+
+Note: this program is EXPERIMENTAL and subject to change.
+</pre>
+</div>
+
+<p>
+As you can see from the <code>-h</code> summary, it makes it really easy to run a shell or a command
+with some packages that are not in your main configuration. It will download the
+package(s) if there are not available in the Nix store (<code>/nix/store/</code>).
+</p>
+
+<p>
+A few month ago I decided it would be a perfect use-case for command I do not run
+often. My idea was, let&rsquo;s define <code>aliases</code> (in the shell) that would make a simple command
+call, like <code>ncdu</code>, become <code>nix run nixpkgs.ncdu -c ndcu</code>. My <i>shell of choice</i> is <a href="https://fishshell.com/">fish</a>, so
+I decided to dig into the <i>language</i> in order to implement that.
+</p>
+
+<p>
+The use case is the following :
+</p>
+<ul class="org-ul">
+<li>When I type <code>foo</code>, I want the command <code>foo</code> in package <code>bar</code> to be executed.</li>
+<li>I want to be able to pin a channel for the package — I&rsquo;m using <a href="https://matthewbauer.us/">Matthew Bauer</a> <a href="https://matthewbauer.us/blog/channel-changing.html">Channel
+Changing with Nix</a> setup for pin-pointing a given channel.</li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Fish%20aliases%20experimentation" class="outline-2">
+<h2 id="Fish%20aliases%20experimentation">Fish aliases experimentation</h2>
+<div class="outline-text-2" id="text-Fish%20aliases%20experimentation">
+<p>
+I had a feeling the built-in <code>alias</code> would not work so I ended up trying to define a
+<i>dynamic</i> function that would be the name of the command. That&rsquo;s the beauty of the shell,
+everything is a command, even function appears as commands. If you define a function
+<code>foo()</code>, you will be able to run <code>foo</code> in your shell, <b>and</b> it will take precedence over
+the <code>foo</code> executable file that would be in your <code>PATH</code>.
+</p>
+
+<p>
+I ended up with two main helper function that would create those <i>alias</i> function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-fish">function _nix_run_package
+    set -l s $argv[1]
+    set -l package (string split ":" $s)
+    switch (count $package)
+        case 1
+            _nix_run $s $s $argv[2] $argv[3]
+        case 2
+            _nix_run $package[1] $package[2] $argv[2] $argv[3]
+    end
+end
+
+function _nix_run
+    set -l c $argv[1]
+    set -l p $argv[2]
+    set -l channel $argv[3]
+    set -l channelsfile $argv[4]
+    function $c --inherit-variable c --inherit-variable p --inherit-variable channel --inherit-variable channelsfile
+        set -l cmd nix run
+        if test -n "$channelsfile"
+            set cmd $cmd -f $channelsfile
+        end
+        eval $cmd $channel.$p -c $c $argv
+    end
+end
+</pre>
+</div>
+
+<p>
+In a nutshell, <code>_nix_run</code> is the function that create the alias function. There is so
+condition in there depending on whether we gave it a channel or not. So, a call like
+<code>_nix_run foo bar unstable channels.nix</code> would, in the end generate a function <code>foo</code> with
+the following call : <code>nix run -f channels.nix unstable.bar -c foo</code>.
+</p>
+
+<p>
+The other function, <code>_nix_run_package</code> is there to make me write less when I define those
+aliases — aka if the command and the package share the same name, I don&rsquo;t want to write it
+twice. So, a call like <code>_nix_run_package foo nixpkgs</code> would result in a <code>_nix_run foo foo
+nixpkgs</code>, whereas a call like <code>_nix_run_package foo:bar unstable channels.nix</code> would
+result in a <code>_nix_run foo bar unstable channels.nix</code>.
+</p>
+
+<p>
+An example is gonna be better than the above paragraphs. This is what I used to have in my
+fish configuration.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-fish">function _def_nix_run_aliases
+    set -l stable mr sshfs ncdu wakeonlan:python36Packages.wakeonlan lspci:pciutils lsusb:usbutils beet:beets gotop virt-manager:virtmanager pandoc nix-prefetch-git:nix-prefetch-scripts nix-prefetch-hg:nix-prefetch-scripts
+    set -l unstable op:_1password update-desktop-database:desktop-file-utils lgogdownloader
+    for s in $stable
+        _nix_run_package $s nixpkgs
+    end
+    for s in $unstable
+        _nix_run_package $s unstable ~/.config/nixpkgs/channels.nix
+    end
+end
+# Call the function to create the aliases
+_def_nix_run_aliases
+</pre>
+</div>
+
+<p>
+This works like a charm, and for a while, I was happy. But I soon realized something : I&rsquo;m
+not always on my shell — like, I tend to spend more and more time in <code>eshell</code>. This also
+doesn&rsquo;t work with graphic tools like <a href="https://github.com/DaveDavenport/rofi"><code>rofi</code></a>. I needed actual command, so that external
+tools would benefit from that. I ended up writing a small tool, <a href="https://github.com/vdemeester/nr"><code>nr</code></a> that integrates
+nicely with <code>nix</code> and <a href="https://github.com/rycee/home-manager"><code>home-manager</code></a>.
+</p>
+</div>
+</section>
+<section id="outline-container-A%20proper%20tool%20%3A%20%3Dnr%3D" class="outline-2">
+<h2 id="A%20proper%20tool%20%3A%20%3Dnr%3D">A proper tool : <code>nr</code></h2>
+<div class="outline-text-2" id="text-A%20proper%20tool%20%3A%20%3Dnr%3D">
+<p>
+The gist for this tool is simple :
+</p>
+<ul class="org-ul">
+<li>create an executable script that will call <code>nix run ...</code> instead of the command</li>
+<li>as for the above fish script, support different channels</li>
+<li>make sure we don&rsquo;t have conflicts — if the command already exists, then don&rsquo;t create the
+command</li>
+</ul>
+
+<p>
+The <code>nr</code> tool would have to be able to manage multiple <i>profile</i>, which really stands for
+multiple file. The main reason is really about how I manage my configuration ; To make it
+simple, depending on the computer my configurations are setup, I may not have <code>go</code>, thus I
+don&rsquo;t want any <code>go</code>-related aliases for a computer that doesn&rsquo;t have <code>go</code> (using <code>go</code> here
+but you can replace with anything).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-fish">$ nr default
+&gt; nr generate default
+&gt; virtmanager already exists
+$ nr git
+&gt; nr generate git
+</pre>
+</div>
+
+<p>
+<code>nr</code> generates a bash script that does the <code>nr run …</code> and mark it as executable. <code>nr</code>
+needs to be able to clean files it has generated (in case we removed it from
+aliases). Thus, I went for a really naive comment in the script. When generating a new set
+of commands, <code>nr</code> will first remove previously generated script for this profile, and for
+that, it uses the comment. Let&rsquo;s look at what a generated script looks like, for the
+default profile.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">#!/usr/bin/env bash
+# Generated by nr default
+nix run nixpkgs.nix-prefetch-scripts -c nix-prefetch-git $@
+</pre>
+</div>
+
+<p>
+The format used in <code>nr</code> is <code>json</code>. I&rsquo;m not a <i>huge fan</i> of <code>json</code> but it really was the
+best format to use for this tool. The reason to use <code>json</code> are simple :
+</p>
+
+<ul class="org-ul">
+<li><p>
+Go has <code>encoding/json</code> built-in, so it&rsquo;s really easy to <code>Marshall</code> and <code>Unmarshall</code>
+structure.
+</p>
+<div class="org-src-container">
+<pre class="src src-go">type alias struct {
+        Command string `json:"cmd"`
+        Package string `json:"pkg"`
+        Channel string `json:"chan"`
+}
+</pre>
+</div></li>
+<li>Nix also has built-in support for <code>json</code> : <code>builtins.toJSON</code> will marshall a <i>struct</i>
+into a json file.</li>
+</ul>
+
+<p>
+Finally, to avoid conflicts at <i>build time</i> (<code>home-manager switch</code>) I couldn&rsquo;t use/define
+a nix package, but to execute command(s) at the end of the build. One way to achieve it is
+to use <code>file.?.onChange</code> script, which is executed after <a href="https://github.com/rycee/home-manager"><code>home-manager</code></a> has updated the
+environment, <b>if</b> the file has changed. That means it&rsquo;s possible to check for executable
+files in <code>~/.nix-profile/bin/</code> for defined aliases and create those that are not there,
+with <code>nr</code>. My configuration then looks like the following.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix">xdg.configFile."nr/default" = {
+  text = builtins.toJSON [
+    {cmd = "ncdu";} {cmd = "sshfs";} {cmd = "gotop";} {cmd = "pandoc";}
+    {cmd = "wakeonlan"; pkg = "python36Packages.wakeonlan";}
+    {cmd = "beet"; pkg = "beets";}
+    {cmd = "virt-manager"; pkg = "virtmanager";}
+    {cmd = "nix-prefetch-git"; pkg = "nix-prefetch-scripts";}
+    {cmd = "nix-prefetch-hg"; pkg = "nix-prefetch-scripts";}
+  ];
+  onChange = "${pkgs.nur.repos.vdemeester.nr}/bin/nr default";
+};
+</pre>
+</div>
+
+<p>
+And there you are, now, each time I update my environment (<code>home-manager switch</code>), <code>nr</code>
+will regenerate my <code>nix run</code> aliases.
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

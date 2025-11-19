@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>minikube</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">minikube</h1>
+</header>
+<section id="outline-container-h:ac96a1df-968e-4cac-b8fe-60b7bf747917" class="outline-2">
+<h2 id="h:ac96a1df-968e-4cac-b8fe-60b7bf747917">Alternative container runtimes</h2>
+<div class="outline-text-2" id="text-h:ac96a1df-968e-4cac-b8fe-60b7bf747917">
+<div class="org-src-container">
+<pre class="src src-sh">minikube start <span class="org-sh-escaped-newline">\</span>
+    --network-plugin=cni <span class="org-sh-escaped-newline">\</span>
+    --container-runtime=containerd <span class="org-sh-escaped-newline">\</span>
+    --bootstrapper=kubeadm
+<span class="org-comment-delimiter"># </span><span class="org-comment">or &#8230;</span>
+minikube start <span class="org-sh-escaped-newline">\</span>
+  --network-plugin=cni <span class="org-sh-escaped-newline">\</span>
+    --extra-config=kubelet.container-runtime=remote <span class="org-sh-escaped-newline">\</span>
+    --extra-config=kubelet.container-runtime-endpoint=unix:///run/containerd/containerd.sock <span class="org-sh-escaped-newline">\</span>
+    --extra-config=kubelet.image-service-endpoint=unix:///run/containerd/containerd.sock <span class="org-sh-escaped-newline">\</span>
+    --bootstrapper=kubeadm
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-sh">minikube start <span class="org-sh-escaped-newline">\</span>
+    --network-plugin=cni <span class="org-sh-escaped-newline">\</span>
+    --container-runtime=cri-o <span class="org-sh-escaped-newline">\</span>
+    --bootstrapper=kubeadm
+<span class="org-comment-delimiter"># </span><span class="org-comment">or &#8230;</span>
+minikube start <span class="org-sh-escaped-newline">\</span>
+    --network-plugin=cni <span class="org-sh-escaped-newline">\</span>
+    --extra-config=kubelet.container-runtime=remote <span class="org-sh-escaped-newline">\</span>
+    --extra-config=kubelet.container-runtime-endpoint=/var/run/crio.sock <span class="org-sh-escaped-newline">\</span>
+    --extra-config=kubelet.image-service-endpoint=/var/run/crio.sock <span class="org-sh-escaped-newline">\</span>
+    --bootstrapper=kubeadm
+</pre>
+</div>
+</div>
+</section>
+
+<section id="outline-container-h:84b224cb-6da0-48b3-a4f7-ea3cfd0d62ec" class="outline-2">
+<h2 id="h:84b224cb-6da0-48b3-a4f7-ea3cfd0d62ec">Cache some images</h2>
+<div class="outline-text-2" id="text-h:84b224cb-6da0-48b3-a4f7-ea3cfd0d62ec">
+<p>
+Depending on your workflow with <code>minikube</code>, you may re-create a VM from time to time (or
+quite a lot). In this case, you may want to speed the process up a bit.
+</p>
+
+<p>
+First, you need a recent <code>minikube</code> version, a.k.a. <code>v0.29.0</code> at least — adding image to
+cache with <code>v0.28.1</code> is bugged and doesn&rsquo;t work.
+</p>
+
+<p>
+Then, it&rsquo;s pretty simple and it works even if a minikube VM doesn&rsquo;t work — in that case
+images will be loaded when doing a <code>minikube start</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">minikube cache add docker.io/library/ubuntu:18.04
+<span class="org-comment-delimiter"># </span><span class="org-comment">[&#8230;]</span>
+minikube cache add docker.io/prom/statsd-export:v0.6.0
+</pre>
+</div>
+
+<p>
+There is some shortcomings still, as <span class="underline">for now</span>, it&rsquo;s not possible to download digest image.
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

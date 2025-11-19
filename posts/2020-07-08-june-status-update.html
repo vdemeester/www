@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Status update, June 2020</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Status update, June 2020</h1>
+</header><section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Time for the first new monthly status update! I do like those updates from <a href="https://drewdevault.com/2020/06/15/Status-update.html">Drew DeVault</a>
+and <a href="https://emersion.fr/blog/2020/status-update-19/">Simon Ser</a>, so I figured, why not trying myself 🙃. I am not sure where to start and
+where to end, but I guess I&rsquo;ll figure things out as I go.
+</p>
+</div>
+</section>
+<section id="outline-container-Tekton%20%26%20OpenShift%20Pipelines" class="outline-2">
+<h2 id="Tekton%20%26%20OpenShift%20Pipelines">Tekton &amp; OpenShift Pipelines</h2>
+<div class="outline-text-2" id="text-Tekton%20%26%20OpenShift%20Pipelines">
+<p>
+As you know, <i>or may not</i>, I am working on the <a href="https://github.com/tektoncd/">TektonCD</a> project and also on our <a href="https://redhat.com">RedHat</a>
+product <a href="https://www.openshift.com/learn/topics/pipelines">OpenShift Pipelines</a>. As far as the month of June went :
+</p>
+
+<ul class="org-ul">
+<li>We release <a href="https://github.com/tektoncd/pipeline/releases/tag/v0.13.0">v0.13.0</a> &ldquo;Bobtail Bishop&rdquo; and a bunch of fixes (<a href="https://github.com/tektoncd/pipeline/releases/tag/v0.13.2">v0.13.2</a>)
+<ul class="org-ul">
+<li>It&rsquo;s the second release after the <code>v1beta1</code> bump, and we start to stabilise things.</li>
+<li><a href="https://github.com/tektoncd/pipeline/releases/tag/v0.14.0">v0.14.0</a> will (and actually is already) a more feature-packed release because there is
+now the <code>finally</code> field support and cloud-events opt-in.</li>
+</ul></li>
+<li><p>
+But the <b>most important</b> contributions I tried to make during that month is the TEP
+process. <b>TEP</b> stands for <b>Tekton Enhancement proposals</b>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-markdown"># Tekton Enhancement Proposals (TEPs)
+
+A Tekton Enhancement Proposal (TEP) is a way to propose, communicate
+and coordinate on new efforts for the Tekton project.  You can read
+the full details of the project in
+[TEP-1](https://github.com/tektoncd/community/blob/master/teps/0001-tekton-enhancement-proposal-process.md).
+
+## What is a TEP
+
+A standardized development process for Tekton is proposed in order to
+
+- provide a common structure and clear checkpoints for proposing
+  changes to Tekton
+- ensure that the motivation for a change is clear
+- allow for the enumeration stability milestones and stability
+  graduation criteria
+- persist project information in a Version Control System (VCS) for
+  future Tekton users and contributors
+- support the creation of _high value user facing_ information such
+  as:
+  - an overall project development roadmap
+  - motivation for impactful user facing changes
+- ensure community participants are successfully able to drive changes
+  to completion across one or more releases while stakeholders are
+  adequately represented throughout the process
+
+This process is supported by a unit of work called a Tekton
+Enhancement Proposal (TEP). A TEP attempts to combine aspects of the
+following:
+
+- feature, and effort tracking document
+- a product requirements document
+- design document
+
+into one file which is created incrementally in collaboration with one
+or more [Working
+Groups](https://github.com/tektoncd/community/blob/master/working-groups.md)
+(WGs).
+
+This process does not block authors from doing early design docs using
+any means. It does not block authors from sharing those design docs
+with the community (during Working groups, on Slack, GitHub, ….
+
+**This process acts as a requirement when a design docs is ready to be
+implemented or integrated in the `tektoncd` projects**. In other words,
+a change that impact other `tektoncd` projects or users cannot be
+merged if there is no `TEP` associated with it.
+
+This TEP process is related to
+- the generation of an architectural roadmap
+- the fact that the what constitutes a feature is still undefined
+- issue management
+- the difference between an accepted design and a proposal
+- the organization of design proposals
+
+This proposal attempts to place these concerns within a general
+framework.
+
+
+See [TEP-1](https://github.com/tektoncd/community/blob/master/teps/0001-tekton-enhancement-proposal-process.md) for more details.
+</pre>
+</div></li>
+</ul>
+</div>
+</section>
+<section id="outline-container-%3Dhome%3D%2C%20Nixos%20and%20the%20rest%20of%20thing" class="outline-2">
+<h2 id="%3Dhome%3D%2C%20Nixos%20and%20the%20rest%20of%20thing"><code>home</code>, Nixos and the rest of thing</h2>
+<div class="outline-text-2" id="text-%3Dhome%3D%2C%20Nixos%20and%20the%20rest%20of%20thing">
+<p>
+I did some big changes in my <a href="https://git.sr.ht/~vdemeester/home"><code>home</code></a> repository, it&rsquo;s still much a work-in-progress but it
+is in a way better state than before.
+</p>
+
+<ul class="org-ul">
+<li>It is more reproductible. All dependencies are managed by <a href="https://github.com/nmattia/niv">niv</a> and all machines are using
+a pinned version of channels from there. That way I can test the configuration (on the
+CI) and cache the packages for all channels that my machines uses. I also can decide
+when I want to upgrade a particular channel (nixos, unstable, …).</li>
+<li>I am slowly experimenting on simplifying things more and more. This is a bit related to
+the <a href="2020-02-22-digital-minimalism.html">previous post</a>. I am trying to use Gnome3 everywhere. Well configured, managed by
+NixOS, it&rsquo;s enough for my test and reduce the configuration cruft I need to do.</li>
+</ul>
+
+<p>
+An ongoing work is my knowledge base and how it is published as part of this website :
+<a href="https://vincent.demeester.fr/articles/">articles</a>. I am trying to make all those publishable (for the one that do not hold any
+secret). I&rsquo;ll document this a bit more at some point but…
+</p>
+<ul class="org-ul">
+<li>Configurations are now part of that knowledge base, the <code>docs</code> folder of <a href="https://git.sr.ht/~vdemeester/home"><code>home</code></a> is going
+away.</li>
+<li>I am trying to use litterate configuration as much as possible. So slowly, the content
+from <a href="https://git.sr.ht/~vdemeester/home"><code>home</code></a> will be a tangled version of my knowledge base. At least that is the goal as
+of today.</li>
+</ul>
+
+<p>
+And I feel that&rsquo;s all <i>for June</i>.
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

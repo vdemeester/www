@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Golang testing — gotest.tools golden</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Golang testing — gotest.tools golden</h1>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#%3DAssert%3D%20and%20%3DAssertBytes%3D"><code>Assert</code> and <code>AssertBytes</code></a></li>
+<li><a href="#%3DBytes%3D%20and%20%3DString%3D"><code>Bytes</code> and <code>String</code></a></li>
+<li><a href="#Conclusion%E2%80%A6">Conclusion…</a></li>
+</ul>
+</div>
+</nav>
+<section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Let&rsquo;s continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>golden</code> package. This is a
+<a href="file:///posts/2017-04-22-golang-testing-golden-file/"><i>quick follow-up</i> on a previous <code>golden</code> post</a>, but focused on the <code>gotest.tools</code>
+implementation. I&rsquo;m gonna be quicker, please read that one if <code>golden</code> files is a new
+concept for you.
+</p>
+
+<blockquote>
+<p>
+Package <code>golden</code> provides tools for comparing large mutli-line strings.
+</p>
+
+<p>
+Golden files are files in the <code>./testdata/</code> sub-directory of the package under test.
+</p>
+</blockquote>
+
+<p>
+In the previous article, we described the problem, and how to fix it by writing a small
+helper. Well, that small helper is in <code>gotest.tools/golden</code> now, and it has a tiny bit
+more features.
+</p>
+
+<p>
+One of the difference between the <code>gotest.tools</code> implementation and the previous post is
+the flag name. In <code>gotest.tools/golden</code>, the flag is <code>-test.update-golden</code> (was just
+<code>-test.update</code> before). Just as before, if the <code>-test.update-golden</code> flag is set then the
+actual content is written to the golden file, before reading it and comparing.
+</p>
+
+<p>
+There is two ways to use the <code>golden</code> package:
+</p>
+<ul class="org-ul">
+<li>on it&rsquo;s own, using <code>golden.Assert</code> or <code>golden.AssertBytes</code></li>
+<li>as a <code>cmp.Comparison</code>, with <code>golden.String</code> or <code>golden.Bytes</code></li>
+</ul>
+</div>
+</section>
+<section id="outline-container-%3DAssert%3D%20and%20%3DAssertBytes%3D" class="outline-2">
+<h2 id="%3DAssert%3D%20and%20%3DAssertBytes%3D"><code>Assert</code> and <code>AssertBytes</code></h2>
+<div class="outline-text-2" id="text-%3DAssert%3D%20and%20%3DAssertBytes%3D">
+<p>
+Using <code>Assert</code> functions should be straightforward. Both <code>Assert</code> function compares the
+actual content to the expected content in the golden file and returns whether the
+assertion was successful (true) or not (false).
+</p>
+
+<ul class="org-ul">
+<li><code>Assert</code> uses string. Note that this one <b>removes carriage return</b> before comparing to
+depend as less as possible of the system (<code>\n</code> vs <code>\r\n</code> 😅)</li>
+<li><code>AssertBytes</code> uses raw data (in the form of <code>[]byte</code>)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-go">golden.Assert(t, "foo", "foo-content.golden")
+// Could also be used to check some binary format
+golden.AssertBytes(t, []byte("foo"), "foo-content.golden")
+</pre>
+</div>
+</div>
+</section>
+<section id="outline-container-%3DBytes%3D%20and%20%3DString%3D" class="outline-2">
+<h2 id="%3DBytes%3D%20and%20%3DString%3D"><code>Bytes</code> and <code>String</code></h2>
+<div class="outline-text-2" id="text-%3DBytes%3D%20and%20%3DString%3D">
+<p>
+As written in a <a href="file:///posts/2018-08-16-gotest-tools-assertions/">previous post (about the <code>assert</code> package)</a>, I prefer to use <code>cmp.Comparison</code>.
+</p>
+
+<blockquote>
+<p>
+All those helper functions have a equivalent function in the <code>cmp</code> package that returns a
+<code>Comparison</code>. I, personally, prefer to use <code>assert.Check</code> or <code>assert.Assert</code> in
+combination with <code>cmp.Comparison</code> as it allows me to write all my assertions the same way,
+with built-ins comparison or with my own — i.e. <code>assert.Assert(t, is.Equal(…), "message"</code>
+or <code>assert.Assert(t, stackIsUp(c, time…), "another message")</code>.
+</p>
+</blockquote>
+
+<p>
+The <code>golden</code> package gives us that too, in the form of <code>Bytes</code> and <code>String</code>. Using the
+<code>assert.Check</code> or <code>assert.Assert</code> functions with those is equivalent to their <i>helper</i>
+counter-part <code>golden.Assert</code> and <code>golden.AssertBytes</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">assert.Assert(t, golden.String("foo", "foo-content.golden"))
+// Could also be used to check some binary format
+assert.Assert(t, golden.Bytes([]byte("foo"), "foo-content.golden"))
+</pre>
+</div>
+</div>
+</section>
+<section id="outline-container-Conclusion%E2%80%A6" class="outline-2">
+<h2 id="Conclusion%E2%80%A6">Conclusion…</h2>
+<div class="outline-text-2" id="text-Conclusion%E2%80%A6">
+<p>
+… that&rsquo;s a wrap. As for <a href="file:///posts/2018-09-01-gotest-tools-skip/"><code>skip</code></a>, this is a small package, so the post was going to be
+quick. <code>golden</code> package just solve a specific problem (read <a href="file:///posts/2017--04-22-golang-testing-golden-file/">Golang testing — golden file</a>)
+in a simple way.
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

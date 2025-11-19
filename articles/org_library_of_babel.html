@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Library of Babel (org-mode)</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Library of Babel (org-mode)</h1>
+</header><p>
+This is my <a href="org_mode.html">org-mode</a> <a href="https://orgmode.org/manual/Library-of-Babel.html">Library of Babel</a>.
+</p>
+<section id="outline-container-File%20I%2FO" class="outline-2">
+<h2 id="File%20I%2FO">File I/O</h2>
+<div class="outline-text-2" id="text-File%20I%2FO">
+</div>
+<div id="outline-container-Reading%20and%20writing%20files" class="outline-3">
+<h3 id="Reading%20and%20writing%20files">Reading and writing files</h3>
+<div class="outline-text-3" id="text-Reading%20and%20writing%20files">
+<p>
+Read the contents of the file at <code>file</code>.  The <code>:results vector</code> and
+<code>:results scalar</code> header arguments can be used to read the contents of
+file as either a table or a string.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org3a5f35f">(if (string= format "csv")
+    (with-temp-buffer
+      (org-table-import (expand-file-name file) nil)
+      (org-table-to-lisp))
+  (with-temp-buffer
+    (insert-file-contents (expand-file-name file))
+    (buffer-string)))
+</pre>
+</div>
+
+<p>
+Write <code>data</code> to a file at <code>file</code>.  If <code>data</code> is a list, then write it
+as a table in traditional Org-mode table syntax.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgcff07ff">(flet ((echo (r) (if (stringp r) r (format "%S" r))))
+  (with-temp-file file
+    (case (and (listp data)
+               (or ext (intern (file-name-extension file))))
+      ('tsv (insert (orgtbl-to-tsv data '(:fmt echo))))
+      ('csv (insert (orgtbl-to-csv data '(:fmt echo))))
+      (t    (org-babel-insert-result data)))))
+nil
+</pre>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

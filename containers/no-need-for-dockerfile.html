@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>You may not need a =Dockerfile= 🐳</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="post" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/css/2022.css" />
+<link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">You may not need a <code>Dockerfile</code> 🐳</h1>
+<p class="subtitle" role="doc-subtitle">Explore ways to create images without the <code>Dockerfile</code> generic approach</p>
+</header><p>
+Building a &ldquo;docker image&rdquo;, or more appropriately an OCI image, is usually associated with
+the <code>Dockerfile</code> format. Although it is one of the most <i>generic</i> way to build an OCI
+image, it is definitely not the only way, nor the best way, depending on your use case.
+<b>And</b> there is a decent amount of ways to create your image. Let&rsquo;s try to explore some of
+them.
+</p>
+
+<p>
+<a href="https://imjasonh.com/">Jason</a> write an amazing article around this : <a href="https://github.com/imjasonh/ImJasonH/tree/main/articles/moving-and-building-images">Moving and Building Container Images, The Right Way</a>.
+</p>
+<section id="outline-container-Don%27t%20get%20me%20wrong%2C%20I%20used%20to%20love%20%3DDockerfile%3D%20%F0%9F%99%83" class="outline-2">
+<h2 id="Don%27t%20get%20me%20wrong%2C%20I%20used%20to%20love%20%3DDockerfile%3D%20%F0%9F%99%83">Don&rsquo;t get me wrong, I used to love <code>Dockerfile</code> 🙃</h2>
+<div class="outline-text-2" id="text-Don%27t%20get%20me%20wrong%2C%20I%20used%20to%20love%20%3DDockerfile%3D%20%F0%9F%99%83">
+<p>
+I <b>love</b> <code>Dockerfile</code>. They have been extremely useful for the container ecosystem. The
+recent evolutions, backed by <a href="https://github.com/moby/buildkit"><code>buildkit</code></a> are also very good. But they do come with a bit of
+baggages:
+</p>
+
+<ul class="org-ul">
+<li>They do not <i>allow</i> (or <i>enable</i>) to write reproducible builds. The timestamps, the
+<code>RUN</code> with &ldquo;random&rdquo; commands is getting in the way.</li>
+<li>They bring a very <b>big assumption</b>, each and every <code>RUN</code> is running in a container. Of
+course there is tools (as we may, or may not see) that do build <code>Dockerfile</code> without
+containers, but they are a bit limited (because of that assumption).</li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Questions%20to%20ask%20yourself" class="outline-2">
+<h2 id="Questions%20to%20ask%20yourself">Questions to ask yourself</h2>
+<div class="outline-text-2" id="text-Questions%20to%20ask%20yourself">
+<p>
+In order to decide what to use to build a container image, there is a couple of questions
+to answer. Your answers will help you choose what tool to use.
+</p>
+
+<ul class="org-ul">
+<li>Is &ldquo;reproductible builds&rdquo; something important to you ?</li>
+<li>Is your CI running in containers ?</li>
+<li>Is your developement environment running in containers ?</li>
+<li>Do you care about running things as root ?</li>
+<li>Do you care about running things as <b>privileged</b> (aka giving the keys to escape the
+containers to the process running in the container) ?</li>
+</ul>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

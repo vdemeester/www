@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Golang testing — gotest.tools fs</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Golang testing — gotest.tools fs</h1>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#Create%20folder%20structures">Create folder structures</a></li>
+<li><a href="#Compare%20folder%20structures">Compare folder structures</a></li>
+<li><a href="#Conclusion%E2%80%A6">Conclusion…</a></li>
+</ul>
+</div>
+</nav>
+<section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Let&rsquo;s continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>fs</code> package.
+</p>
+
+<blockquote>
+<p>
+Package fs provides tools for creating temporary files, and testing the contents and structure of a directory.
+</p>
+</blockquote>
+
+<p>
+This package is heavily using functional arguments (as we saw in <a href="file:///posts/2017-01-01-go-testing-functionnal-builders/">functional arguments for
+wonderful builders</a>). Functional arguments is, in a nutshell, a combinaison of two Go
+features : <i>variadic</i> functions (<code>...</code> operation in a function signature) and the fact
+that <code>func</code> are <i>first class citizen</i>. This looks more or less like that.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">type Config struct {}
+
+func MyFn(ops ...func(*Config)) *Config {
+        c := &amp;Config{} // with default values
+        for _, op := range ops {
+                op(c)
+        }
+        return c
+}
+
+// Calling it
+conf := MyFn(withFoo, withBar("baz"))
+</pre>
+</div>
+
+<p>
+The <code>fs</code> package has too <b>main</b> purpose :
+</p>
+
+<ol class="org-ol">
+<li>create folders and files required for testing in a simple manner</li>
+<li>compare two folders structure (and content)</li>
+</ol>
+</div>
+</section>
+<section id="outline-container-Create%20folder%20structures" class="outline-2">
+<h2 id="Create%20folder%20structures">Create folder structures</h2>
+<div class="outline-text-2" id="text-Create%20folder%20structures">
+<p>
+Sometimes, you need to create folder structures (and files) in tests. Doing <code>i/o</code> work
+takes time so try to limit the number of tests that needs to do that, especially in unit
+tests. Doing it in tests adds a bit of boilerplate that could be avoid. As stated <a href="file:///posts/2017-01-01-go-testing-functionnal-builders/">before</a> :
+</p>
+
+<blockquote>
+<p>
+One of the most important characteristic of a unit test (and any type of test really) is
+<b>readability</b>. This means it should be easy to read but most importantly it should <b>clearly
+show the intent</b> of the test. The setup (and cleanup) of the tests should be as small as
+possible to avoid the noise.
+</p>
+</blockquote>
+
+<p>
+In a test you usually end up using <code>ioutil</code> function to create what you need. This looks
+somewhat like the following.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">path, err := ioutil.TempDir("", "bar")
+if err != nil { // or using `assert.Assert`
+        t.Fatal(err)
+}
+if err := os.Mkdir(filepath.Join(path, "foo"), os.FileMode(0755)); err != nil {
+        t.Fatal(err)
+}
+if err := ioutil.WriteFile(filepath.Join(path, "foo", "bar"), []byte("content"), os.FileMode(0777)); err != nil {
+        t.Fatal(err)
+}
+defer os.RemoveAll(path) // to clean up at the end of the test
+</pre>
+</div>
+
+<p>
+The <code>fs</code> package intends to help reduce the noise and comes with a bunch function to create
+folder structure :
+</p>
+
+<ul class="org-ul">
+<li>two main function <code>NewFile</code> and <code>NewDir</code></li>
+<li>a bunch of <i>operators</i> : <code>WithFile</code>, <code>WithDir</code>, …</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-go">func NewDir(t assert.TestingT, prefix string, ops ...PathOp) *Dir {
+        // …
+}
+
+func NewFile(t assert.TestingT, prefix string, ops ...PathOp) *File {
+        // …
+}
+</pre>
+</div>
+
+<p>
+The <code>With*</code> function are all satisfying the <code>PathOp</code> interface, making <code>NewFile</code> and
+<code>NewDir</code> extremely composable. Let&rsquo;s first see how our above example would look like using
+the <code>fs</code> package, and then, we&rsquo;ll look a bit more at the main <code>PathOp</code> function…
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">dir := fs.NewDir(t, "bar", fs.WithDir("foo",
+        fs.WithFile("bar", fs.WithContent("content"), fs.WithMode(os.FileMode(0777))),
+))
+defer dir.Remove()
+</pre>
+</div>
+
+<p>
+It&rsquo;s clean and simple to read. The intent is well described and there is not that much of
+noise. <code>fs</code> functions tends to have <i>sane</i> and <i>safe</i> defaults value (for <code>os.FileMode</code>
+for example). Let&rsquo;s list the main, useful, <code>PathOp</code> provided by <code>gotest.tools/fs</code>.
+</p>
+
+<ul class="org-ul">
+<li><code>WithDir</code> creates a sub-directory in the directory at path.</li>
+<li><code>WithFile</code> creates a file in the directory at path with content.</li>
+<li><code>WithSymlink</code> creates a symlink in the directory which links to target. Target must be a
+path relative to the directory.</li>
+<li><code>WithHardlink</code> creates a link in the directory which links to target. Target must be a
+path relative to the directory.</li>
+<li><code>WithContent</code> and <code>WWithBytes</code> write content to a file at Path (from a <code>string</code> or a
+<code>[]byte</code> slice).</li>
+<li><code>WithMode</code> sets the file mode on the directory or file at path.</li>
+<li><code>WithTimestamps</code> sets the access and modification times of the file system object at
+path.</li>
+<li><code>FromDir</code> copies the directory tree from the source path into the new Dir. This is
+pretty useful when you have a huge folder structure already present in you <code>testdata</code>
+folder or elsewhere.</li>
+<li><code>AsUser</code> changes ownership of the file system object at Path.</li>
+</ul>
+
+<p>
+Also, note that <code>PathOp</code> being an function type, you can provide your own implementation
+for specific use-cases. Your function just has to satisfy <code>PathOp</code> signature.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">type PathOp func(path Path) error
+</pre>
+</div>
+</div>
+</section>
+<section id="outline-container-Compare%20folder%20structures" class="outline-2">
+<h2 id="Compare%20folder%20structures">Compare folder structures</h2>
+<div class="outline-text-2" id="text-Compare%20folder%20structures">
+<p>
+Sometimes, the code you&rsquo;re testing is creating a folder structure, and you would like to
+be able to tests that, with the given arguments, it creates the specified structure. <code>fs</code>
+allows you to do that too.
+</p>
+
+<p>
+The package provides a <code>Equal</code> function, which returns a <code>Comparison</code>, that the <a href="file:///posts/2018-08-16-gotest-tools-assertions/"><code>assert</code></a>
+package understand. It works by comparing a <code>Manifest</code> type provided by the test and a
+<code>Manifest</code> representation of the specified folder.
+</p>
+
+<blockquote>
+<p>
+Equal compares a directory to the expected structured described by a manifest and returns
+success if they match. If they do not match the failure message will contain all the
+differences between the directory structure and the expected structure defined by the
+Manifest.
+</p>
+</blockquote>
+
+<p>
+A <code>Manifest</code> stores the expected structure and properties of files and directories in a
+file-system. You can create a <code>Manifest</code> using either the functions <code>Expected</code> or
+<code>ManifestFromDir</code>.
+</p>
+
+<p>
+We&rsquo;re going to focus on the <code>Expected</code> function, as <code>ManifestFromDir</code> does pretty much
+what you would expected : it takes the specified path, and returns a <code>Manifest</code> that
+represent this folder.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">func Expected(t assert.TestingT, ops ...PathOp) Manifest
+</pre>
+</div>
+
+<p>
+<code>Expected</code> is close to <code>NewDir</code> function : it takes the same <code>PathOp</code> functional
+arguments. This makes creating a <code>Manifest</code> straightforward, as it&rsquo;s working the same. Any
+function that satisfy <code>PathOp</code> can be used for <code>Manifest</code> the exact same way you&rsquo;re using
+them on <code>fs.NewDir</code>.
+</p>
+
+<p>
+There is a few additional functions that are only useful with <code>Manifest</code> :
+</p>
+
+<ul class="org-ul">
+<li><code>MatchAnyFileContent</code> updates a Manifest so that the file at path may contain any content.</li>
+<li><code>MatchAnyFileMode</code> updates a Manifest so that the resource at path will match any file mode.</li>
+<li><code>MatchContentIgnoreCarriageReturn</code> ignores cariage return discrepancies.</li>
+<li><code>MatchExtraFiles</code> updates a Manifest to allow a directory to contain unspecified files.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-go">path := operationWhichCreatesFiles()
+expected := fs.Expected(t,
+    fs.WithFile("one", "",
+        fs.WithBytes(golden.Get(t, "one.golden")),
+        fs.WithMode(0600)),
+    fs.WithDir("data",
+            fs.WithFile("config", "", fs.MatchAnyFileContent)),
+)
+
+assert.Assert(t, fs.Equal(path, expected))
+</pre>
+</div>
+
+<p>
+The following example compares the result of <code>operationWhichCreatesFiles</code> to the expected
+<code>Manifest</code>. As you can see it also integrates well with other part of the <code>gotest.tools</code>
+library, with the <a href="file:///posts/2018-09-06-gotest-tools-golden/"><code>golden</code> package</a> in this example.
+</p>
+</div>
+</section>
+<section id="outline-container-Conclusion%E2%80%A6" class="outline-2">
+<h2 id="Conclusion%E2%80%A6">Conclusion…</h2>
+<div class="outline-text-2" id="text-Conclusion%E2%80%A6">
+<p>
+… that&rsquo;s a wrap. In my opinion, this is one the most useful package provided by
+<code>gotest.tools</code> after <code>assert</code>. It allows to create simple or complex folder structure
+without the noise that usually comes with it.
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

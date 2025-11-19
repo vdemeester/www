@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Programming</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Programming</h1>
+</header><section id="outline-container-Languages" class="outline-2">
+<h2 id="Languages">Languages</h2>
+<div class="outline-text-2" id="text-Languages">
+<ul class="org-ul">
+<li><a href="go.html">Go</a></li>
+<li><a href="python.html">Python</a></li>
+<li><a href="lisp.html">Lisp</a>
+<ul class="org-ul">
+<li><a href="clojure.html">Clojure</a></li>
+<li><a href="emacs_lisp.html">Emacs Lisp</a></li>
+</ul></li>
+<li><a href="rust.html">Rust</a></li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Four%20principles%20of%20software%20engineering" class="outline-2">
+<h2 id="Four%20principles%20of%20software%20engineering">Four principles of software engineering</h2>
+<div class="outline-text-2" id="text-Four%20principles%20of%20software%20engineering">
+<blockquote>
+<p>
+Software should be robust. It should be designed to accommodate all
+known edge cases. In practice, this means predicting and handling all
+known error cases, enumerating and addressing all classes of user
+inputs, reasoning about and planning for the performance
+characteristics of your program, and so on.
+</p>
+
+<p>
+Software should be reliable. It should be expected to work for an
+extended length of time under design conditions without failures.
+Ideally, it should work outside of design conditions up to some
+threshold.
+</p>
+
+<p>
+Software should also be stable. It should not change in incompatible
+or unexpected ways; if it works today it should also work tomorrow. If
+it has to change, a plan shall be written. Stakeholders (including
+users!) should be given advance notice and should be involved in the
+planning stage.
+</p>
+
+<p>
+Finally, software should be simple. Only as many moving parts should
+be included as necessary to meet the other three goals. All software
+has bugs, but complicated software (1) has more bugs and (2) is more
+difficult to diagnose and fix. Note that designing a simple solution
+is usually more difficult than designing a complex solution.
+</p>
+
+<p>
+This (short) article is based on a Mastodon post I wrote a few weeks
+ago.
+</p>
+
+<p>
+From: <a href="https://drewdevault.com/2020/10/09/Four-principles-of-software-engineering.html">Four principles of software engineering</a>
+</p>
+</blockquote>
+</div>
+</section>
+<section id="outline-container-Programming%20is%20terrible" class="outline-2">
+<h2 id="Programming%20is%20terrible">Programming is terrible</h2>
+<div class="outline-text-2" id="text-Programming%20is%20terrible">
+<p>
+<a href="https://programmingisterrible.com/">programming is terrible</a> — lessons learned from a life wasted — is a very interesting
+website. I&rsquo;ve tried to extract a few links from it with my comments in here.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://programmingisterrible.com/post/110922879293/stop-blowhard-syndrome">Stop Blowhard Syndrome — programming is terrible</a>
+Yes, Yes, Yes !</li>
+<li><p>
+<a href="https://programmingisterrible.com/post/102153932958/how-i-write-software">How I write software — programming is terrible</a>
+Write boring code !
+</p>
+
+<blockquote>
+<p>
+My favourite property of good code is boredom. Dull statements one after another, no
+surprises, no tricks, no special cases, and absolutely no meta-programming. Boring code is
+the easiest to debug, to verify, and to explain.
+</p>
+
+<p>
+Boring code usually doesn’t use global state, has very precise effects, and isn’t strongly
+tied to the project it lives in. Boring features like single assignment, where each
+variable only holds one object, and not relying on changing the world around it. Boring
+code will only do what its asked of it and does not rely on implicit behaviours.
+</p>
+</blockquote></li>
+
+<li><a href="https://programmingisterrible.com/post/116698171738/nothing-is-more-indicative-of-a-bullshit-job-than">Nothing is more indicative of a bullshit job than&#x2026; — programming is terrible</a></li>
+<li><a href="https://programmingisterrible.com/post/39420736223/bisecting-programmers">What makes good and what makes bad programmers? — programming is terrible</a>
+Some thoughs about good/bad programmers — and really, is there good/bad ?</li>
+<li><a href="https://programmingisterrible.com/post/173883533613/code-to-debug">Write code that&rsquo;s easy to delete, and easy to&#x2026; — programming is terrible</a></li>
+<li><a href="https://programmingisterrible.com/post/139222674273/write-code-that-is-easy-to-delete-not-easy-to">Write code that is easy to delete, not easy to&#x2026; — programming is terrible</a></li>
+<li><a href="https://programmingisterrible.com/post/173883533613/code-to-debug">Write code that&rsquo;s easy to delete, and easy to&#x2026; — programming is terrible</a></li>
+<li><a href="https://programmingisterrible.com/post/110292532528/modules-network-microservices">modules + network = microservices — programming is terrible</a></li>
+<li><a href="https://programmingisterrible.com/post/162346490883/how-do-you-cut-a-monolith-in-half">How do you cut a monolith in half? — programming is terrible</a>
+Some thoughts one cutting monolith in several pieces</li>
+<li><a href="https://programmingisterrible.com/post/188942142748/scaling-in-the-presence-of-errorsdont-ignore">Scaling in the presence of errors—don’t ignore&#x2026; — programming is terrible</a></li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Code%20reviews" class="outline-2">
+<h2 id="Code%20reviews">Code reviews</h2>
+<div class="outline-text-2" id="text-Code%20reviews">
+<p>
+Code review is one extremely powerful tool in a software developer team’s arsenal, yet
+it’s often neglected or used in a way that leads to toxic behavior, causing more harm than
+good.
+</p>
+
+<p>
+The primary purpose of code review is to make sure that the overall code health of your
+project code base is improving over time. All of the tools and processes of code review
+are designed to this end.
+</p>
+
+<p>
+An list of code-review article and tools aronud code revîew :  <a href="https://github.com/joho/awesome-code-review">awesome-code-review</a>.
+</p>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fdev.to%2Frfornal%2Fbetter-code-review-practices-15nb%5D%5BBetter%20Code%20Review%20Practices%20-%20DEV%20Community%20%F0%9F%91%A9%E2%80%8D%F0%9F%92%BB%F0%9F%91%A8%E2%80%8D%F0%9F%92%BB%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fdev.to%2Frfornal%2Fbetter-code-review-practices-15nb%5D%5BBetter%20Code%20Review%20Practices%20-%20DEV%20Community%20%F0%9F%91%A9%E2%80%8D%F0%9F%92%BB%F0%9F%91%A8%E2%80%8D%F0%9F%92%BB%5D%5D"><span class="todo TODO">TODO</span> <a href="https://dev.to/rfornal/better-code-review-practices-15nb">Better Code Review Practices - DEV Community 👩‍💻👨‍💻</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fdev.to%2Frfornal%2Fbetter-code-review-practices-15nb%5D%5BBetter%20Code%20Review%20Practices%20-%20DEV%20Community%20%F0%9F%91%A9%E2%80%8D%F0%9F%92%BB%F0%9F%91%A8%E2%80%8D%F0%9F%92%BB%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-01-28 Tue 18:58]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmedium.com%2Fpalantir%2Fcode-review-best-practices-19e02780015f%5D%5BCode%20Review%20Best%20Practices%20-%20Palantir%20Blog%20-%20Medium%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmedium.com%2Fpalantir%2Fcode-review-best-practices-19e02780015f%5D%5BCode%20Review%20Best%20Practices%20-%20Palantir%20Blog%20-%20Medium%5D%5D"><span class="todo TODO">TODO</span> <a href="https://medium.com/palantir/code-review-best-practices-19e02780015f">Code Review Best Practices - Palantir Blog - Medium</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmedium.com%2Fpalantir%2Fcode-review-best-practices-19e02780015f%5D%5BCode%20Review%20Best%20Practices%20-%20Palantir%20Blog%20-%20Medium%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-01-28 Tue 18:58]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fcodingsans.com%2Fblog%2Fcode-review%5D%5BCode%20Review%3A%20Create%20The%20Culture%2C%20Learn%20The%20Best%20Practices%20%7C%20Coding%20Sans%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fcodingsans.com%2Fblog%2Fcode-review%5D%5BCode%20Review%3A%20Create%20The%20Culture%2C%20Learn%20The%20Best%20Practices%20%7C%20Coding%20Sans%5D%5D"><span class="todo TODO">TODO</span> <a href="https://codingsans.com/blog/code-review">Code Review: Create The Culture, Learn The Best Practices | Coding Sans</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fcodingsans.com%2Fblog%2Fcode-review%5D%5BCode%20Review%3A%20Create%20The%20Culture%2C%20Learn%20The%20Best%20Practices%20%7C%20Coding%20Sans%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-01-28 Tue 18:58]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgoogle.github.io%2Feng-practices%2Freview%2Fdeveloper%2F%5D%5BThe%20CL%20author%E2%80%99s%20guide%20to%20getting%20through%20code%20review%20%7C%20eng-practices%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgoogle.github.io%2Feng-practices%2Freview%2Fdeveloper%2F%5D%5BThe%20CL%20author%E2%80%99s%20guide%20to%20getting%20through%20code%20review%20%7C%20eng-practices%5D%5D"><span class="todo TODO">TODO</span> <a href="https://google.github.io/eng-practices/review/developer/">The CL author’s guide to getting through code review | eng-practices</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgoogle.github.io%2Feng-practices%2Freview%2Fdeveloper%2F%5D%5BThe%20CL%20author%E2%80%99s%20guide%20to%20getting%20through%20code%20review%20%7C%20eng-practices%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-10-07 Mon 10:43]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgoogle.github.io%2Feng-practices%2Freview%2Freviewer%2F%5D%5BHow%20to%20do%20a%20code%20review%20%7C%20eng-practices%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgoogle.github.io%2Feng-practices%2Freview%2Freviewer%2F%5D%5BHow%20to%20do%20a%20code%20review%20%7C%20eng-practices%5D%5D"><span class="todo TODO">TODO</span> <a href="https://google.github.io/eng-practices/review/reviewer/">How to do a code review | eng-practices</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgoogle.github.io%2Feng-practices%2Freview%2Freviewer%2F%5D%5BHow%20to%20do%20a%20code%20review%20%7C%20eng-practices%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-10-07 Mon 10:44]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.jez.io%2Fcli-code-review%2F%5D%5BCode%20Review%20from%20the%20Command%20Line%20-%20Bits%2C%20Bytes%2C%20and%20Words%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.jez.io%2Fcli-code-review%2F%5D%5BCode%20Review%20from%20the%20Command%20Line%20-%20Bits%2C%20Bytes%2C%20and%20Words%5D%5D"><span class="todo TODO">TODO</span> <a href="https://blog.jez.io/cli-code-review/">Code Review from the Command Line - Bits, Bytes, and Words</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.jez.io%2Fcli-code-review%2F%5D%5BCode%20Review%20from%20the%20Command%20Line%20-%20Bits%2C%20Bytes%2C%20and%20Words%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-23 Wed 13:02]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fbenjamincongdon.me%2Fblog%2F2021%2F10%2F17%2FFeatures-of-Excellent-Code-Review-Tools%2F%5D%5BFeatures%20of%20Excellent%20Code%20Review%20Tools%20%7C%20Ben%20Congdon%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fbenjamincongdon.me%2Fblog%2F2021%2F10%2F17%2FFeatures-of-Excellent-Code-Review-Tools%2F%5D%5BFeatures%20of%20Excellent%20Code%20Review%20Tools%20%7C%20Ben%20Congdon%5D%5D"><span class="todo TODO">TODO</span> <a href="https://benjamincongdon.me/blog/2021/10/17/Features-of-Excellent-Code-Review-Tools/">Features of Excellent Code Review Tools | Ben Congdon</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fbenjamincongdon.me%2Fblog%2F2021%2F10%2F17%2FFeatures-of-Excellent-Code-Review-Tools%2F%5D%5BFeatures%20of%20Excellent%20Code%20Review%20Tools%20%7C%20Ben%20Congdon%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2021-10-29 Fri 18:03]</span></span>
+</p>
+</div>
+</div>
+</section>
+<section id="outline-container-Pair%20programming" class="outline-2">
+<h2 id="Pair%20programming">Pair programming&#xa0;&#xa0;&#xa0;<span class="tag"><span class="pair">pair</span></span></h2>
+<div class="outline-text-2" id="text-Pair%20programming">
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmartinfowler.com%2Farticles%2Fon-pair-programming.html%5D%5BOn%20Pair%20Programming%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmartinfowler.com%2Farticles%2Fon-pair-programming.html%5D%5BOn%20Pair%20Programming%5D%5D"><span class="todo TODO">TODO</span> <a href="https://martinfowler.com/articles/on-pair-programming.html">On Pair Programming</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmartinfowler.com%2Farticles%2Fon-pair-programming.html%5D%5BOn%20Pair%20Programming%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-02-12 Wed 09:21]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F01%2Fadvanced-pair-programming-pairing-remotely%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Pairing%20Remotely%20%E2%80%93%20Chelsea%20Troy%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F01%2Fadvanced-pair-programming-pairing-remotely%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Pairing%20Remotely%20%E2%80%93%20Chelsea%20Troy%5D%5D"><span class="todo TODO">TODO</span> <a href="https://chelseatroy.com/2017/04/01/advanced-pair-programming-pairing-remotely/">Advanced Pair Programming: Pairing Remotely – Chelsea Troy</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F01%2Fadvanced-pair-programming-pairing-remotely%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Pairing%20Remotely%20%E2%80%93%20Chelsea%20Troy%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-04-21 Tue 18:26]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F04%2Fadvanced-pair-programming-enabling-your-pair%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Enabling%20Your%20Pair%20%E2%80%93%20Chelsea%20Troy%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F04%2Fadvanced-pair-programming-enabling-your-pair%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Enabling%20Your%20Pair%20%E2%80%93%20Chelsea%20Troy%5D%5D"><span class="todo TODO">TODO</span> <a href="https://chelseatroy.com/2017/04/04/advanced-pair-programming-enabling-your-pair/">Advanced Pair Programming: Enabling Your Pair – Chelsea Troy</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F04%2Fadvanced-pair-programming-enabling-your-pair%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Enabling%20Your%20Pair%20%E2%80%93%20Chelsea%20Troy%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-04-21 Tue 18:26]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F06%2Fadvanced-pair-programming-learning-from-your-pair%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Learning%20From%20Your%20Pair%20%E2%80%93%20Chelsea%20Troy%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F06%2Fadvanced-pair-programming-learning-from-your-pair%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Learning%20From%20Your%20Pair%20%E2%80%93%20Chelsea%20Troy%5D%5D"><span class="todo TODO">TODO</span> <a href="https://chelseatroy.com/2017/04/06/advanced-pair-programming-learning-from-your-pair/">Advanced Pair Programming: Learning From Your Pair – Chelsea Troy</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2017%2F04%2F06%2Fadvanced-pair-programming-learning-from-your-pair%2F%5D%5BAdvanced%20Pair%20Programming%3A%20Learning%20From%20Your%20Pair%20%E2%80%93%20Chelsea%20Troy%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-04-21 Tue 18:26]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2016%2F01%2F30%2Fremote-pair-programming-best-practices%2F%5D%5BRemote%20Pair%20Programming%3A%20Best%20Practices%20%E2%80%93%20Chelsea%20Troy%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2016%2F01%2F30%2Fremote-pair-programming-best-practices%2F%5D%5BRemote%20Pair%20Programming%3A%20Best%20Practices%20%E2%80%93%20Chelsea%20Troy%5D%5D"><span class="todo TODO">TODO</span> <a href="https://chelseatroy.com/2016/01/30/remote-pair-programming-best-practices/">Remote Pair Programming: Best Practices – Chelsea Troy</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fchelseatroy.com%2F2016%2F01%2F30%2Fremote-pair-programming-best-practices%2F%5D%5BRemote%20Pair%20Programming%3A%20Best%20Practices%20%E2%80%93%20Chelsea%20Troy%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-04-21 Tue 18:27]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgeshan.com.np%2Fblog%2F2020%2F06%2Fpair-programming-benefits-for-your-team%2F%5D%5B5%20pair%20programming%20benefits%20you%20should%20know%20about%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgeshan.com.np%2Fblog%2F2020%2F06%2Fpair-programming-benefits-for-your-team%2F%5D%5B5%20pair%20programming%20benefits%20you%20should%20know%20about%5D%5D"><span class="todo TODO">TODO</span> <a href="https://geshan.com.np/blog/2020/06/pair-programming-benefits-for-your-team/">5 pair programming benefits you should know about</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgeshan.com.np%2Fblog%2F2020%2F06%2Fpair-programming-benefits-for-your-team%2F%5D%5B5%20pair%20programming%20benefits%20you%20should%20know%20about%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-23 Tue 17:49]</span></span>
+</p>
+</div>
+</div>
+</section>
+<section id="outline-container-Misc." class="outline-2">
+<h2 id="Misc.">Misc.</h2>
+<div class="outline-text-2" id="text-Misc.">
+</div>
+<div id="outline-container-%5B%5Bhttp%3A%2F%2Fkarolis.koncevicius.lt%2Fposts%2Fporn_zen_and_vimrc%2F%5D%5BPorn%2C%20Zen%2C%20and%20.vimrc%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttp%3A%2F%2Fkarolis.koncevicius.lt%2Fposts%2Fporn_zen_and_vimrc%2F%5D%5BPorn%2C%20Zen%2C%20and%20.vimrc%5D%5D"><span class="todo TODO">TODO</span> <a href="http://karolis.koncevicius.lt/posts/porn_zen_and_vimrc/">Porn, Zen, and .vimrc</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttp%3A%2F%2Fkarolis.koncevicius.lt%2Fposts%2Fporn_zen_and_vimrc%2F%5D%5BPorn%2C%20Zen%2C%20and%20.vimrc%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-17 Thu 08:36]</span></span>
+</p>
+
+<p>
+Could be on it&rsquo;s own entry on editors
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fsolovyov.net%2Fblog%2F2020%2Fhigher-order-functions%2F%5D%5BHigher-order%20functions%20are%20like%20inheritance%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fsolovyov.net%2Fblog%2F2020%2Fhigher-order-functions%2F%5D%5BHigher-order%20functions%20are%20like%20inheritance%5D%5D"><span class="todo TODO">TODO</span> <a href="https://solovyov.net/blog/2020/higher-order-functions/">Higher-order functions are like inheritance</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fsolovyov.net%2Fblog%2F2020%2Fhigher-order-functions%2F%5D%5BHigher-order%20functions%20are%20like%20inheritance%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-18 Fri 11:29]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.arp242.net%2Fcomments.html%5D%5BGood%20comments%20are%20to%20the%20point%20and%20flow%20well%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.arp242.net%2Fcomments.html%5D%5BGood%20comments%20are%20to%20the%20point%20and%20flow%20well%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.arp242.net/comments.html">Good comments are to the point and flow well</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.arp242.net%2Fcomments.html%5D%5BGood%20comments%20are%20to%20the%20point%20and%20flow%20well%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-12-12 Thu 18:03]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.sandimetz.com%2Fblog%2F2016%2F1%2F20%2Fthe-wrong-abstraction%5D%5BThe%20Wrong%20Abstraction%20%E2%80%94%20Sandi%20Metz%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.sandimetz.com%2Fblog%2F2016%2F1%2F20%2Fthe-wrong-abstraction%5D%5BThe%20Wrong%20Abstraction%20%E2%80%94%20Sandi%20Metz%5D%5D"><a href="https://www.sandimetz.com/blog/2016/1/20/the-wrong-abstraction">The Wrong Abstraction — Sandi Metz</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.sandimetz.com%2Fblog%2F2016%2F1%2F20%2Fthe-wrong-abstraction%5D%5BThe%20Wrong%20Abstraction%20%E2%80%94%20Sandi%20Metz%5D%5D">
+<p>
+A really interesting article about a really good point : sometimes duplication is better
+than the wrong abstraction !
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fblog.nelhage.com%2Fpost%2Freflections-on-performance%2F%5D%5BReflections%20on%20software%20performance%20-%20Made%20of%20Bugs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fblog.nelhage.com%2Fpost%2Freflections-on-performance%2F%5D%5BReflections%20on%20software%20performance%20-%20Made%20of%20Bugs%5D%5D"><a href="https://blog.nelhage.com/post/reflections-on-performance/">Reflections on software performance - Made of Bugs</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fblog.nelhage.com%2Fpost%2Freflections-on-performance%2F%5D%5BReflections%20on%20software%20performance%20-%20Made%20of%20Bugs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-06 Sat 12:36]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmedium.com%2F%40johnclarke_82232%2Fmono-or-multi-repo-6c3674142dfc%5D%5BMono-%20or%20Multi-repo%3F.%20One%20big%20repo%2C%20or%20lots%20of%20smaller%20repos%E2%80%A6%20%7C%20by%20John%20Clarke%20%7C%20Medium%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmedium.com%2F%40johnclarke_82232%2Fmono-or-multi-repo-6c3674142dfc%5D%5BMono-%20or%20Multi-repo%3F.%20One%20big%20repo%2C%20or%20lots%20of%20smaller%20repos%E2%80%A6%20%7C%20by%20John%20Clarke%20%7C%20Medium%5D%5D"><span class="todo TODO">TODO</span> <a href="https://medium.com/@johnclarke_82232/mono-or-multi-repo-6c3674142dfc">Mono- or Multi-repo?. One big repo, or lots of smaller repos… | by John Clarke | Medium</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmedium.com%2F%40johnclarke_82232%2Fmono-or-multi-repo-6c3674142dfc%5D%5BMono-%20or%20Multi-repo%3F.%20One%20big%20repo%2C%20or%20lots%20of%20smaller%20repos%E2%80%A6%20%7C%20by%20John%20Clarke%20%7C%20Medium%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-08-17 Mon 16:33]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmedium.com%2F%40mattklein123%2Fmonorepos-please-dont-e9a279be011b%5D%5BMonorepos%3A%20Please%20don%E2%80%99t%21.%20Here%20we%20are%20at%20the%20beginning%20of%202019%E2%80%A6%20%7C%20by%20Matt%20Klein%20%7C%20Medium%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmedium.com%2F%40mattklein123%2Fmonorepos-please-dont-e9a279be011b%5D%5BMonorepos%3A%20Please%20don%E2%80%99t%21.%20Here%20we%20are%20at%20the%20beginning%20of%202019%E2%80%A6%20%7C%20by%20Matt%20Klein%20%7C%20Medium%5D%5D"><span class="todo TODO">TODO</span> <a href="https://medium.com/@mattklein123/monorepos-please-dont-e9a279be011b">Monorepos: Please don’t!. Here we are at the beginning of 2019… | by Matt Klein | Medium</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmedium.com%2F%40mattklein123%2Fmonorepos-please-dont-e9a279be011b%5D%5BMonorepos%3A%20Please%20don%E2%80%99t%21.%20Here%20we%20are%20at%20the%20beginning%20of%202019%E2%80%A6%20%7C%20by%20Matt%20Klein%20%7C%20Medium%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-08-17 Mon 16:33]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Funderstandlegacycode.com%2Fblog%2Fkey-points-of-working-effectively-with-legacy-code%2F%5D%5BThe%20key%20points%20of%20Working%20Effectively%20with%20Legacy%20Code%20%E2%80%94%20Understand%20Legacy%20Code%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Funderstandlegacycode.com%2Fblog%2Fkey-points-of-working-effectively-with-legacy-code%2F%5D%5BThe%20key%20points%20of%20Working%20Effectively%20with%20Legacy%20Code%20%E2%80%94%20Understand%20Legacy%20Code%5D%5D"><span class="todo TODO">TODO</span> <a href="https://understandlegacycode.com/blog/key-points-of-working-effectively-with-legacy-code/">The key points of Working Effectively with Legacy Code — Understand Legacy Code</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Funderstandlegacycode.com%2Fblog%2Fkey-points-of-working-effectively-with-legacy-code%2F%5D%5BThe%20key%20points%20of%20Working%20Effectively%20with%20Legacy%20Code%20%E2%80%94%20Understand%20Legacy%20Code%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-02-26 Wed 12:20]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Ftrineo.com%2Fblog%2F2020%2F01%2Fconstraint-driven-development%5D%5BConstraint%20Driven%20Development%20%7C%20Trineo%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Ftrineo.com%2Fblog%2F2020%2F01%2Fconstraint-driven-development%5D%5BConstraint%20Driven%20Development%20%7C%20Trineo%5D%5D"><span class="todo TODO">TODO</span> <a href="https://trineo.com/blog/2020/01/constraint-driven-development">Constraint Driven Development | Trineo</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Ftrineo.com%2Fblog%2F2020%2F01%2Fconstraint-driven-development%5D%5BConstraint%20Driven%20Development%20%7C%20Trineo%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-29 Sun 06:15]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjameshfisher.com%2F2014%2F05%2F11%2Fyour-syntax-highlighter-is-wrong%2F%5D%5BYour%20syntax%20highlighter%20is%20wrong%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjameshfisher.com%2F2014%2F05%2F11%2Fyour-syntax-highlighter-is-wrong%2F%5D%5BYour%20syntax%20highlighter%20is%20wrong%5D%5D"><span class="todo TODO">TODO</span> <a href="https://jameshfisher.com/2014/05/11/your-syntax-highlighter-is-wrong/">Your syntax highlighter is wrong</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjameshfisher.com%2F2014%2F05%2F11%2Fyour-syntax-highlighter-is-wrong%2F%5D%5BYour%20syntax%20highlighter%20is%20wrong%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-12-12 Thu 13:35]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.benkuhn.net%2Fsyntax%5D%5BSyntax%20highlighting%20is%20backwards%20%7C%20benkuhn.net%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.benkuhn.net%2Fsyntax%5D%5BSyntax%20highlighting%20is%20backwards%20%7C%20benkuhn.net%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.benkuhn.net/syntax">Syntax highlighting is backwards | benkuhn.net</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.benkuhn.net%2Fsyntax%5D%5BSyntax%20highlighting%20is%20backwards%20%7C%20benkuhn.net%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-02 Mon 17:02]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Flukeplant.me.uk%2Fblog%2Fposts%2Fwhy-im-leaving-elm%2F%5D%5BWhy%20I%E2%80%99m%20leaving%C2%A0Elm%20-%20lukeplant.me.uk%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Flukeplant.me.uk%2Fblog%2Fposts%2Fwhy-im-leaving-elm%2F%5D%5BWhy%20I%E2%80%99m%20leaving%C2%A0Elm%20-%20lukeplant.me.uk%5D%5D"><span class="todo TODO">TODO</span> <a href="https://lukeplant.me.uk/blog/posts/why-im-leaving-elm/">Why I’m leaving Elm - lukeplant.me.uk</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Flukeplant.me.uk%2Fblog%2Fposts%2Fwhy-im-leaving-elm%2F%5D%5BWhy%20I%E2%80%99m%20leaving%C2%A0Elm%20-%20lukeplant.me.uk%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-04-09 Thu 19:48]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fandreyorst.gitlab.io%2Fposts%2F2020-04-29-text-editors%2F%5D%5BText%20Editors%20%E2%80%93%20Andrey%C2%A0Orst%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fandreyorst.gitlab.io%2Fposts%2F2020-04-29-text-editors%2F%5D%5BText%20Editors%20%E2%80%93%20Andrey%C2%A0Orst%5D%5D"><span class="todo TODO">TODO</span> <a href="https://andreyorst.gitlab.io/posts/2020-04-29-text-editors/">Text Editors – Andrey Orst</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fandreyorst.gitlab.io%2Fposts%2F2020-04-29-text-editors%2F%5D%5BText%20Editors%20%E2%80%93%20Andrey%C2%A0Orst%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-14 Thu 12:31]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fcodewithoutrules.com%2F2020%2F04%2F20%2Fproductivity-skills%2F%5D%5BThe%20secret%20skills%20of%20productive%20programmers%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fcodewithoutrules.com%2F2020%2F04%2F20%2Fproductivity-skills%2F%5D%5BThe%20secret%20skills%20of%20productive%20programmers%5D%5D"><span class="todo TODO">TODO</span> <a href="https://codewithoutrules.com/2020/04/20/productivity-skills/">The secret skills of productive programmers</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fcodewithoutrules.com%2F2020%2F04%2F20%2Fproductivity-skills%2F%5D%5BThe%20secret%20skills%20of%20productive%20programmers%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-15 Fri 14:33]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fcodewithoutrules.com%2F2020%2F05%2F14%2Fprepare-losing-job%2F%5D%5BHow%20to%20prepare%20for%20losing%20your%20programming%20job%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fcodewithoutrules.com%2F2020%2F05%2F14%2Fprepare-losing-job%2F%5D%5BHow%20to%20prepare%20for%20losing%20your%20programming%20job%5D%5D"><span class="todo TODO">TODO</span> <a href="https://codewithoutrules.com/2020/05/14/prepare-losing-job/">How to prepare for losing your programming job</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fcodewithoutrules.com%2F2020%2F05%2F14%2Fprepare-losing-job%2F%5D%5BHow%20to%20prepare%20for%20losing%20your%20programming%20job%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-15 Fri 14:33]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Ficyphox.sh%2Fblog%2Fsimplicity-security%2F%5D%5BSimplicity%20%28mostly%29%20guarantees%20security%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Ficyphox.sh%2Fblog%2Fsimplicity-security%2F%5D%5BSimplicity%20%28mostly%29%20guarantees%20security%5D%5D"><span class="todo TODO">TODO</span> <a href="https://icyphox.sh/blog/simplicity-security/">Simplicity (mostly) guarantees security</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Ficyphox.sh%2Fblog%2Fsimplicity-security%2F%5D%5BSimplicity%20%28mostly%29%20guarantees%20security%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-16 Sat 15:17]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttp%3A%2F%2Fthemediocreprogrammer.com%2Fbuild%2Fhtml%2Fthe_mediocre_programmer.html%5D%5BThe%20Mediocre%20Programmer%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttp%3A%2F%2Fthemediocreprogrammer.com%2Fbuild%2Fhtml%2Fthe_mediocre_programmer.html%5D%5BThe%20Mediocre%20Programmer%5D%5D"><span class="todo TODO">TODO</span> <a href="http://themediocreprogrammer.com/build/html/the_mediocre_programmer.html">The Mediocre Programmer</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="_read">#read</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttp%3A%2F%2Fthemediocreprogrammer.com%2Fbuild%2Fhtml%2Fthe_mediocre_programmer.html%5D%5BThe%20Mediocre%20Programmer%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-25 Mon 11:10]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmichaelfeathers.silvrback.com%2Ffunctional-code-is-honest-code%5D%5BMichael%20Feathers%20-%20Functional%20Code%20is%20Honest%20Code%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmichaelfeathers.silvrback.com%2Ffunctional-code-is-honest-code%5D%5BMichael%20Feathers%20-%20Functional%20Code%20is%20Honest%20Code%5D%5D"><span class="todo TODO">TODO</span> <a href="https://michaelfeathers.silvrback.com/functional-code-is-honest-code">Michael Feathers - Functional Code is Honest Code</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmichaelfeathers.silvrback.com%2Ffunctional-code-is-honest-code%5D%5BMichael%20Feathers%20-%20Functional%20Code%20is%20Honest%20Code%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-23 Tue 17:39]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmichaelfeathers.silvrback.com%2Ftesting-warranties%5D%5BMichael%20Feathers%20-%20Testing%20Warranties%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmichaelfeathers.silvrback.com%2Ftesting-warranties%5D%5BMichael%20Feathers%20-%20Testing%20Warranties%5D%5D"><span class="todo TODO">TODO</span> <a href="https://michaelfeathers.silvrback.com/testing-warranties">Michael Feathers - Testing Warranties</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmichaelfeathers.silvrback.com%2Ftesting-warranties%5D%5BMichael%20Feathers%20-%20Testing%20Warranties%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-23 Tue 17:39]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fqntm.org%2Fclean%5D%5BIt%27s%20probably%20time%20to%20stop%20recommending%20Clean%20Code%20%40%20Things%20Of%20Interest%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fqntm.org%2Fclean%5D%5BIt%27s%20probably%20time%20to%20stop%20recommending%20Clean%20Code%20%40%20Things%20Of%20Interest%5D%5D"><span class="todo TODO">TODO</span> <a href="https://qntm.org/clean">It&rsquo;s probably time to stop recommending Clean Code @ Things Of Interest</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fqntm.org%2Fclean%5D%5BIt%27s%20probably%20time%20to%20stop%20recommending%20Clean%20Code%20%40%20Things%20Of%20Interest%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-29 Mon 17:01]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Ftomgamon.com%2Fposts%2F2020-08-25-dont-marry-your-design%2F%5D%5BDon%27t%20marry%20your%20design%20after%20the%20first%20date%20-%20Tom%20Gamon%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Ftomgamon.com%2Fposts%2F2020-08-25-dont-marry-your-design%2F%5D%5BDon%27t%20marry%20your%20design%20after%20the%20first%20date%20-%20Tom%20Gamon%5D%5D"><span class="todo TODO">TODO</span> <a href="https://tomgamon.com/posts/2020-08-25-dont-marry-your-design/">Don&rsquo;t marry your design after the first date - Tom Gamon</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Ftomgamon.com%2Fposts%2F2020-08-25-dont-marry-your-design%2F%5D%5BDon%27t%20marry%20your%20design%20after%20the%20first%20date%20-%20Tom%20Gamon%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-08-26 Wed 16:14]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fphaazon.net%2Fblog%2Feditors-in-2020%5D%5BMy%20thoughts%20about%20editors%20in%202020%20%E2%80%93%20phaazon.net%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fphaazon.net%2Fblog%2Feditors-in-2020%5D%5BMy%20thoughts%20about%20editors%20in%202020%20%E2%80%93%20phaazon.net%5D%5D"><span class="todo TODO">TODO</span> <a href="https://phaazon.net/blog/editors-in-2020">My thoughts about editors in 2020 – phaazon.net</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fphaazon.net%2Fblog%2Feditors-in-2020%5D%5BMy%20thoughts%20about%20editors%20in%202020%20%E2%80%93%20phaazon.net%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-07 Mon 10:28]</span></span>
+</p>
+
+<p>
+Because I think the speed doesn’t matter when programming, I think the most important part to remember here is the comfort: the wrists don’t move and my fingers fly around the keyboard, whatever the speed.
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fnoelwelsh.com%2Fposts%2F2020-07-05-what-and-why-fp.html%5D%5BNoel%20Welsh%3A%20What%20Functional%20Programming%20Is%2C%20What%20it%20Isn%27t%2C%20and%20Why%20it%20Matters%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fnoelwelsh.com%2Fposts%2F2020-07-05-what-and-why-fp.html%5D%5BNoel%20Welsh%3A%20What%20Functional%20Programming%20Is%2C%20What%20it%20Isn%27t%2C%20and%20Why%20it%20Matters%5D%5D"><span class="todo TODO">TODO</span> <a href="https://noelwelsh.com/posts/2020-07-05-what-and-why-fp.html">Noel Welsh: What Functional Programming Is, What it Isn&rsquo;t, and Why it Matters</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fnoelwelsh.com%2Fposts%2F2020-07-05-what-and-why-fp.html%5D%5BNoel%20Welsh%3A%20What%20Functional%20Programming%20Is%2C%20What%20it%20Isn%27t%2C%20and%20Why%20it%20Matters%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-07 Mon 16:07]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjosephg.com%2Fblog%2F3-tribes%2F%5D%5B3%20tribes%20of%20programming%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjosephg.com%2Fblog%2F3-tribes%2F%5D%5B3%20tribes%20of%20programming%5D%5D"><span class="todo TODO">TODO</span> <a href="https://josephg.com/blog/3-tribes/">3 tribes of programming</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjosephg.com%2Fblog%2F3-tribes%2F%5D%5B3%20tribes%20of%20programming%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-23 Wed 12:12]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjfmengels.net%2Fsafe-dead-code-removal%2F%3Flobsters%5D%5BSafe%20dead%20code%20removal%20in%20a%20pure%20functional%20language%20%7C%20jfmengels%27%20blog%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjfmengels.net%2Fsafe-dead-code-removal%2F%3Flobsters%5D%5BSafe%20dead%20code%20removal%20in%20a%20pure%20functional%20language%20%7C%20jfmengels%27%20blog%5D%5D"><span class="todo TODO">TODO</span> <a href="https://jfmengels.net/safe-dead-code-removal/?lobsters">Safe dead code removal in a pure functional language | jfmengels&rsquo; blog</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjfmengels.net%2Fsafe-dead-code-removal%2F%3Flobsters%5D%5BSafe%20dead%20code%20removal%20in%20a%20pure%20functional%20language%20%7C%20jfmengels%27%20blog%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2021-01-29 Fri 10:28]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.unixsheikh.com%2Farticles%2Fcode-navigation-design-patterns-and-too-many-functions.html%5D%5BCode%20Navigation%2C%20Design%20Patterns%2C%20and%20Too%20Many%20Functions%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.unixsheikh.com%2Farticles%2Fcode-navigation-design-patterns-and-too-many-functions.html%5D%5BCode%20Navigation%2C%20Design%20Patterns%2C%20and%20Too%20Many%20Functions%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.unixsheikh.com/articles/code-navigation-design-patterns-and-too-many-functions.html">Code Navigation, Design Patterns, and Too Many Functions</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.unixsheikh.com%2Farticles%2Fcode-navigation-design-patterns-and-too-many-functions.html%5D%5BCode%20Navigation%2C%20Design%20Patterns%2C%20and%20Too%20Many%20Functions%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-10-27 Tue 16:21]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttp%3A%2F%2Fbrooker.co.za%2Fblog%2F2020%2F06%2F23%2Fcode.html%5D%5BCode%20Only%20Says%20What%20it%20Does%20-%20Marc%27s%20Blog%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttp%3A%2F%2Fbrooker.co.za%2Fblog%2F2020%2F06%2F23%2Fcode.html%5D%5BCode%20Only%20Says%20What%20it%20Does%20-%20Marc%27s%20Blog%5D%5D"><span class="todo TODO">TODO</span> <a href="http://brooker.co.za/blog/2020/06/23/code.html">Code Only Says What it Does - Marc&rsquo;s Blog</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttp%3A%2F%2Fbrooker.co.za%2Fblog%2F2020%2F06%2F23%2Fcode.html%5D%5BCode%20Only%20Says%20What%20it%20Does%20-%20Marc%27s%20Blog%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-10-27 Tue 16:22]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjoshwcomeau.com%2Faccessibility%2Fhands-free-coding%2F%5D%5BCoding%20with%20voice%20dictation%20using%20Talon%20Voice%20%C2%B7%20Josh%20W%20Comeau%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjoshwcomeau.com%2Faccessibility%2Fhands-free-coding%2F%5D%5BCoding%20with%20voice%20dictation%20using%20Talon%20Voice%20%C2%B7%20Josh%20W%20Comeau%5D%5D"><span class="todo TODO">TODO</span> <a href="https://joshwcomeau.com/accessibility/hands-free-coding/">Coding with voice dictation using Talon Voice · Josh W Comeau</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjoshwcomeau.com%2Faccessibility%2Fhands-free-coding%2F%5D%5BCoding%20with%20voice%20dictation%20using%20Talon%20Voice%20%C2%B7%20Josh%20W%20Comeau%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-10-22 Thu 10:50]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fthereader.mitpress.mit.edu%2Fhabits-of-expert-software-designers%2F%5D%5BEight%20Habits%20of%20Expert%20Software%20Designers%3A%20An%20Illustrated%20Guide%20%7C%20The%20MIT%20Press%20Reader%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fthereader.mitpress.mit.edu%2Fhabits-of-expert-software-designers%2F%5D%5BEight%20Habits%20of%20Expert%20Software%20Designers%3A%20An%20Illustrated%20Guide%20%7C%20The%20MIT%20Press%20Reader%5D%5D"><span class="todo TODO">TODO</span> <a href="https://thereader.mitpress.mit.edu/habits-of-expert-software-designers/">Eight Habits of Expert Software Designers: An Illustrated Guide | The MIT Press Reader</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fthereader.mitpress.mit.edu%2Fhabits-of-expert-software-designers%2F%5D%5BEight%20Habits%20of%20Expert%20Software%20Designers%3A%20An%20Illustrated%20Guide%20%7C%20The%20MIT%20Press%20Reader%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-10-10 Thu 14:38]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.inkandswitch.com%2Fend-user-programming.html%5D%5BEnd-user%20programming%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.inkandswitch.com%2Fend-user-programming.html%5D%5BEnd-user%20programming%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.inkandswitch.com/end-user-programming.html">End-user programming</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="inkandswitch">inkandswitch</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.inkandswitch.com%2Fend-user-programming.html%5D%5BEnd-user%20programming%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-02-08 Sat 18:02]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2F8thlight.com%2Fblog%2Fjavier-garc%2525C3%2525ADa%2F2019%2F10%2F29%2Ffunctional-lessons.html%5D%5BFunctional%20lessons%20learnt%20%7C%208th%20Light%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2F8thlight.com%2Fblog%2Fjavier-garc%2525C3%2525ADa%2F2019%2F10%2F29%2Ffunctional-lessons.html%5D%5BFunctional%20lessons%20learnt%20%7C%208th%20Light%5D%5D"><span class="todo TODO">TODO</span> <a href="https://8thlight.com/blog/javier-garc%25C3%25ADa/2019/10/29/functional-lessons.html">Functional lessons learnt | 8th Light</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2F8thlight.com%2Fblog%2Fjavier-garc%2525C3%2525ADa%2F2019%2F10%2F29%2Ffunctional-lessons.html%5D%5BFunctional%20lessons%20learnt%20%7C%208th%20Light%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-11-06 Wed 09:29]</span></span>
+</p>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

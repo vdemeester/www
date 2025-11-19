@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Development machines made easy</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="article" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Development machines made easy</h1>
+<p class="subtitle" role="doc-subtitle">From lazyness to awesomeness</p>
+</header><div class="abstract" id="org9ca9678">
+<p>
+Let&rsquo;s dig into how I manage creating and managing development machines. The Why and the
+How.
+</p>
+
+</div>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h:f7b73025-0a31-4001-a08d-a5646d6e7be1">Use case</a></li>
+<li><a href="#h:302d6250-fe7f-42a9-9c1c-0cbfcedf8e62">Base images</a></li>
+<li><a href="#h:dc187bf7-25a3-4bdd-a021-54ca4b59cf65"><span class="todo TODO">TODO</span> Provisionning</a></li>
+<li><a href="#h:9c4d79c4-726c-424c-8d27-3f819532d1ae">References</a></li>
+<li><a href="#h:1f6e052f-3df2-415c-a7a1-e1eb9ae3f6c0">Archives</a></li>
+</ul>
+</div>
+</nav>
+
+<p>
+For work, I sometimes need to create and use <i>development</i> machines to hack on a specific
+case. There is multiple reason I would need to create those machines instead of working
+directly on my laptop or desktop. Let&rsquo;s look at those, and how I try to automate the hell
+out of it (because I am <b>really lazy</b>).
+</p>
+
+<section id="outline-container-h:f7b73025-0a31-4001-a08d-a5646d6e7be1" class="outline-2">
+<h2 id="h:f7b73025-0a31-4001-a08d-a5646d6e7be1">Use case</h2>
+<div class="outline-text-2" id="text-h:f7b73025-0a31-4001-a08d-a5646d6e7be1">
+<p>
+Let&rsquo;s look into some use-case that are useful to me
+</p>
+
+<ul class="org-ul">
+<li>Create and/or test packages for a specific distribution — most likely RPM-based (Fedora,
+RHEL, …) and Debian-based (Ubuntu, Debian, …).</li>
+<li>From scratch machine,
+<ul class="org-ul">
+<li>to make sure some documentation are complete for people to start
+hacking on a project, and using a tool.</li>
+<li>to make demo, recording or something 👼</li>
+</ul></li>
+<li>Cluster machines for Kubernetes or Openshift.</li>
+</ul>
+
+<p>
+Some requirements and <span class="underline">nice-to-have</span>:
+</p>
+
+<ul class="org-ul">
+<li>Automate provisioning of these machines.</li>
+<li>Use virtual machine for most case (<code>libvirt</code>, <code>qemu+kvm</code>).</li>
+<li>Auto updates of the &ldquo;provisioning&rdquo;</li>
+</ul>
+
+<p>
+Targeted system are, <span class="underline">for now</span> :
+</p>
+
+<ul class="org-ul">
+<li>Fedora, RHEL</li>
+<li>Debian, Ubuntu</li>
+<li>NixOS</li>
+</ul>
+</div>
+</section>
+
+<section id="outline-container-h:302d6250-fe7f-42a9-9c1c-0cbfcedf8e62" class="outline-2">
+<h2 id="h:302d6250-fe7f-42a9-9c1c-0cbfcedf8e62">Base images</h2>
+<div class="outline-text-2" id="text-h:302d6250-fe7f-42a9-9c1c-0cbfcedf8e62">
+<p>
+I initially wanted to use <code>packer</code> and it has its uses. I mainly need to build images for
+virtual machines, and it&rsquo;s even simpler than that, <code>qemu</code> based virtual machine (using
+<code>libvirt</code>). For those cases, there is simpler solution:
+</p>
+
+<ul class="org-ul">
+<li>For <code>nixos</code>, a tool seems to be designed for that purpose : <a href="https://github.com/nix-community/nixos-generators"><code>nixos-generators</code></a></li>
+<li>For <code>fedora</code>, <code>ubuntu</code> and all, if targeting <code>libvirt</code>, there is a really nice tool :
+<a href="http://libguestfs.org/virt-builder.1.html"><code>virt-builder</code></a> from <a href="http://libguestfs.org/">libguestfs</a>.</li>
+</ul>
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h:86b2f8d4-a8c7-4b6f-a788-e7a5a681a3d5"><span class="todo TODO">TODO</span> <code>virt-builder</code></a></li>
+<li><a href="#h:5d22d10b-657d-4ca2-a614-577b60d0023e"><span class="todo TODO">TODO</span> NixOS <code>nixos-generators</code></a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:86b2f8d4-a8c7-4b6f-a788-e7a5a681a3d5" class="outline-3">
+<h3 id="h:86b2f8d4-a8c7-4b6f-a788-e7a5a681a3d5"><span class="todo TODO">TODO</span> <code>virt-builder</code></h3>
+<div class="outline-text-3" id="text-h:86b2f8d4-a8c7-4b6f-a788-e7a5a681a3d5">
+</div>
+</div>
+
+<div id="outline-container-h:5d22d10b-657d-4ca2-a614-577b60d0023e" class="outline-3">
+<h3 id="h:5d22d10b-657d-4ca2-a614-577b60d0023e"><span class="todo TODO">TODO</span> NixOS <code>nixos-generators</code></h3>
+<div class="outline-text-3" id="text-h:5d22d10b-657d-4ca2-a614-577b60d0023e">
+</div>
+</div>
+</section>
+
+<section id="outline-container-h:dc187bf7-25a3-4bdd-a021-54ca4b59cf65" class="outline-2">
+<h2 id="h:dc187bf7-25a3-4bdd-a021-54ca4b59cf65"><span class="todo TODO">TODO</span> Provisionning</h2>
+<div class="outline-text-2" id="text-h:dc187bf7-25a3-4bdd-a021-54ca4b59cf65">
+<p>
+Now that we have base images, we can start to play around, most likely with <code>ansible</code> to
+easily and quickly provision setups based on those. Those setups can includes :
+</p>
+
+<ul class="org-ul">
+<li>development environment
+<ul class="org-ul">
+<li>Nix-based (aka Nixos or Nixpkgs on other machines)</li>
+<li><i>Native</i>-based (aka no Nix), Fedora</li>
+</ul></li>
+<li>multiple node testing environment</li>
+</ul>
+</div>
+
+<div id="outline-container-h:b1ad53f3-6ac7-44e1-8fc0-326ef785ec46" class="outline-3">
+<h3 id="h:b1ad53f3-6ac7-44e1-8fc0-326ef785ec46"><span class="todo TODO">TODO</span> Development machine</h3>
+<div class="outline-text-3" id="text-h:b1ad53f3-6ac7-44e1-8fc0-326ef785ec46">
+<p>
+There is currently only one, my <i>main</i> development machine, to hack on containers and
+orchestration tooling, using mainly go.
+</p>
+
+<ul class="org-ul">
+<li>It doesn&rsquo;t need to be a &ldquo;workstation&rdquo;, can be a server, I just need a headless
+fedora on which I can install stuff and run services.</li>
+<li>It needs to be able to run <code>minikube</code> or <code>crc</code>, so nested virtualization is required.</li>
+<li>It needs to require the less effort to reset/recreate.</li>
+<li>It needs to have the same IP on the network, always (meaning same MAC address)</li>
+<li>It needs to be &ldquo;updatable&rdquo; using provisionning (aka I change the provisionning part, I
+apply and go !)</li>
+</ul>
+</div>
+
+<div id="outline-container-h:bc7d4e4c-76e9-4fc6-9ce6-999f250c4d4c" class="outline-4">
+<h4 id="h:bc7d4e4c-76e9-4fc6-9ce6-999f250c4d4c"><span class="todo TODO">TODO</span> Create the virtal machine</h4>
+<div class="outline-text-4" id="text-h:bc7d4e4c-76e9-4fc6-9ce6-999f250c4d4c">
+<p>
+I want to re-use a disk for <code>/home</code> (or at least <code>$HOME/src</code>) so that I can just re-attach
+it later on. We are assuming we have a base image working here, see <a href="#h:86b2f8d4-a8c7-4b6f-a788-e7a5a681a3d5"><code>virt-builder</code></a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">virsh --connect=qemu+tcp://wakasu.home:16509/system list
+</pre>
+</div>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Id</td>
+<td class="org-left">Name</td>
+<td class="org-left">State</td>
+</tr>
+
+<tr>
+<td class="org-left">----------------------------</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">2</td>
+<td class="org-left">fedora-dev</td>
+<td class="org-left">running</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-h:af99c176-b991-433e-8070-17b38a8fb82a" class="outline-4">
+<h4 id="h:af99c176-b991-433e-8070-17b38a8fb82a"><span class="todo TODO">TODO</span> Base system</h4>
+<div class="outline-text-4" id="text-h:af99c176-b991-433e-8070-17b38a8fb82a">
+<ul class="org-ul">
+<li>zsh</li>
+<li>bash</li>
+<li>exa</li>
+<li>htop</li>
+<li>ssh/shhd</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:6cbfd75a-6dbd-4b6b-8b63-c7c92db04e77" class="outline-4">
+<h4 id="h:6cbfd75a-6dbd-4b6b-8b63-c7c92db04e77"><span class="todo TODO">TODO</span> Virtualization tooling</h4>
+<div class="outline-text-4" id="text-h:6cbfd75a-6dbd-4b6b-8b63-c7c92db04e77">
+<ul class="org-ul">
+<li>nested virt =&gt; @virtualization, libvirt-devel</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:8a9a0d74-00d4-458f-a481-1620de380a4f" class="outline-4">
+<h4 id="h:8a9a0d74-00d4-458f-a481-1620de380a4f"><span class="todo TODO">TODO</span> Containers tooling</h4>
+<div class="outline-text-4" id="text-h:8a9a0d74-00d4-458f-a481-1620de380a4f">
+<ul class="org-ul">
+<li>podman-docker</li>
+<li>buildah</li>
+<li>skopeo</li>
+
+<li>ko</li>
+<li>kubectl</li>
+<li>google-cloud-sdk</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:cbbb7ea9-a553-4029-b755-d3d2f6894ced" class="outline-4">
+<h4 id="h:cbbb7ea9-a553-4029-b755-d3d2f6894ced"><span class="todo TODO">TODO</span> Developers tooling</h4>
+<div class="outline-text-4" id="text-h:cbbb7ea9-a553-4029-b755-d3d2f6894ced">
+</div>
+</div>
+
+<div id="outline-container-h:27836d1b-e7f9-4274-b3ca-37909e72daaa" class="outline-4">
+<h4 id="h:27836d1b-e7f9-4274-b3ca-37909e72daaa"><span class="todo TODO">TODO</span> Nix setup ?</h4>
+<div class="outline-text-4" id="text-h:27836d1b-e7f9-4274-b3ca-37909e72daaa">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h:77a3cff7-20d4-416b-bb1d-b772196b1f3e" class="outline-3">
+<h3 id="h:77a3cff7-20d4-416b-bb1d-b772196b1f3e"><span class="todo TODO">TODO</span> Kubernetes cluster</h3>
+<div class="outline-text-3" id="text-h:77a3cff7-20d4-416b-bb1d-b772196b1f3e">
+</div>
+</div>
+</section>
+
+<section id="outline-container-h:9c4d79c4-726c-424c-8d27-3f819532d1ae" class="outline-2">
+<h2 id="h:9c4d79c4-726c-424c-8d27-3f819532d1ae">References</h2>
+<div class="outline-text-2" id="text-h:9c4d79c4-726c-424c-8d27-3f819532d1ae">
+<ul class="org-ul">
+<li><a href="https://github.com/SkypLabs/packer-debian">https://github.com/SkypLabs/packer-debian</a></li>
+<li><a href="https://github.com/SkypLabs/packer-centos">https://github.com/SkypLabs/packer-centos</a></li>
+<li><a href="https://github.com/idi-ops/packer-fedora">https://github.com/idi-ops/packer-fedora</a></li>
+<li><a href="https://github.com/rustic/fedora29-minimal">https://github.com/rustic/fedora29-minimal</a></li>
+<li><a href="https://github.com/terusus/packer-ansible-arch">https://github.com/terusus/packer-ansible-arch</a></li>
+<li><a href="https://github.com/jogleasonjr/packer-arch">https://github.com/jogleasonjr/packer-arch</a></li>
+<li><a href="https://github.com/karolistamutis/packer-archlinux">https://github.com/karolistamutis/packer-archlinux</a></li>
+<li><a href="https://developer.fedoraproject.org/tools/virt-builder/about.html">https://developer.fedoraproject.org/tools/virt-builder/about.html</a></li>
+<li><a href="https://computingforgeeks.com/virsh-commands-cheatsheet/">https://computingforgeeks.com/virsh-commands-cheatsheet/</a></li>
+<li><a href="https://help.ubuntu.com/community/KVM/Virsh">https://help.ubuntu.com/community/KVM/Virsh</a></li>
+</ul>
+</div>
+</section>
+
+<section id="outline-container-h:1f6e052f-3df2-415c-a7a1-e1eb9ae3f6c0" class="outline-2">
+<h2 id="h:1f6e052f-3df2-415c-a7a1-e1eb9ae3f6c0">Archives</h2>
+<div class="outline-text-2" id="text-h:1f6e052f-3df2-415c-a7a1-e1eb9ae3f6c0">
+</div>
+<div id="outline-container-h:62c6b7b1-0ab4-4ab6-9dad-edd9e2d7c54e" class="outline-3">
+<h3 id="h:62c6b7b1-0ab4-4ab6-9dad-edd9e2d7c54e">Packer</h3>
+<div class="outline-text-3" id="text-h:62c6b7b1-0ab4-4ab6-9dad-edd9e2d7c54e">
+<p>
+Let&rsquo;s use <a href="https://packer.io/"><code>packer</code></a> with qemu for those cases — and let&rsquo;s create a repository where we&rsquo;re
+gonna write the development machine recipes : <a href="https://github.com/vdemeester/machines"><code>vdemeester/machines</code></a>.
+</p>
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h:edba86e1-0aa2-43a7-832b-60bfd5bf3727">NixOS recipes</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h:edba86e1-0aa2-43a7-832b-60bfd5bf3727" class="outline-4">
+<h4 id="h:edba86e1-0aa2-43a7-832b-60bfd5bf3727">NixOS recipes</h4>
+<div class="outline-text-4" id="text-h:edba86e1-0aa2-43a7-832b-60bfd5bf3727">
+<p>
+The initial source of packer recipes comes from <a href="https://github.com/nix-community/nixbox"><code>nix-community/nixbox</code></a>, but I&rsquo;m
+<i>tailoring</i> them to my needs
+</p>
+
+<div class="org-src-container">
+<pre class="src src-json">{
+  "builders": [
+    {
+      "boot_wait": "40s",
+      "boot_command": [
+        "echo http://{{ .HTTPIP }}:{{ .HTTPPort}} &gt; .packer_http&lt;enter&gt;",
+        "mkdir -m 0700 .ssh&lt;enter&gt;",
+        "curl $(cat .packer_http)/install_rsa.pub &gt; .ssh/authorized_keys&lt;enter&gt;",
+        "systemctl start sshd&lt;enter&gt;"
+      ],
+      "http_directory": "scripts",
+      "iso_checksum_type": "sha256",
+      "shutdown_command": "shutdown -h now",
+      "ssh_private_key_file": "./scripts/install_rsa",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "type": "qemu",
+      "iso_url": "https://d3g5gsiof5omrk.cloudfront.net/nixos/18.09/nixos-18.09.1799.b9fa31cea0e/nixos-minimal-18.09.1799.b9fa31cea0e-x86_64-linux.iso",
+      "iso_checksum": "cc7c399c5fe4672383fe54cb1d648854a0d6732765fe1a61bb38b3fe3b7c6d2f",
+      "disk_interface": "virtio-scsi",
+      "qemuargs": [
+        [
+          "-m",
+          "1024"
+        ]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "./scripts/install.sh"
+    }
+  ]
+}
+</pre>
+</div>
+
+<p>
+Let&rsquo;s look at the provisioning script. We don&rsquo;t want to create a full specific
+configuration for these images as we will use <code>ansible</code> for the final provisioning.
+</p>
+
+<ul class="org-ul">
+<li><p>
+<code>scripts/install.sh</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span class="org-comment-delimiter">#</span><span class="org-comment">!/bin/</span><span class="org-keyword">sh</span><span class="org-comment"> -e</span>
+
+<span class="org-variable-name">packer_http</span>=$(cat .packer_http)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Partition disk</span>
+cat &lt;&lt;FDISK | fdisk /dev/sda
+<span class="org-sh-heredoc">n</span>
+
+
+
+
+<span class="org-sh-heredoc">a</span>
+<span class="org-sh-heredoc">w</span>
+
+<span class="org-sh-heredoc">FDISK</span>
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Create filesystem</span>
+mkfs.ext4 -j -L nixos /dev/sda1
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Mount filesystem</span>
+mount <span class="org-variable-name">LABEL</span>=nixos /mnt
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Setup system</span>
+nixos-generate-config --root /mnt
+
+curl -sf <span class="org-string">"$packer_http/machine.nix"</span> &gt; /mnt/etc/nixos/machine.nix
+curl -sf <span class="org-string">"$packer_http/builders/$PACKER_BUILDER_TYPE.nix"</span> &gt; /mnt/etc/nixos/hardware-builder.nix
+curl -sf <span class="org-string">"$packer_http/configuration.nix"</span> &gt; /mnt/etc/nixos/configuration.nix
+curl -sf <span class="org-string">"$packer_http/custom-configuration.nix"</span> &gt; /mnt/etc/nixos/custom-configuration.nix
+
+<span class="org-comment-delimiter">### </span><span class="org-comment">Install ###</span>
+nixos-install
+
+<span class="org-comment-delimiter">### </span><span class="org-comment">Cleanup ###</span>
+curl <span class="org-string">"$packer_http/postinstall.sh"</span> | nixos-install
+</pre>
+</div></li>
+<li><p>
+<code>scripts/postinstall.sh</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span class="org-comment-delimiter">#</span><span class="org-comment">!/bin/</span><span class="org-keyword">sh</span>
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Make sure we are totally up to date</span>
+nix-channel --add https://nixos.org/channels/nixos-18.09 nixos
+nix-channel --update
+nixos-rebuild switch --upgrade
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Cleanup any previous generations and delete old packages that can be</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">pruned.</span>
+
+<span class="org-keyword">for</span> x<span class="org-keyword"> in</span> $(seq 0 2) ; <span class="org-keyword">do</span>
+  nix-env --delete-generations old
+  nix-collect-garbage -d
+<span class="org-keyword">done</span>
+
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Remove install ssh key</span>
+rm -rf /root/.ssh /root/.packer_http
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Zero out the disk (for better compression)</span>
+dd <span class="org-variable-name">if</span>=/dev/zero <span class="org-variable-name">of</span>=/EMPTY <span class="org-variable-name">bs</span>=1M
+rm -rf /EMPTY
+</pre>
+</div></li>
+<li><p>
+<code>scripts/machine.nix</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-nix"><span class="org-comment-delimiter"># </span><span class="org-comment">This file is overwritten by the vagrant-nixos plugin</span>
+{ config, pkgs, ... }:
+{
+  <span class="org-nix-attribute">networking.hostName</span> = <span class="org-string">"nixos-machine"</span>;
+}
+</pre>
+</div></li>
+<li><p>
+<code>scripts/configuration.nix</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-nix">{ config, pkgs, ... }:
+
+{
+  <span class="org-nix-attribute">imports</span> =
+    [ <span class="org-comment"># Include the results of the hardware scan.</span>
+      <span class="org-nix-constant">./hardware-configuration.nix</span>
+      <span class="org-nix-constant">./hardware-builder.nix</span>
+      <span class="org-nix-constant">./machine.nix</span>
+      <span class="org-nix-constant">./custom-configuration.nix</span>
+    ];
+
+  <span class="org-comment"># Use the GRUB 2 boot loader.</span>
+  <span class="org-nix-attribute">boot.loader.grub.enable</span> = <span class="org-nix-builtin">true</span>;
+  <span class="org-nix-attribute">boot.loader.grub.version</span> = 2;
+  <span class="org-nix-attribute">boot.loader.grub.device</span> = <span class="org-string">"/dev/sda"</span>;
+
+  <span class="org-comment"># remove the fsck that runs at startup. It will always fail to run, stopping</span>
+  <span class="org-comment"># your boot until you press *.</span>
+  <span class="org-nix-attribute">boot.initrd.checkJournalingFS</span> = <span class="org-nix-builtin">false</span>;
+
+  <span class="org-comment"># Services to enable:</span>
+
+  <span class="org-comment"># Enable the OpenSSH daemon.</span>
+  <span class="org-nix-attribute">services.openssh.enable</span> = <span class="org-nix-builtin">true</span>;
+
+  <span class="org-comment"># Enable DBus</span>
+  <span class="org-nix-attribute">services.dbus.enable</span>    = <span class="org-nix-builtin">true</span>;
+
+  <span class="org-comment"># Replace nptd by timesyncd</span>
+  <span class="org-nix-attribute">services.timesyncd.enable</span> = <span class="org-nix-builtin">true</span>;
+
+  <span class="org-comment"># Packages for Vagrant</span>
+  <span class="org-nix-attribute">environment.systemPackages</span> = <span class="org-nix-keyword">with</span> pkgs; [
+    iputils
+  ];
+
+  <span class="org-comment"># Creates a "vincent" users with password-less sudo access</span>
+  <span class="org-nix-attribute">users</span> = {
+    <span class="org-nix-attribute">extraGroups</span> = [ { <span class="org-nix-attribute">name</span> = <span class="org-string">"vincent"</span>; } ];
+    <span class="org-nix-attribute">extraUsers</span>  = [
+      <span class="org-comment"># Try to avoid ask password</span>
+      { <span class="org-nix-attribute">name</span> = <span class="org-string">"root"</span>; <span class="org-nix-attribute">password</span> = <span class="org-string">"vincent"</span>; }
+      {
+        <span class="org-nix-attribute">description</span>     = <span class="org-string">"Vincent User"</span>;
+        <span class="org-nix-attribute">name</span>            = <span class="org-string">"vincent"</span>;
+        <span class="org-nix-attribute">group</span>           = <span class="org-string">"vincent"</span>;
+        <span class="org-nix-attribute">extraGroups</span>     = [ <span class="org-string">"users"</span> <span class="org-string">"wheel"</span> ];
+        <span class="org-nix-attribute">password</span>        = <span class="org-string">"vincent"</span>;
+        <span class="org-nix-attribute">home</span>            = <span class="org-string">"/home/vincent"</span>;
+        <span class="org-nix-attribute">createHome</span>      = <span class="org-nix-builtin">true</span>;
+        <span class="org-nix-attribute">useDefaultShell</span> = <span class="org-nix-builtin">true</span>;
+        <span class="org-nix-attribute">openssh.authorizedKeys.keys</span> = [
+          <span class="org-string">"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDO1sx5h44xnK/k0ODnQ3aQR8+nr7HC7u94fS3OhwQ6AvjqDGLnI6EP4sr4Yh2eXf8lHX+lkg8iZ6Z+y9dVnnzwveZfqbfOyh6t8Hg+M1nl26rwdYv+guU8khvh+Kzl9Vdb5dexf/hWQ/LcWvsuPO+tBmqajNTLYbGinqrMm3Bw2jJS/+DitgoT8hiuSTU1smY1CGzggHEdsx4+oDMuDMvRYwOBBHrUF00lZLx3zB3nGl1VFYD2St3vzlmzoZNrW7Rx8TRg02BTVAwd4qPHOMz8Kg+JmDhVig9yeqHo4FCwXxQ8+jk54Cd2el6TjfaA5HD2+e4FYLP6bMSLIabLTfLP vincent@wakasu"</span>
+        ];
+      }
+    ];
+  };
+
+  <span class="org-nix-attribute">security.sudo.configFile</span> =
+    <span class="org-string">''</span>
+<span class="org-string">      Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE</span>
+<span class="org-string">      Defaults:root,%wheel env_keep+=NIX_PATH</span>
+<span class="org-string">      Defaults:root,%wheel env_keep+=TERMINFO_DIRS</span>
+<span class="org-string">      Defaults env_keep+=SSH_AUTH_SOCK</span>
+<span class="org-string">      Defaults lecture = never</span>
+<span class="org-string">      root   ALL=(ALL) SETENV: ALL</span>
+<span class="org-string">      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL</span>
+<span class="org-string">    ''</span>;
+
+}
+</pre>
+</div></li>
+<li><p>
+<code>scripts/custom-configuration.nix</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-nix">{ config, pkgs, ... }:
+
+{
+<span class="org-comment-delimiter"># </span><span class="org-comment">Place here any custom configuration specific to your organisation (locale, ...)</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">if you want it to be part of the packer base image to be used with vagrant.</span>
+}
+</pre>
+</div></li>
+<li><p>
+<code>scripts/builders/qemu.nix</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-nix">{ modulesPath, ... }:
+{
+  <span class="org-nix-attribute">imports</span> = [
+    <span class="org-string">"</span><span class="org-nix-antiquote">${</span><span class="org-nix-builtin">toString</span> modulesPath<span class="org-nix-antiquote">}</span><span class="org-string">/profiles/qemu-guest.nix"</span>
+  ];
+}
+</pre>
+</div></li>
+</ul>
+
+
+<p>
+And to build this image, a simple <code>packer build nixos.json</code> is required.
+</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

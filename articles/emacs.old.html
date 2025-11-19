@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Oct 07, 2022 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Emacs System</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">My Emacs System</h1>
+<p class="subtitle" role="doc-subtitle">A attempt to document my emacs setup 🙃</p>
+</header><p>
+Emacs is the best editor possible, at least for me, especially with the killer <a href="org_mode.html">org-mode</a>
+module.
+</p>
+
+<p>
+I do all in a lot in Emacs:
+</p>
+<ul class="org-ul">
+<li>task and calendar management using <a href="org_mode.html">org-mode</a>.</li>
+<li>mail using <a href="gnus.html">gnus</a>.</li>
+<li>programming in different languages (<a href="elisp.html">elisp</a>, <a href="go.html">go</a>, <a href="bash.html">bash</a>, …)</li>
+<li>interactive shell using either <a href="eshell.html">eshell</a> or <a href="vterm.html">vterm</a>.</li>
+</ul>
+
+<p>
+This is my attempt to document my Emacs setup, inspired by <a href="https://writequit.org/eos/eos.html">The Emacs Operating System
+(EOS)</a> or <a href="http://doc.rix.si/cce/cce.html">Complete Computing Environment</a> and other litterate configurations, see
+<a href="#Inspirations">Inspirations</a>. In a gist, this is the litterate version of the <a href="config_configurations.html">configurations</a> available in
+my <a href="https://git.sr.ht/~vdemeester/home">monorepo</a>.
+</p>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#What%20is%20this">What is this</a></li>
+<li><a href="#Why%20using%20GNU%2FEmacs%20%3F">Why using GNU/Emacs ?</a></li>
+<li><a href="#Assumptions">Assumptions</a></li>
+<li><a href="#Keybinding">Keybinding</a></li>
+<li><a href="#COPYING">COPYING</a></li>
+<li><a href="#Base%20settings">Base settings</a></li>
+<li><a href="#Configurations">Configurations</a></li>
+<li><a href="#Nix%28eries%29">Nix(eries)</a></li>
+<li><a href="#Inspirations">Inspirations</a></li>
+<li><a href="#Links">Links</a></li>
+</ul>
+</div>
+</nav>
+
+<section id="outline-container-What%20is%20this" class="outline-2">
+<h2 id="What%20is%20this">What is this</h2>
+<div class="outline-text-2" id="text-What%20is%20this">
+<p>
+The present document, referred to in the source code version as <code>emacs.org</code>, contains the
+bulk of my configurations for GNU Emacs. It is designed using principles of &ldquo;literate
+programming&rdquo;: a combination of ordinary language and inline code blocks. Emacs knows how
+to parse this file properly so as to evaluate only the elisp (&ldquo;Emacs Lisp&rdquo;) included
+herein. The rest is for humans to make sense of my additions and their underlying
+rationale.
+</p>
+
+<blockquote>
+<p>
+Literate programming allows us to be more expressive and deliberate. Not only we can use
+typography to its maximum potential, but can also employ techniques such as internal links
+between sections. This makes the end product much better for end users, than a terse
+script.
+</p>
+</blockquote>
+
+<p>
+I switched back and forth on using <code>org-mode</code> and literate programming, so why re-using
+it. First, I think I went for it the wrong way the first time. I copied part of the
+configuration from elsewhere, sometimes without really needing what I was copying. for
+some reason I think this is a common pattern when configuring Emacs. You start by using a
+distribution (Doom Emacs, Spacemacs, …) or by copying configuration from all over the
+place. Slowly but surely you realize this was a mistake as you didn&rsquo;t learn anything, so
+you <b>reboot</b> your configuration.
+</p>
+</div>
+</section>
+
+
+<section id="outline-container-Why%20using%20GNU%2FEmacs%20%3F" class="outline-2">
+<h2 id="Why%20using%20GNU%2FEmacs%20%3F">Why using GNU/Emacs ?</h2>
+<div class="outline-text-2" id="text-Why%20using%20GNU%2FEmacs%20%3F">
+<p>
+This is a question I thought I needed to answer, or at least, document why I am choosing
+GNU/Emacs as my primary editor. <a href="https://protesilaos.com/">Protesilaos Stavrou</a> has a <a href="https://protesilaos.com/codelog/2019-12-20-vlog-switch-emacs/">video</a> about it, really
+interesting.
+</p>
+
+<p>
+There is a lot of reasons but for me, the following are the main ones:
+</p>
+<ul class="org-ul">
+<li><b>Open Source</b>: this is a &ldquo;of course&rdquo;, but my editor <span class="underline">has to be</span> open-sourced. This seems
+to be the norm these days anyway (and for a long time, with <code>vim</code>).</li>
+<li><b>Lightweight</b>: the editor should be relatively lightweight. I don&rsquo;t want a full browser
+loaded to edit files, and I want to be able to run it in a terminal, on a server. <code>vim</code>
+can do that (and sometimes, <code>vim</code> or <code>vi</code> is enough 👼).</li>
+<li><b>Extensible</b>: to be honest, this is the most important reason. I want to be able to
+extend my editor as much as possible.</li>
+</ul>
+
+<p>
+GNU/Emacs checks all the boxes for me. Even though GNU/Emacs is probably not as
+lightweight as <code>vim</code>, it is definitely lightweight compared to all the Electron-based
+editors (vscode, …). It is of course open-source, and since ages (almost as old as I am
+😅). And best of all, GNU/Emacs is extensible as you couldn&rsquo;t dream of. Emacs is a lisp
+interpreter, and it is designed to be extended in order to meet the user&rsquo;s
+needs. <i>Extensibility</i> is the quintessential Emacs quality. You can modify any piece of
+elisp <i>in real time</i>.
+</p>
+
+<p>
+I&rsquo;m also a huge fan of <i>text-based</i> software, a.k.a. do whatever you can using text :
+reading mails, news, organizing notes and todos, all can be done in text. And GNU/Emacs
+shines at this. For emails and news, you&rsquo;ve got Gnus built-in, for notes and todos, the
+wonderful <code>org-mode</code> is the best thing on earth (seriously, this is the <b>one</b> mode that
+made me switch from <code>vim</code>).
+</p>
+</div>
+</section>
+
+<section id="outline-container-Assumptions" class="outline-2">
+<h2 id="Assumptions">Assumptions</h2>
+<div class="outline-text-2" id="text-Assumptions">
+<p>
+I&rsquo;ll make a few assumption in the following document (that may or may not be true):
+</p>
+
+<ul class="org-ul">
+<li><a href="https://nixos.org/nix/"><code>nix</code></a> is available, either from <a href="https://nixos.org">NixOS</a> or via an install of nix. I&rsquo;ll try my best to
+support non-nix environment, but it&rsquo;s definitely not my current focus.
+<ul class="org-ul">
+<li>As I am making the assumption that <code>nix</code> is available, I am also making the assumption
+that all the library required are already present (in my <a href="https://github.com/vdemeester/home"><code>home</code></a>, there is a file
+called <a href="https://github.com/vdemeester/home/blob/master/modules/profiles/emacs.nix"><code>emacs.nix</code></a> that encapsulate those dependencies). This is why, by default
+<b>use-package</b> doesn&rsquo;t use the <code>ensure</code> option in 99% of the configuration.</li>
+</ul></li>
+<li>Any function I wrote is going to be prefixed by <code>vde/</code> so that it doesn&rsquo;t conflicts with
+function that would have been defined elsewhere.</li>
+<li>Any function imported from another configuration, without any change, should be kept as
+is and/or prefixed by an unique id. I&rsquo;ll try to make sure to link to the configuration
+too.</li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Keybinding" class="outline-2">
+<h2 id="Keybinding">Keybinding</h2>
+<div class="outline-text-2" id="text-Keybinding">
+<p>
+As it is detailed in each part of this configuration, I am trying to setup keybinding in a
+<i>mnemonics</i> way so it&rsquo;s easy to remember (and use). This is what <a href="https://www.spacemacs.org/">spacemacs</a> does with evil
+keybindings (aka vim-like keybindings). I am staying with the <i>standard</i> emacs keybinding
+as much as possible (as there is already some mnemonics in there).
+</p>
+
+<p>
+There are countless jokes and comics on Emacs’s seemingly ridiculous keybindings. Good
+laughs indeed, but at the end of day, it’s not incomprehensible. It has well-defined
+conventions listed at <a href="https://www.gnu.org/software/emacs/manual/html%5Fnode/elisp/Key-Binding-Conventions.html">Emacs Key Bindings Convention</a>. In summary, the general rules are:
+</p>
+
+<ul class="org-ul">
+<li><code>C-x</code> reserved for Emacs native essential keybindings: buffer, window, frame, file, directory, etc…</li>
+<li><code>C-c</code> reserved for user and major mode:
+<ul class="org-ul">
+<li><code>C-c letter</code> reserved for user. <code>&lt;F5&gt;</code>-<code>&lt;F9&gt;</code> reserved for user.</li>
+<li><code>C-c C-letter</code> reserved for major mode.</li>
+</ul></li>
+<li>Don’t rebind <code>C-g</code>, <code>C-h</code> and <code>ESC</code>.</li>
+</ul>
+
+<p>
+To give a small example, most of my personal <code>org-mode</code> keybinding will start with <code>C-c
+o</code>, as it is reserved for user, and <code>o</code> is for <code>org-mode</code>. For version control, it&rsquo;s gonna
+be <code>C-c v</code>, for projects it&rsquo;s gonna be <code>C-c p</code>, etc…
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">prefix</th>
+<th scope="col" class="org-left">&ldquo;mode&rdquo;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">&lt;F1&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F2&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F3&gt;</td>
+<td class="org-left"><i>built-in</i> Register macro(s)</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F4&gt;</td>
+<td class="org-left"><i>built-in</i> Plays macro(s)</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F5&gt;</td>
+<td class="org-left"><code>revert-buffer</code></td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F6&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F7&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F8&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F9&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F10&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F11&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;F12&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c b</code></td>
+<td class="org-left">Bookmarks (<code>bookmark-plus</code>)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c h</code></td>
+<td class="org-left">Help (<code>helpful</code>, …)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c n</code></td>
+<td class="org-left">Navigation (<code>avy</code>, …)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c o</code></td>
+<td class="org-left">Org mode</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c p</code></td>
+<td class="org-left">Projects (<code>projectile</code>, …)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c v</code></td>
+<td class="org-left">Version control (<code>vc</code>, <code>magit</code>, …)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c w</code></td>
+<td class="org-left">Window management (<code>ace-window</code>, …)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-x p</code></td>
+<td class="org-left">Bookmarks (<code>bookmark-plus</code>, …)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This table is not complete and I don&rsquo;t intend to keep it complete here. Instead, there
+should be a table like this on each configuration file to describe what this config brings
+as keybinding.
+</p>
+
+<p>
+See also:
+</p>
+<ul class="org-ul">
+<li><a href="https://karl-voit.at/2018/07/08/emacs-key-bindings/">https://karl-voit.at/2018/07/08/emacs-key-bindings/</a></li>
+<li><a href="https://www.masteringemacs.org/article/mastering-key-bindings-emacs">https://www.masteringemacs.org/article/mastering-key-bindings-emacs</a></li>
+<li><a href="http://www.wilfred.me.uk/blog/2018/01/06/the-emacs-guru-guide-to-key-bindings/">http://www.wilfred.me.uk/blog/2018/01/06/the-emacs-guru-guide-to-key-bindings/</a></li>
+</ul>
+</div>
+</section>
+<section id="outline-container-COPYING" class="outline-2">
+<h2 id="COPYING">COPYING</h2>
+<div class="outline-text-2" id="text-COPYING">
+<p>
+Copyright (c) 2013-2020 Vincent Demeester &lt;vincent@sbr.pm&gt;
+</p>
+
+<p>
+This file is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+</p>
+
+<p>
+This file is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+</p>
+
+<p>
+You should have received a copy of the GNU General Public License
+along with this file.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+</p>
+</div>
+</section>
+<section id="outline-container-Base%20settings" class="outline-2">
+<h2 id="Base%20settings">Base settings</h2>
+<div class="outline-text-2" id="text-Base%20settings">
+<p>
+This section contains configurations that are needed prior to the setup of everything
+else. Anything that needs to be configured first should be in there, this includes the
+<code>init.el</code> and <code>early-init.el</code> files content.
+</p>
+</div>
+
+<div id="outline-container-Early%20initialization" class="outline-3">
+<h3 id="Early%20initialization">Early initialization</h3>
+<div class="outline-text-3" id="text-Early%20initialization">
+<p>
+Starting with Emacs 27, an <code>early-init.el</code> file can be used to do early configuration
+and optimization.
+</p>
+
+<blockquote>
+<p>
+Emacs can now be configured using an early init file. The file is called <code>early-init.el</code>,
+in <code>user-emacs-directory</code>. It is loaded very early in the startup process: before
+graphical elements such as the tool bar are initialized, and before the package manager is
+initialized. The primary purpose is to allow customizing how the package system is
+initialized given that initialization now happens before loading the regular init file
+(see below).
+</p>
+
+<p>
+We recommend against putting any customizations in this file that don&rsquo;t need to be set up
+before initializing installed add-on packages, because the early init file is read too
+early into the startup process, and some important parts of the Emacs session, such as
+&rsquo;window-system&rsquo; and other GUI features, are not yet set up, which could make some
+customization fail to work.
+</p>
+</blockquote>
+
+<p>
+We can use this to our advantage and optimize the initial loading of emacs.
+</p>
+
+<ul class="org-ul">
+<li><p>
+Before Emacs 27, the init file was responsible for initializing the package manager by
+calling `package-initialize&rsquo;.  Emacs 27 changed the default behavior: It now calls
+`package-initialize&rsquo; before loading the init file.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setq</span> package-enable-at-startup nil)
+</pre>
+</div></li>
+
+<li><p>
+Let&rsquo;s inhibit resizing the frame at early stage.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setq</span> frame-inhibit-implied-resize t)
+</pre>
+</div></li>
+
+<li><p>
+I never use the <i>menu-bar</i>, or the <i>tool-bar</i> or even the <i>scroll-bar</i>, so we can safely
+disable those very very early.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(horizontal-scroll-bar-mode -1)
+</pre>
+</div></li>
+
+<li><p>
+Finally we can try to avoid garbage collection at startup. The garbage collector can
+easily double startup time, so we suppress it at startup by turning up <code>gc-cons-threshold</code>
+(and perhaps <code>gc-cons-percentage</code>) temporarily.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setq</span> gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+</pre>
+</div></li>
+
+<li><p>
+Another small optimization concerns on <code>file-name-handler-alist</code> : on every .el and .elc
+file loaded during start up, it has to runs those regexps against the filename ; setting
+it to <code>nil</code> and after initialization finished put the value back make the initialization
+process quicker.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defvar</span> <span class="org-variable-name">file-name-handler-alist-original</span> file-name-handler-alist)
+(<span class="org-keyword">setq</span> file-name-handler-alist nil)
+</pre>
+</div>
+
+<p>
+However, it is important to reset it eventually. Not doing so will cause garbage
+collection freezes during long-term interactive use. Conversely, a <code>gc-cons-threshold</code>
+that is too small will cause stuttering. This will be done at the end.
+</p></li>
+
+<li><p>
+It&rsquo;s also possible to put the theme <b>and</b> the font in <code>early-init.el</code> to speed the
+start.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defvar</span> <span class="org-variable-name">contrib/after-load-theme-hook</span> nil
+  <span class="org-doc">"Hook run after a color theme is loaded using `</span><span class="org-doc"><span class="org-constant">load-theme</span></span><span class="org-doc">'."</span>)
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">contrib/run-after-load-theme-hook</span> (<span class="org-builtin">&amp;rest</span> _)
+  <span class="org-doc">"Run `</span><span class="org-doc"><span class="org-constant">contrib/after-load-theme-hook</span></span><span class="org-doc">'."</span>
+  (run-hooks 'contrib/after-load-theme-hook))
+
+(advice-add #'load-theme <span class="org-builtin">:after</span> #'contrib/run-after-load-theme-hook)
+(<span class="org-keyword">require</span> '<span class="org-constant">modus-operandi-theme</span>)
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">vde/modus-operandi</span> ()
+  <span class="org-doc">"Enable some Modus Operandi variables and load the theme.</span>
+<span class="org-doc">This is used internally by `</span><span class="org-doc"><span class="org-constant">vde/modus-themes-toggle</span></span><span class="org-doc">'."</span>
+  (<span class="org-keyword">setq</span> modus-operandi-theme-slanted-constructs t
+        modus-operandi-theme-bold-constructs t
+        modus-operandi-theme-subtle-diffs t
+        modus-operandi-theme-rainbow-headings t
+        modus-operandi-theme-section-headings nil
+        modus-operandi-theme-scale-headings nil
+        modus-operandi-theme-fringes 'subtle <span class="org-comment-delimiter">; </span><span class="org-comment">{nil,'subtle,'intense}</span>
+        modus-operandi-theme-mode-line '3d <span class="org-comment-delimiter">; </span><span class="org-comment">{nil,'3d,'moody}</span>
+        modus-operandi-theme-3d-modeline t
+        modus-operandi-theme-faint-syntax nil
+        modus-operandi-theme-intense-hl-line t
+        modus-operandi-theme-intense-paren-match t
+        modus-operandi-theme-prompts 'subtle <span class="org-comment-delimiter">; </span><span class="org-comment">{nil,'subtle,'intense}</span>
+        modus-operandi-theme-completions 'opinionated <span class="org-comment-delimiter">; </span><span class="org-comment">{nil,'moderate,'opinionated}</span>
+        modus-operandi-theme-diffs 'desaturated <span class="org-comment-delimiter">; </span><span class="org-comment">{nil,'desaturated,'fg-only}</span>
+        modus-operandi-theme-org-blocks 'greyscale <span class="org-comment-delimiter">; </span><span class="org-comment">{nil,'greyscale,'rainbow}</span>
+        modus-operandi-theme-variable-pitch-headings nil
+        modus-operandi-theme-rainbow-headings t
+        modus-operandi-theme-section-headings nil
+        modus-operandi-theme-scale-headings t
+        modus-operandi-theme-scale-1 1.05
+        modus-operandi-theme-scale-2 1.1
+        modus-operandi-theme-scale-3 1.15
+        modus-operandi-theme-scale-4 1.2)
+  (load-theme 'modus-operandi t))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">vde/modus-operandi-custom</span> ()
+  <span class="org-doc">"Customize modus-operandi theme"</span>
+  (<span class="org-keyword">if</span> (member 'modus-operandi custom-enabled-themes)
+      (modus-operandi-theme-with-color-variables <span class="org-comment-delimiter">; </span><span class="org-comment">this macro allows us to access the colour palette</span>
+        (custom-theme-set-faces
+         'modus-operandi
+         `(whitespace-tab ((,class (<span class="org-builtin">:background</span> <span class="org-string">"#ffffff"</span> <span class="org-builtin">:foreground</span> <span class="org-string">"#cccccc"</span>))))
+         `(whitespace-space ((,class (<span class="org-builtin">:background</span> <span class="org-string">"#ffffff"</span> <span class="org-builtin">:foreground</span> <span class="org-string">"#cccccc"</span>))))
+         `(whitespace-hspace ((,class (<span class="org-builtin">:background</span> <span class="org-string">"#ffffff"</span> <span class="org-builtin">:foreground</span> <span class="org-string">"#cccccc"</span>))))
+         `(whitespace-newline ((,class (<span class="org-builtin">:background</span> <span class="org-string">"#ffffff"</span> <span class="org-builtin">:foreground</span> <span class="org-string">"#cccccc"</span>))))
+         `(whitespace-indentation ((,class (<span class="org-builtin">:background</span> <span class="org-string">"#ffffff"</span> <span class="org-builtin">:foreground</span> <span class="org-string">"#cccccc"</span>))))
+         ))))
+
+(add-hook 'contrib/after-load-theme-hook 'vde/modus-operandi-custom)
+(vde/modus-operandi)
+
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">font-height</span> 130
+  <span class="org-doc">"Default font-height to use."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">font-family-mono</span> <span class="org-string">"Ubuntu Mono"</span>
+  <span class="org-doc">"Default monospace font-family to use."</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">font-family-sans</span> <span class="org-string">"Ubuntu Sans"</span>
+  <span class="org-doc">"Default sans font-family to use."</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Middle/Near East: &#1513;&#1500;&#1493;&#1501;, &#1575;&#1604;&#1587;&#1617;&#1604;&#1575;&#1605; &#1593;&#1604;&#1610;&#1603;&#1605;</span>
+(<span class="org-keyword">when</span> (member <span class="org-string">"Noto Sans Arabic"</span> (font-family-list))
+  (set-fontset-font t 'arabic <span class="org-string">"Noto Sans Arabic"</span>))
+(<span class="org-keyword">when</span> (member <span class="org-string">"Noto Sans Hebrew"</span> (font-family-list))
+  (set-fontset-font t 'arabic <span class="org-string">"Noto Sans Hebrew"</span>))
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Africa: &#4640;&#4619;&#4637;</span>
+(<span class="org-keyword">when</span> (member <span class="org-string">"Noto Sans Ethiopic"</span> (font-family-list))
+  (set-fontset-font t 'ethiopic <span class="org-string">"Noto Sans Ethiopic"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">If font-family-mono or font-family-sans are not available, use the default Emacs face</span>
+(<span class="org-keyword">when</span> (member font-family-mono (font-family-list))
+  (set-face-attribute 'default nil
+                      <span class="org-builtin">:family</span> font-family-mono
+                      <span class="org-builtin">:height</span> font-height)
+  (set-face-attribute 'fixed-pitch nil
+                      <span class="org-builtin">:family</span> font-family-mono))
+(<span class="org-keyword">when</span> (member font-family-sans (font-family-list))
+  (set-face-attribute 'variable-pitch nil
+                      <span class="org-builtin">:family</span> font-family-sans
+                      <span class="org-builtin">:weight</span> 'regular))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Ignore X resources; its settings would be redundant with the other settings</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">in this file and can conflict with later config (particularly where the</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">cursor color is concerned).</span>
+(advice-add #'x-apply-session-resources <span class="org-builtin">:override</span> #'ignore)
+</pre>
+</div></li>
+
+<li><p>
+Reseting garbage collection and file-name-handler values.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-hook 'after-init-hook
+          `(<span class="org-keyword">lambda</span> ()
+             (<span class="org-keyword">setq</span> gc-cons-threshold 67108864 <span class="org-comment-delimiter">; </span><span class="org-comment">64mb</span>
+                   gc-cons-percentage 0.1
+                   file-name-handler-alist file-name-handler-alist-original)
+             (garbage-collect)) <span class="org-warning">t)</span>
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-Initialization" class="outline-3">
+<h3 id="Initialization">Initialization</h3>
+<div class="outline-text-3" id="text-Initialization">
+<p>
+I am using the <a href="https://archive.casouri.cat/note/2020/painless-transition-to-portable-dumper/index.html">portable dump</a> feature (<i>to speed things up</i>) <b>but</b> I want to also start
+without <code>pdump</code>, so I need to take both cases into account.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defvar</span> <span class="org-variable-name">sbr-dumped</span> nil
+  <span class="org-doc">"non-nil when a dump file is loaded (because dump.el sets this variable)."</span>)
+
+(<span class="org-keyword">defmacro</span> <span class="org-function-name">sbr-if-dump</span> (then <span class="org-builtin">&amp;rest</span> else)
+  <span class="org-doc">"Evaluate IF if running with a dump file, else evaluate ELSE."</span>
+  (<span class="org-keyword">declare</span> (indent 1))
+  `(<span class="org-keyword">if</span> sbr-dumped
+       ,then
+     ,@else))
+
+(sbr-if-dump
+    (<span class="org-keyword">progn</span>
+      (global-font-lock-mode)
+      (transient-mark-mode)
+      (<span class="org-keyword">setq</span> load-path sbr-dumped-load-path))
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">add load-path&#8217;s and load autoload files</span>
+  (package-initialize))
+</pre>
+</div>
+
+<p>
+First thing first, let&rsquo;s define a <code>emacs-start-time</code> constant to be able to compute the
+time Emacs took to start.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defconst</span> <span class="org-variable-name">emacs-start-time</span> (current-time))
+</pre>
+</div>
+
+<p>
+My configuration do not support Emacs version lower than 26.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">let</span> ((minver 26))
+  (<span class="org-keyword">unless</span> (&gt;= emacs-major-version minver)
+    (<span class="org-warning">error</span> <span class="org-string">"Your Emacs is too old -- this configuration requires v%s or higher"</span> minver)))
+</pre>
+</div>
+
+<p>
+One thing though, I am currently not necessarily running Emacs 27, so I am going to need
+to have the same configuration in <code>init.el</code> for a little bit of time.
+</p>
+
+<p>
+<i>Note: the lowest emacs version I wanna support is 26 (as of today, might evolve)</i>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">load early-init.el before Emacs 27.0</span>
+(<span class="org-keyword">unless</span> (&gt;= emacs-major-version 27)
+  (message <span class="org-string">"Early init: Emacs Version &lt; 27.0"</span>)
+  (load (expand-file-name <span class="org-string">"early-init.el"</span> user-emacs-directory)))
+</pre>
+</div>
+
+<p>
+We also want our configuration to be working the same on any computer, this means we want
+to define every option by ourselves, not relying on default files (<code>default.el</code>) that
+would be set by our distribution. This is where <code>inhibit-default-init</code> comes into play,
+setting it to non-nil inhibit loading the <code>default</code> library.
+</p>
+
+<p>
+We also want to inhibit some initial default start messages and screen. The default screen
+will be as bare as possible.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setq</span> inhibit-default-init t)           <span class="org-comment-delimiter">; </span><span class="org-comment">Disable the site default settings</span>
+
+(<span class="org-keyword">setq</span> inhibit-startup-message t
+      inhibit-startup-screen t)
+</pre>
+</div>
+
+<p>
+Let&rsquo;s also use <code>y</code> or <code>n</code> instead of <code>yes</code> and <code>no</code> when exiting Emacs.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setq</span> confirm-kill-emacs #'y-or-n-p)
+</pre>
+</div>
+
+<p>
+One last piece to the puzzle is the default mode. Setting it to fundamental-mode means we
+won&rsquo;t load any <i>heavy</i> mode at startup (like <code>org-mode</code>). We also want this scratch buffer
+to be empty, so let&rsquo;s set it as well
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setq</span> initial-major-mode 'fundamental-mode
+      initial-scratch-message nil)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Unicode%20all%20the%20way" class="outline-3">
+<h3 id="Unicode%20all%20the%20way">Unicode all the way</h3>
+<div class="outline-text-3" id="text-Unicode%20all%20the%20way">
+<p>
+By default, all my systems are configured and support <code>utf-8</code>, so let&rsquo;s just make it a
+default in Emacs ; and handle special case on demand.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-language-environment 'utf-8)
+(set-selection-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Package%20management%20with%20%3Duse-package%3D" class="outline-3">
+<h3 id="Package%20management%20with%20%3Duse-package%3D">Package management with <code>use-package</code></h3>
+<div class="outline-text-3" id="text-Package%20management%20with%20%3Duse-package%3D">
+<p>
+<code>use-package</code> is a tool that streamlines the configuration of packages. It handles
+everything from assigning key bindings, setting the value of customisation options,
+writing hooks, declaring a package as a dependency for another, and so on.
+</p>
+
+<blockquote>
+<p>
+The <code>use-package</code> macro allows you to isolate package configuration in your <code>.emacs</code> file
+in a way that is both performance-oriented and, well, tidy.  I created it because I have
+over 80 packages that I use in Emacs, and things were getting difficult to manage.  Yet
+with this utility my total load time is around 2 seconds, with no loss of functionality!
+</p>
+</blockquote>
+
+<p>
+With <code>use-package</code> we can improve the start-up performance of Emacs in a few fairly simple
+ways. Whenever a command is bound to a key it is configured to be loaded only once
+invoked. Otherwise we can specify which functions should be autoloaded by means of the
+<code>:commands</code> keyword.
+</p>
+
+<p>
+We need to setup the emacs package system and install <code>use-package</code> if not present
+already.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">require</span> '<span class="org-constant">package</span>)
+
+(<span class="org-keyword">setq</span> package-archives
+      '((<span class="org-string">"melpa"</span> . <span class="org-string">"http://melpa.org/packages/"</span>)
+        (<span class="org-string">"org"</span> . <span class="org-string">"https://orgmode.org/elpa/"</span>)
+        (<span class="org-string">"gnu"</span> . <span class="org-string">"https://elpa.gnu.org/packages/"</span>)))
+
+(<span class="org-keyword">setq</span> package-archive-priorities
+      '((<span class="org-string">"melpa"</span> .  3)
+        (<span class="org-string">"org"</span> . 2)
+        (<span class="org-string">"gnu"</span> . 1)))
+
+(<span class="org-keyword">require</span> '<span class="org-constant">tls</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">From https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core-packages.el#L102</span>
+(<span class="org-keyword">setq</span> gnutls-verify-error (not (getenv <span class="org-string">"INSECURE"</span>)) <span class="org-comment-delimiter">; </span><span class="org-comment">you shouldn't use this</span>
+      tls-checktrust gnutls-verify-error
+      tls-program (list <span class="org-string">"gnutls-cli --x509cafile %t -p %p %h"</span>
+                        <span class="org-comment-delimiter">;; </span><span class="org-comment">compatibility fallbacks</span>
+                        <span class="org-string">"gnutls-cli -p %p %h"</span>
+                        <span class="org-string">"openssl s_client -connect %h:%p -no_ssl2 -no_ssl3 -ign_eof"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Initialise the packages, avoiding a re-initialisation.</span>
+(<span class="org-keyword">unless</span> (<span class="org-keyword">bound-and-true-p</span> package--initialized)
+  (<span class="org-keyword">setq</span> package-enable-at-startup nil)
+  (package-initialize))
+
+(<span class="org-keyword">setq</span> load-prefer-newer t)              <span class="org-comment-delimiter">; </span><span class="org-comment">Always load newer compiled files</span>
+(<span class="org-keyword">setq</span> ad-redefinition-action 'accept)   <span class="org-comment-delimiter">; </span><span class="org-comment">Silence advice redefinition warnings</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Init `</span><span class="org-comment"><span class="org-constant">delight</span></span><span class="org-comment">'</span>
+(<span class="org-keyword">unless</span> (package-installed-p 'delight)
+  (package-refresh-contents)
+  (package-install 'delight))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Configure `</span><span class="org-comment"><span class="org-constant">use-package</span></span><span class="org-comment">' prior to loading it.</span>
+(<span class="org-keyword">eval-and-compile</span>
+  (<span class="org-keyword">setq</span> use-package-always-ensure nil)
+  (<span class="org-keyword">setq</span> use-package-always-defer nil)
+  (<span class="org-keyword">setq</span> use-package-always-demand nil)
+  (<span class="org-keyword">setq</span> use-package-expand-minimally nil)
+  (<span class="org-keyword">setq</span> use-package-enable-imenu-support t))
+
+(<span class="org-keyword">unless</span> (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(<span class="org-keyword">eval-when-compile</span>
+  (<span class="org-keyword">require</span> '<span class="org-constant">use-package</span>))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Early%20environment%20setup" class="outline-3">
+<h3 id="Early%20environment%20setup">Early environment setup</h3>
+<div class="outline-text-3" id="text-Early%20environment%20setup">
+<p>
+I want to <b>force</b> <code>=SSH_AUTH_SOCK</code> in Emacs to use my gpg-agent.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setenv <span class="org-string">"SSH_AUTH_SOCK"</span> <span class="org-string">"/run/user/1000/gnupg/S.gpg-agent.ssh"</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-%3Dcustom.el%3D" class="outline-3">
+<h3 id="%3Dcustom.el%3D"><code>custom.el</code></h3>
+<div class="outline-text-3" id="text-%3Dcustom.el%3D">
+<p>
+When you install a package or use the various customisation interfaces to tweak things to
+your liking, Emacs will append a piece of elisp to your init file. I prefer to have that
+stored in a separate file.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defconst</span> <span class="org-variable-name">vde/custom-file</span> (locate-user-emacs-file <span class="org-string">"custom.el"</span>)
+  <span class="org-doc">"File used to store settings from Customization UI."</span>)
+
+(use-package cus-edit
+  <span class="org-builtin">:config</span>
+  (<span class="org-keyword">setq</span>
+   custom-file vde/custom-file
+   custom-buffer-done-kill nil          <span class="org-comment-delimiter">; </span><span class="org-comment">Kill when existing</span>
+   custom-buffer-verbose-help nil       <span class="org-comment-delimiter">; </span><span class="org-comment">Remove redundant help text</span>
+   custom-unlispify-tag-names nil       <span class="org-comment-delimiter">; </span><span class="org-comment">Show me the real variable name</span>
+   custom-unlispify-menu-entries nil)
+  (<span class="org-keyword">unless</span> (file-exists-p custom-file)
+    (write-region <span class="org-string">""</span> nil custom-file))
+
+  (load vde/custom-file 'no-error 'no-message))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Remove%20built-in%20%3Dorg-mode%3D" class="outline-3">
+<h3 id="Remove%20built-in%20%3Dorg-mode%3D">Remove built-in <code>org-mode</code></h3>
+<div class="outline-text-3" id="text-Remove%20built-in%20%3Dorg-mode%3D">
+<p>
+I want to make sure I am using the installed version of <code>orgmode</code> (from my org
+configuration) instead of the built-in one. To do that safely, let&rsquo;s remove the built-in
+version out of the load path.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">require</span> '<span class="org-constant">cl-seq</span>)
+(<span class="org-keyword">setq</span> load-path
+      (cl-remove-if
+       (<span class="org-keyword">lambda</span> (x)
+         (string-match-p <span class="org-string">"org$"</span> x))
+       load-path))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Loading%20configuration%20files" class="outline-3">
+<h3 id="Loading%20configuration%20files">Loading configuration files</h3>
+<div class="outline-text-3" id="text-Loading%20configuration%20files">
+<p>
+This <code>org-mode</code> document <i>tangles</i> into several files in different folders :
+</p>
+<ul class="org-ul">
+<li><code>config</code> for my configuration</li>
+<li><code>lisp</code> for imported code or library I&rsquo;ve written and not yet published</li>
+</ul>
+
+<p>
+I used to load them by hand in the <code>init.el</code> file, which is very cumbersome, so let&rsquo;s try
+to automatically load them. I want to first load the file in the <code>lisp</code> folder as they are
+potentially used by my configuration (in <code>config</code>).
+</p>
+
+<p>
+Let&rsquo;s define some functions that would do the job.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">vde/el-load-dir</span> (dir)
+  <span class="org-doc">"Load el files from the given folder"</span>
+  (<span class="org-keyword">let</span> ((files (directory-files dir nil <span class="org-string">"</span><span class="org-string"><span class="org-warning">\</span></span><span class="org-string">.el$"</span>)))
+    (<span class="org-keyword">while</span> files
+      (load-file (concat dir (<span class="org-keyword">pop</span> files))))))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">vde/short-hostname</span> ()
+  <span class="org-doc">"Return hostname in short (aka wakasu.local -&gt; wakasu)"</span>
+  (string-match <span class="org-string">"[0-9A-Za-z-]+"</span> system-name)
+  (substring system-name (match-beginning 0) (match-end 0)))
+</pre>
+</div>
+
+<p>
+Let&rsquo;s define some constants early, based on the system, and the environment, to be able to
+use those later on to skip some package or change some configuration accordingly.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defconst</span> <span class="org-variable-name">*sys/gui*</span>
+  (display-graphic-p)
+  <span class="org-doc">"Are we running on a GUI Emacs ?"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">*sys/linux*</span>
+  (eq system-type 'gnu/linux)
+  <span class="org-doc">"Are we running on a GNU/Linux system?"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">*sys/mac*</span>
+  (eq system-type 'darwin)
+  <span class="org-doc">"Are we running on a Mac system?"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">*sys/root*</span>
+  (string-equal <span class="org-string">"root"</span> (getenv <span class="org-string">"USER"</span>))
+  <span class="org-doc">"Are you a ROOT user?"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">*nix*</span>
+  (executable-find <span class="org-string">"nix"</span>)
+  <span class="org-doc">"Do we have nix? (aka are we running in NixOS or a system using nixpkgs)"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">*rg*</span>
+  (executable-find <span class="org-string">"rg"</span>)
+  <span class="org-doc">"Do we have ripgrep?"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">*gcc*</span>
+  (executable-find <span class="org-string">"gcc"</span>)
+  <span class="org-doc">"Do we have gcc?"</span>)
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">*git*</span>
+  (executable-find <span class="org-string">"git"</span>)
+  <span class="org-doc">"Do we have git?"</span>)
+
+(<span class="org-keyword">defvar</span> <span class="org-variable-name">*sys/full*</span>
+  (member (vde/short-hostname) '(<span class="org-string">"wakasu"</span> <span class="org-string">"naruhodo"</span>)) <span class="org-comment-delimiter">; </span><span class="org-comment">"naruhodo" &lt;- put naruhodo back in</span>
+  <span class="org-doc">"Is it a full system ?"</span>)
+(<span class="org-keyword">defvar</span> <span class="org-variable-name">*sys/light*</span>
+  (not *sys/full*)
+  <span class="org-doc">"Is it a light system ?"</span>)
+</pre>
+</div>
+
+<p>
+Now, in order to load <code>lisp</code> and <code>config</code> files, it&rsquo;s just a matter of calling this
+function with the right argument.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-to-list 'load-path (concat user-emacs-directory <span class="org-string">"lisp/"</span>))
+(add-to-list 'load-path (concat user-emacs-directory <span class="org-string">"lisp/vorg"</span>))
+(<span class="org-keyword">require</span> '<span class="org-constant">init-func</span>)
+(vde/el-load-dir (concat user-emacs-directory <span class="org-string">"/config/"</span>))
+</pre>
+</div>
+
+<p>
+Finally, I want to be able to load files for a specific machine, in case I need it (not
+entirely sure why yet but…)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">if</span> (file-exists-p (downcase (concat user-emacs-directory <span class="org-string">"/hosts/"</span> (vde/short-hostname) <span class="org-string">".el"</span>)))
+    (load-file (downcase (concat user-emacs-directory <span class="org-string">"/hosts/"</span> (vde/short-hostname) <span class="org-string">".el"</span>))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Counting%20the%20time%20of%20loading" class="outline-3">
+<h3 id="Counting%20the%20time%20of%20loading">Counting the time of loading</h3>
+<div class="outline-text-3" id="text-Counting%20the%20time%20of%20loading">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">let</span> ((elapsed (float-time (time-subtract (current-time)
+                                          emacs-start-time))))
+  (message <span class="org-string">"Loading %s...done (%.3fs)"</span> load-file-name elapsed))
+
+(add-hook 'after-init-hook
+          `(<span class="org-keyword">lambda</span> ()
+             (<span class="org-keyword">let</span> ((elapsed
+                    (float-time
+                     (time-subtract (current-time) emacs-start-time))))
+               (message <span class="org-string">"Loading %s...done (%.3fs) [after-init]"</span>
+                        ,load-file-name elapsed))) <span class="org-warning">t)</span>
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-Configurations" class="outline-2">
+<h2 id="Configurations">Configurations</h2>
+<div class="outline-text-2" id="text-Configurations">
+<p>
+As seen above, I split my configurations in a <code>config</code> folder. Each of those configuration
+has its own documentation, on its own page. Ideally, each module is optional and can be
+skipped if not desired. In practice though, I load all of them, because this is my
+config. I haven&rsquo;t really tried loading them all individually to make sure I don&rsquo;t have
+links between them.
+</p>
+
+<ul class="org-ul">
+<li>Core System
+<ul class="org-ul">
+<li><a href="emacs_keep_it_clean.html">keep emacs clean</a></li>
+<li><a href="emacs_appearance.html">appearance</a></li>
+<li>editing</li>
+<li>navigation</li>
+<li>buffer and windows</li>
+<li>files (with dired)</li>
+</ul></li>
+<li>Version control</li>
+<li><a href="emacs_projects.html">Projects</a></li>
+<li>Programming
+<ul class="org-ul">
+<li>emacs-lisp</li>
+<li>go</li>
+<li>nix</li>
+</ul></li>
+<li>Writing</li>
+<li>Task management
+<ul class="org-ul">
+<li><a href="my_organizational_workflow.html">Org-mode and agenda</a> aka &ldquo;My Organization Workflow&rdquo;</li>
+</ul></li>
+<li>Communications
+<ul class="org-ul">
+<li><a href="config_email_configuration.html">Email configuration</a>, notably using <a href="gnus.html">Gnus</a> and <a href="notmuch.html">notmuch</a>.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="outline-container-Nix%28eries%29" class="outline-2">
+<h2 id="Nix%28eries%29">Nix(eries)</h2>
+<div class="outline-text-2" id="text-Nix%28eries%29">
+<p>
+I am using <a href="nixos.html">NixOS</a> and <a href="nix.html">Nix</a>, thus I do have a nix specific setup for Emacs.
+</p>
+</div>
+
+<div id="outline-container-Scripts" class="outline-3">
+<h3 id="Scripts">Scripts</h3>
+<div class="outline-text-3" id="text-Scripts">
+<p>
+I have a few scripts and desktop files that I want to get installed in my environment.
+</p>
+</div>
+
+<div id="outline-container-capture" class="outline-4">
+<h4 id="capture">capture</h4>
+<div class="outline-text-4" id="text-capture">
+<p>
+The first one is a capture command that starts a new frame using the <code>org</code> daemon so that
+I can quickly capture something from anywhere.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="org53b4124"><span class="org-nix-attribute">capture</span> = pkgs.writeScriptBin <span class="org-string">"capture"</span> <span class="org-string">''</span>
+<span class="org-string">  #!</span><span class="org-nix-antiquote">${</span>pkgs.stdenv.shell<span class="org-nix-antiquote">}</span>
+<span class="org-string">  emacsclient -s /run/user/1000/emacs/org -n -F '((name . "capture") (width . 150) (height . 90))' -e '(org-capture)'</span>
+<span class="org-string">''</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-emacsclient%20helpers" class="outline-4">
+<h4 id="emacsclient%20helpers">emacsclient helpers</h4>
+<div class="outline-text-4" id="text-emacsclient%20helpers">
+<p>
+<code>ec</code> will start an emacs &ldquo;window&rdquo; frame from the emacs org server.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="org7baa974"><span class="org-nix-attribute">ec</span> = pkgs.writeScriptBin <span class="org-string">"ec"</span> <span class="org-string">''</span>
+<span class="org-string">  #!</span><span class="org-nix-antiquote">${</span>pkgs.stdenv.shell<span class="org-nix-antiquote">}</span>
+<span class="org-string">  emacsclient -s /run/user/1000/emacs/org --create-frame $@</span>
+<span class="org-string">''</span>;
+</pre>
+</div>
+
+<p>
+<code>ec</code> will start an emacs termimal frame from the emacs org server.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="orge349e27"><span class="org-nix-attribute">et</span> = pkgs.writeScriptBin <span class="org-string">"et"</span> <span class="org-string">''</span>
+<span class="org-string">  #!</span><span class="org-nix-antiquote">${</span>pkgs.stdenv.shell<span class="org-nix-antiquote">}</span>
+<span class="org-string">  emacsclient -s /run/user/1000/emacs/org --tty $@</span>
+<span class="org-string">''</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-portable%20dump%20command" class="outline-4">
+<h4 id="portable%20dump%20command">portable dump command</h4>
+<div class="outline-text-4" id="text-portable%20dump%20command">
+<p>
+<code>e</code> starts emacs using the portable dump.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="orge77203e"><span class="org-nix-attribute">e</span> = pkgs.writeScriptBin <span class="org-string">"e"</span> <span class="org-string">''</span>
+<span class="org-string">  #!</span><span class="org-nix-antiquote">${</span>pkgs.stdenv.shell<span class="org-nix-antiquote">}</span>
+<span class="org-string">  emacs --dump-file=~/.config/emacs/emacs.pdmp $@</span>
+<span class="org-string">''</span>;
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Desktop%20files" class="outline-3">
+<h3 id="Desktop%20files">Desktop files</h3>
+<div class="outline-text-3" id="text-Desktop%20files">
+<ul class="org-ul">
+<li><p>
+<code>org-protocol.desktop</code>: this register the org protocol in xdg.
+</p>
+<div class="org-src-container">
+<pre class="src src-conf">[<span class="org-type">Desktop Entry</span>]
+<span class="org-variable-name">Name</span>=org-protocol
+<span class="org-variable-name">Exec</span>=emacsclient -s /run/user/1000/emacs/org -n %u
+<span class="org-variable-name">Type</span>=Application
+<span class="org-variable-name">Terminal</span>=false
+<span class="org-variable-name">Categories</span>=System;
+<span class="org-variable-name">MimeType</span>=x-scheme-handler/org-protocol;
+</pre>
+</div></li>
+<li><p>
+<code>ec.desktop</code>: this starts a new frame on the <code>org</code> daemon.
+</p>
+<div class="org-src-container">
+<pre class="src src-conf">[<span class="org-type">Desktop Entry</span>]
+<span class="org-variable-name">Name</span>=Emacs (client)
+<span class="org-variable-name">Exec</span>=ec
+<span class="org-variable-name">Type</span>=Application
+<span class="org-variable-name">Terminal</span>=false
+<span class="org-variable-name">Categories</span>=System;
+<span class="org-variable-name">Icon</span>=emacs;
+</pre>
+</div></li>
+<li><p>
+<code>capture.desktop</code>: this runs the <code>capture</code> script above
+</p>
+<div class="org-src-container">
+<pre class="src src-conf">[<span class="org-type">Desktop Entry</span>]
+<span class="org-variable-name">Name</span>=Emacs capture
+<span class="org-variable-name">Exec</span>=capture
+<span class="org-variable-name">Type</span>=Application
+<span class="org-variable-name">Terminal</span>=false
+<span class="org-variable-name">Categories</span>=System;
+<span class="org-variable-name">Icon</span>=emacs;
+</pre>
+</div></li>
+</ul>
+
+<p>
+And then, we need to link those up :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="org5c0598b">home.file.<span class="org-string">".local/share/applications/org-protocol.desktop"</span>.<span class="org-nix-attribute">source</span> = <span class="org-nix-constant">./emacs/org-protocol.desktop</span>;
+home.file.<span class="org-string">".local/share/applications/ec.desktop"</span>.<span class="org-nix-attribute">source</span> = <span class="org-nix-constant">./emacs/ec.desktop</span>;
+home.file.<span class="org-string">".local/share/applications/capture.desktop"</span>.<span class="org-nix-attribute">source</span> = <span class="org-nix-constant">./emacs/capture.desktop</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Home%20packages" class="outline-3">
+<h3 id="Home%20packages">Home packages</h3>
+<div class="outline-text-3" id="text-Home%20packages">
+<p>
+We need to install a few packages:
+</p>
+<ul class="org-ul">
+<li><code>ditaa</code> and <code>graphiz</code> are there for org-mode and org-babel</li>
+<li><code>pandoc</code> is for when I when to migrate a document from markdown to org-mode or the opposite</li>
+<li><code>sqlite</code> is for packages like <code>forge</code></li>
+<li><code>zip</code> is… always useful</li>
+<li><code>capture</code> is the script defined abovoe.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="org524401b"><span class="org-nix-attribute">home.packages</span> = <span class="org-nix-keyword">with</span> pkgs; [
+  ditaa
+  graphviz
+  pandoc
+  sqlite
+  zip
+  <span class="org-comment"># See if I can hide this under an option</span>
+  capture
+  e
+  ec
+  et
+];
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-%3Dprograms.emacs%3D" class="outline-3">
+<h3 id="%3Dprograms.emacs%3D"><code>programs.emacs</code></h3>
+<div class="outline-text-3" id="text-%3Dprograms.emacs%3D">
+<p>
+<code>home-manager</code> comes with a modules named <code>programs.emacs</code>, so we are going to use it
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="org6d6dc2f"><span class="org-nix-attribute">programs.emacs</span> = {
+  <span class="org-nix-attribute">enable</span> = <span class="org-nix-builtin">true</span>;
+  <span class="org-nix-attribute">package</span> = pkgs.my.emacs;
+  <span class="org-nix-attribute">extraPackages</span> = myExtraPackages;
+};
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-nix" id="orge61a240"><span class="org-nix-attribute">myExtraPackages</span> = epkgs: <span class="org-nix-keyword">with</span> epkgs; [
+  ace-window
+  aggressive-indent
+  async
+  avy
+  bbdb
+  beginend
+  color-identifiers-mode
+  company
+  company-emoji
+  company-go
+  dash
+  delight
+  diredfl
+  dired-collapse
+  dired-git-info
+  dired-narrow
+  dired-quick-sort
+  dired-rsync
+  dired-subtree
+  dockerfile-mode
+  dumb-jump
+  easy-kill
+  edit-indirect
+  envrc
+  esh-autosuggest
+  eshell-prompt-extras
+  esup
+  expand-region
+  flimenu
+  flycheck
+  flycheck-golangci-lint
+  git-annex
+  git-commit
+  gitattributes-mode
+  gitconfig-mode
+  github-review
+  gitignore-mode
+  go-mode
+  go-stacktracer
+  gotest
+  goto-last-change
+  hardhat
+  helpful
+  highlight
+  highlight-indentation
+  highlight-numbers
+  ibuffer-vc
+  icomplete-vertical
+  iedit
+  json-mode
+  magit
+  magit-annex
+  magit-popup
+  magit-todos
+  markdown-mode
+  minions
+  modus-operandi-theme
+  moody
+  mwim
+  nix-buffer
+  nix-mode
+  nixpkgs-fmt
+  no-littering
+  ob-async
+  ob-go
+  ob-http
+  olivetti
+  orderless
+  org-capture-pop-frame
+  org-gcal
+  org-journal
+  org-plus-contrib
+  org-ql
+  org-ref
+  org-roam
+  org-super-agenda
+  org-superstar
+  org-tree-slide
+  org-web-tools
+  orgit
+  ox-pandoc
+  pandoc-mode
+  pdf-tools
+  pkgs.bookmark-plus
+  pkgs.dired-plus
+  projectile
+  python-mode
+  rainbow-delimiters
+  rainbow-mode
+  rg
+  ripgrep
+  scratch
+  shr-tag-pre-highlight
+  smartparens
+  symbol-overlay
+  trashed
+  try
+  undo-tree
+  use-package
+  visual-fill-column
+  visual-regexp
+  vterm
+  web-mode
+  wgrep
+  whole-line-or-region
+  with-editor
+  xterm-color
+  yaml-mode
+];
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Emacs%20%2Fserver%2F" class="outline-3">
+<h3 id="Emacs%20%2Fserver%2F">Emacs <i>server</i></h3>
+<div class="outline-text-3" id="text-Emacs%20%2Fserver%2F">
+<div class="org-src-container">
+<pre class="src src-nix" id="orgd8099cb"><span class="org-nix-attribute">services.emacs-server</span> = {
+  <span class="org-nix-attribute">enable</span> = <span class="org-nix-builtin">true</span>;
+  <span class="org-nix-attribute">package</span> = pkgs.my.emacs;
+  <span class="org-nix-attribute">name</span> = <span class="org-string">"org"</span>;
+  <span class="org-nix-attribute">shell</span> = pkgs.zsh + <span class="org-string">"/bin/zsh -i -c"</span>;
+  <span class="org-comment"># FIXME do this in the derivation :)</span>
+  <span class="org-comment"># extraOptions = "--dump-file=${config.home.homeDirectory}/.config/emacs/emacs.pdmp";</span>
+};
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Commands%20and%20sessions%20variables" class="outline-3">
+<h3 id="Commands%20and%20sessions%20variables">Commands and sessions variables</h3>
+<div class="outline-text-3" id="text-Commands%20and%20sessions%20variables">
+<p>
+Let&rsquo;s define some useful <i>commands</i> that can be used
+</p>
+
+<p>
+Let&rsquo;s define some
+</p>
+</div>
+</div>
+
+<div id="outline-container-Legacy" class="outline-3">
+<h3 id="Legacy">Legacy</h3>
+<div class="outline-text-3" id="text-Legacy">
+<div class="org-src-container">
+<pre class="src src-nix" id="org5b88dbd"><span class="org-nix-attribute">home.sessionVariables</span> = {
+  <span class="org-nix-attribute">EDITOR</span> = <span class="org-string">"et"</span>;
+  <span class="org-nix-attribute">ALTERNATE_EDITOR</span> = <span class="org-string">"et"</span>;
+};
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Configuration%20layout" class="outline-3">
+<h3 id="Configuration%20layout">Configuration layout</h3>
+<div class="outline-text-3" id="text-Configuration%20layout">
+<p>
+Here we define the <code>emacs.nix</code> file that gets generated by the source blocks in our Org
+document. This is the file that actually gets loaded on startup. The placeholders in
+angled brackets correspond to the <code>NAME</code> directives above the <code>SRC</code> blocks throughout this
+document.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nix"><span class="org-comment-delimiter"># </span><span class="org-comment">Note: this file is autogenerated from an org-mode file.</span>
+{ config, lib, pkgs, ... }:
+
+<span class="org-nix-keyword">with</span> lib;
+<span class="org-nix-keyword">let</span>
+  &lt;<span class="org-nix-constant">&lt;script-capture&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;script-e&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;script-et&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;script-ec&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;myExtraPackages&gt;</span>&gt;
+<span class="org-nix-keyword">in</span>
+{
+  &lt;<span class="org-nix-constant">&lt;desktop-files&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;packages&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;programs.emacs&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;emacs-server&gt;</span>&gt;
+  &lt;<span class="org-nix-constant">&lt;legacy&gt;</span>&gt;
+}
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-Inspirations" class="outline-2">
+<h2 id="Inspirations">Inspirations</h2>
+<div class="outline-text-2" id="text-Inspirations">
+<p>
+This is inspired by a crazy amount of configurations (litterate or note):
+</p>
+
+<ul class="org-ul">
+<li><a href="https://protesilaos.com/dotemacs/">Protesilaos Stravou&rsquo;s dotemacs</a></li>
+<li><a href="https://tecosaur.github.io/emacs-config/config.html">Doom Emacs Configuration</a> from <a href="https://github.com/tecosaur">tecosaur</a></li>
+<li><a href="https://gitlab.com/ndw/dotfiles">https://gitlab.com/ndw/dotfiles</a></li>
+<li><a href="https://github.com/MatthewZMD/.emacs.d">https://github.com/MatthewZMD/.emacs.d</a></li>
+<li><a href="https://github.com/alhassy/emacs.d">https://github.com/alhassy/emacs.d</a></li>
+<li><a href="https://github.com/chmouel/emacs-config">https://github.com/chmouel/emacs-config</a></li>
+<li><a href="https://github.com/seagle0128/.emacs.d">https://github.com/seagle0128/.emacs.d</a></li>
+<li><a href="https://github.com/hlissner/doom-emacs">https://github.com/hlissner/doom-emacs</a></li>
+<li><a href="http://doc.norang.ca/org-mode.html">http://doc.norang.ca/org-mode.html</a></li>
+</ul>
+
+<p>
+And also:
+</p>
+
+<ul class="org-ul">
+<li><a href="https://sriramkswamy.github.io/dotemacs/">Emacs configuration file</a></li>
+<li><a href="https://blog.d46.us/advanced-emacs-startup/">Advanced Techniques for Reducing Emacs Startup Time</a></li>
+<li><a href="https://www.bartuka.com/posts/emacs-config/index.html">@bartuka: emacs.d</a></li>
+<li><a href="http://www.howardism.org/Technical/Emacs/getting-boxes-done.html">Getting Boxes Done</a></li>
+<li><a href="https://idiocy.org/emacs-fonts-and-fontsets.html">Emacs, fonts and fontsets</a></li>
+<li><a href="https://spin.atomicobject.com/2016/05/27/write-emacs-package/">A Simple Guide to Writing &amp; Publishing Emacs Packages</a></li>
+<li><a href="https://alphapapa.github.io/emacs-package-dev-handbook/">The Emacs Package Developer&rsquo;s Handbook</a></li>
+<li><a href="https://tecosaur.github.io/emacs-config/config.html">Doom Emacs Configuration</a></li>
+</ul>
+</div>
+</section>
+
+
+<section id="outline-container-Links" class="outline-2">
+<h2 id="Links">Links</h2>
+<div class="outline-text-2" id="text-Links">
+<p>
+Here is a compilation of <i>random</i> articles around GNU/Emacs that I found interesting to
+share. I may add comment on those too.
+</p>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Faliquote.org%2Fpost%2Fminimalist-emacs%2F%5D%5BMinimalist%20Emacs%20-%20aliquot%EF%A3%BF%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Faliquote.org%2Fpost%2Fminimalist-emacs%2F%5D%5BMinimalist%20Emacs%20-%20aliquot%EF%A3%BF%5D%5D"><span class="todo TODO">TODO</span> <a href="https://aliquote.org/post/minimalist-emacs/">Minimalist Emacs - aliquot</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Faliquote.org%2Fpost%2Fminimalist-emacs%2F%5D%5BMinimalist%20Emacs%20-%20aliquot%EF%A3%BF%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-09-17 Thu 17:55]</span></span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fkensanata%2Fggg%23gmail-gnus-gpg-guide-gggg%5D%5Bkensanata%2Fggg%3A%20Gmail%2C%20Gnus%20and%20GPG%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2Fkensanata%2Fggg%23gmail-gnus-gpg-guide-gggg%5D%5Bkensanata%2Fggg%3A%20Gmail%2C%20Gnus%20and%20GPG%5D%5D"><a href="https://github.com/kensanata/ggg#gmail-gnus-gpg-guide-gggg">kensanata/ggg: Gmail, Gnus and GPG</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2Fkensanata%2Fggg%23gmail-gnus-gpg-guide-gggg%5D%5Bkensanata%2Fggg%3A%20Gmail%2C%20Gnus%20and%20GPG%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-07-08 Wed 07:37]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.greghendershott.com%2F2017%2F02%2Femacs-themes.html%5D%5BEmacs%20Themes%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.greghendershott.com%2F2017%2F02%2Femacs-themes.html%5D%5BEmacs%20Themes%5D%5D"><a href="https://www.greghendershott.com/2017/02/emacs-themes.html">Emacs Themes</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.greghendershott.com%2F2017%2F02%2Femacs-themes.html%5D%5BEmacs%20Themes%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-02 Tue 18:07]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fdegruchy.org%2F2020%2F05%2F26%2Fbinding-emacs%2F%5D%5BBinding%20Emacs%20%E2%80%93%20Verily%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fdegruchy.org%2F2020%2F05%2F26%2Fbinding-emacs%2F%5D%5BBinding%20Emacs%20%E2%80%93%20Verily%5D%5D"><a href="https://degruchy.org/2020/05/26/binding-emacs/">Binding Emacs – Verily</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fdegruchy.org%2F2020%2F05%2F26%2Fbinding-emacs%2F%5D%5BBinding%20Emacs%20%E2%80%93%20Verily%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-02 Tue 18:04]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fmihaiolteanu.me%2Feshell-toggle%2F%5D%5BHow%20to%20create%20and%20jump%20to%20eshell%20buffers%20with%20a%20single%20command%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fmihaiolteanu.me%2Feshell-toggle%2F%5D%5BHow%20to%20create%20and%20jump%20to%20eshell%20buffers%20with%20a%20single%20command%5D%5D"><a href="https://mihaiolteanu.me/eshell-toggle/">How to create and jump to eshell buffers with a single command</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fmihaiolteanu.me%2Feshell-toggle%2F%5D%5BHow%20to%20create%20and%20jump%20to%20eshell%20buffers%20with%20a%20single%20command%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-05-29 Fri 15:05]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Ffk7p49%2Fpiping_stdout_to_emacs%2F%5D%5BPiping%20stdout%20to%20Emacs%20%3A%20emacs%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Ffk7p49%2Fpiping_stdout_to_emacs%2F%5D%5BPiping%20stdout%20to%20Emacs%20%3A%20emacs%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.reddit.com/r/emacs/comments/fk7p49/piping_stdout_to_emacs/">Piping stdout to Emacs : emacs</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.reddit.com%2Fr%2Femacs%2Fcomments%2Ffk7p49%2Fpiping_stdout_to_emacs%2F%5D%5BPiping%20stdout%20to%20Emacs%20%3A%20emacs%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-24 Tue 07:54]</span></span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fexplog.in%2Fnotes%2Fpoet.html%5D%5BMaking%20Poet%2C%20an%20Emacs%20theme%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fexplog.in%2Fnotes%2Fpoet.html%5D%5BMaking%20Poet%2C%20an%20Emacs%20theme%5D%5D"><span class="todo TODO">TODO</span> <a href="https://explog.in/notes/poet.html">Making Poet, an Emacs theme</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fexplog.in%2Fnotes%2Fpoet.html%5D%5BMaking%20Poet%2C%20an%20Emacs%20theme%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-25 Wed 16:58]</span></span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwillschenk.com%2Farticles%2F2020%2Ftramp_tricks%2F%5D%5BEmacs%20Tramp%20tricks%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwillschenk.com%2Farticles%2F2020%2Ftramp_tricks%2F%5D%5BEmacs%20Tramp%20tricks%5D%5D"><span class="todo TODO">TODO</span> <a href="https://willschenk.com/articles/2020/tramp_tricks/">Emacs Tramp tricks</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwillschenk.com%2Farticles%2F2020%2Ftramp_tricks%2F%5D%5BEmacs%20Tramp%20tricks%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-03-08 Sun 16:44]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fazzamsa.com%2Fn%2Fscripts-el%2F%5D%5BUseful%20Emacs%20Lisp%20Scripts%C2%A0%F0%9F%8C%B1%20%C2%B7%20AZZAMSA%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fazzamsa.com%2Fn%2Fscripts-el%2F%5D%5BUseful%20Emacs%20Lisp%20Scripts%C2%A0%F0%9F%8C%B1%20%C2%B7%20AZZAMSA%5D%5D"><span class="todo TODO">TODO</span> <a href="https://azzamsa.com/n/scripts-el/">Useful Emacs Lisp Scripts 🌱 · AZZAMSA</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fazzamsa.com%2Fn%2Fscripts-el%2F%5D%5BUseful%20Emacs%20Lisp%20Scripts%C2%A0%F0%9F%8C%B1%20%C2%B7%20AZZAMSA%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-18 Thu 18:41]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2020%2F06%2F10%2Fcomment-commands-redux%2F%5D%5BComment%20Commands%20Redux%20%7C%20Emacs%20Redux%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2020%2F06%2F10%2Fcomment-commands-redux%2F%5D%5BComment%20Commands%20Redux%20%7C%20Emacs%20Redux%5D%5D"><span class="todo TODO">TODO</span> <a href="https://emacsredux.com/blog/2020/06/10/comment-commands-redux/">Comment Commands Redux | Emacs Redux</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Femacsredux.com%2Fblog%2F2020%2F06%2F10%2Fcomment-commands-redux%2F%5D%5BComment%20Commands%20Redux%20%7C%20Emacs%20Redux%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-23 Tue 17:45]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2FMatthewZMD%2F.emacs.d%5D%5BMatthewZMD%2F.emacs.d%3A%20M-EMACS%2C%20a%20full-feature%20GNU%20Emacs%20configuration%20distribution%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2FMatthewZMD%2F.emacs.d%5D%5BMatthewZMD%2F.emacs.d%3A%20M-EMACS%2C%20a%20full-feature%20GNU%20Emacs%20configuration%20distribution%5D%5D"><span class="todo TODO">TODO</span> <a href="https://github.com/MatthewZMD/.emacs.d">MatthewZMD/.emacs.d: M-EMACS, a full-feature GNU Emacs configuration distribution</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2FMatthewZMD%2F.emacs.d%5D%5BMatthewZMD%2F.emacs.d%3A%20M-EMACS%2C%20a%20full-feature%20GNU%20Emacs%20configuration%20distribution%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-06-29 Mon 11:35]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwritequit.org%2Feos%2Feos.html%5D%5BThe%20Emacs%20Operating%20System%20%28EOS%29%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwritequit.org%2Feos%2Feos.html%5D%5BThe%20Emacs%20Operating%20System%20%28EOS%29%5D%5D"><span class="todo TODO">TODO</span> <a href="https://writequit.org/eos/eos.html">The Emacs Operating System (EOS)</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwritequit.org%2Feos%2Feos.html%5D%5BThe%20Emacs%20Operating%20System%20%28EOS%29%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-07-02 Thu 18:20]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjustin.abrah.ms%2Fdotfiles%2Femacs.html%5D%5BMy%20Emacs%20Configuration%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjustin.abrah.ms%2Fdotfiles%2Femacs.html%5D%5BMy%20Emacs%20Configuration%5D%5D"><span class="todo TODO">TODO</span> <a href="https://justin.abrah.ms/dotfiles/emacs.html">My Emacs Configuration</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjustin.abrah.ms%2Fdotfiles%2Femacs.html%5D%5BMy%20Emacs%20Configuration%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-07-15 Wed 12:29]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fjakemccrary.com%2Fblog%2F2020%2F11%2F14%2Fspeeding-up-magit%2F%5D%5BSpeeding%20up%20magit%20-%20Jake%20McCrary%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fjakemccrary.com%2Fblog%2F2020%2F11%2F14%2Fspeeding-up-magit%2F%5D%5BSpeeding%20up%20magit%20-%20Jake%20McCrary%5D%5D"><span class="todo TODO">TODO</span> <a href="https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/">Speeding up magit - Jake McCrary</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fjakemccrary.com%2Fblog%2F2020%2F11%2F14%2Fspeeding-up-magit%2F%5D%5BSpeeding%20up%20magit%20-%20Jake%20McCrary%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-11-17 Tue 18:09]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Ftech.toryanderson.com%2F2020%2F11%2F13%2Fmigrating-to-a-custom-file-less-setup%2F%5D%5BMigrating%20to%20a%20custom-file-less%20setup%20%7C%20Tech.ToryAnderson.com%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Ftech.toryanderson.com%2F2020%2F11%2F13%2Fmigrating-to-a-custom-file-less-setup%2F%5D%5BMigrating%20to%20a%20custom-file-less%20setup%20%7C%20Tech.ToryAnderson.com%5D%5D"><span class="todo TODO">TODO</span> <a href="https://tech.toryanderson.com/2020/11/13/migrating-to-a-custom-file-less-setup/">Migrating to a custom-file-less setup | Tech.ToryAnderson.com</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Ftech.toryanderson.com%2F2020%2F11%2F13%2Fmigrating-to-a-custom-file-less-setup%2F%5D%5BMigrating%20to%20a%20custom-file-less%20setup%20%7C%20Tech.ToryAnderson.com%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-11-19 Thu 11:00]</span></span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fwww.philnewton.net%2Fblog%2Fleanpub-with-emacs%2F%5D%5BWriting%20a%20Leanpub%20book%20with%20Emacs%20-%20philnewton.net%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fwww.philnewton.net%2Fblog%2Fleanpub-with-emacs%2F%5D%5BWriting%20a%20Leanpub%20book%20with%20Emacs%20-%20philnewton.net%5D%5D"><span class="todo TODO">TODO</span> <a href="https://www.philnewton.net/blog/leanpub-with-emacs/">Writing a Leanpub book with Emacs - philnewton.net</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fwww.philnewton.net%2Fblog%2Fleanpub-with-emacs%2F%5D%5BWriting%20a%20Leanpub%20book%20with%20Emacs%20-%20philnewton.net%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-11-19 Thu 11:11]</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fen.liujiacai.net%2F2020%2F11%2F29%2Fwhy-emacs%2F%5D%5BWhat%20you%20need%20to%20know%20before%20try%20Emacs%20-%20KeepCoding%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fen.liujiacai.net%2F2020%2F11%2F29%2Fwhy-emacs%2F%5D%5BWhat%20you%20need%20to%20know%20before%20try%20Emacs%20-%20KeepCoding%5D%5D"><span class="todo TODO">TODO</span> <a href="https://en.liujiacai.net/2020/11/29/why-emacs/">What you need to know before try Emacs - KeepCoding</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fen.liujiacai.net%2F2020%2F11%2F29%2Fwhy-emacs%2F%5D%5BWhat%20you%20need%20to%20know%20before%20try%20Emacs%20-%20KeepCoding%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-01 Tue 08:02]</span></span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-%5B%5Bhttps%3A%2F%2Fgithub.com%2Frougier%2Fnano-emacs%5D%5Brougier%2Fnano-emacs%3A%20GNU%20Emacs%20%2F%20N%20%CE%9B%20N%20O%20-%20Emacs%20made%20simple%5D%5D" class="outline-3">
+<h3 id="%5B%5Bhttps%3A%2F%2Fgithub.com%2Frougier%2Fnano-emacs%5D%5Brougier%2Fnano-emacs%3A%20GNU%20Emacs%20%2F%20N%20%CE%9B%20N%20O%20-%20Emacs%20made%20simple%5D%5D"><span class="todo TODO">TODO</span> <a href="https://github.com/rougier/nano-emacs">rougier/nano-emacs: GNU Emacs / N Λ N O - Emacs made simple</a></h3>
+<div class="outline-text-3" id="text-%5B%5Bhttps%3A%2F%2Fgithub.com%2Frougier%2Fnano-emacs%5D%5Brougier%2Fnano-emacs%3A%20GNU%20Emacs%20%2F%20N%20%CE%9B%20N%20O%20-%20Emacs%20made%20simple%5D%5D">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2020-12-01 Tue 08:12]</span></span>
+</p>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

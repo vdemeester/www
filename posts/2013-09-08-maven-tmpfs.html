@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Maven Tmpfs</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="generator" content="Org Mode" />
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='/css/new.css' type='text/css'/>
+<link rel='stylesheet' href='/css/syntax.css' type='text/css'/>
+<link href='/index.xml' rel='alternate' type='application/rss+xml' title='Vincent Demeester' />
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Maven Tmpfs</h1>
+</header><section id="outline-container-Introduction" class="outline-2">
+<h2 id="Introduction">Introduction</h2>
+<div class="outline-text-2" id="text-Introduction">
+<p>
+Je suis un utilisateur convaincu de <a href="http://maven.apache.org/">maven</a>, malgré ces défauts, le
+moto <b>&ldquo;Convention over configuration&rdquo;</b> me va vraiment bien. Que ce soit
+au boulot ou à la maison, j&rsquo;ai plus d&rsquo;ordinateurs équipés de ssd (ou de
+mémoire flash) que de disque traditionnel (mécanique ?). Pour augmenter
+un peu la durée de vie de ces disques SSD, j&rsquo;ai cherché à savoir comment
+<i>déporter</i> le <i>build</i> de maven (qui, pour rappel, se passe dans le
+dossier <code>target/</code>) hors du SSD ; ici ce sera dans le dossier <code>/tmp/</code> qui
+est monté en mémoire (merci <code>tmpfs</code>), mais on peut imaginer déporter ça
+sur un autre disque, etc.. Après quelques recherches j&rsquo;ai trouvés
+quelques inspirations.
+</p>
+
+<blockquote>
+<p>
+<b>Limitations</b>
+</p>
+
+<p>
+Dans la solution présentée ci-dessous les principales limitations sont
+les suivantes (que j&rsquo;essaierais de diminuer au fil du temp ;P) :
+</p>
+
+<ol class="org-ol">
+<li>Il est nécessaire de modifier le pom.xml du projet ; cela ne
+s&rsquo;appliquera donc pas à tous les projets maven sans modification du
+pom.xml.</li>
+<li>Cela ne fonctionne que sur une plateforme qui support les liens
+symboliques (Linux, Mac OS X, et autre UNIX).</li>
+<li>Cela ne fonctionne qu&rsquo;avec Java 7 ou plus.</li>
+<li>Si vous utilisez m2e, il va gentillement gueuler et c&rsquo;est moche ; pour résoudre le
+problème, il faut faire un tour vers <a href="http://wiki.eclipse.org/M2E_plugin_execution_not_covered">M2E plugin execution not covered</a>.</li>
+</ol>
+</blockquote>
+
+<p>
+Pour <a href="http://maven.apache.org/">maven</a>, le dossier <code>target/</code> vient de la propriété
+<code>project.build.directory</code>. Dans la théorie, il suffirait de modifier
+(dans <code>$HOME/.m2/settings.xml</code>) cette propriété et le tour serait jouer.
+Malheuresement ce n&rsquo;est pas possible, <code>project.build.directory</code> est une
+propriété interne et n&rsquo;est, à priori, pas modifiable.
+</p>
+
+<p>
+Notre souhait est le suivant :
+</p>
+
+<ol class="org-ol">
+<li>Le build doit se faire dans <code>/tmp/m2/</code>, ce qui pour un projet se
+traduit par <code>/tmp/m2/${groupId}:${artifactId}</code>.</li>
+<li>Le dossier <code>target/</code> dans les sources est un lien symbolique vers le
+dossier dans <code>/tmp/m2/</code></li>
+<li>On passe par un <b>profile</b> qui n&rsquo;est <b>pas actif</b> par défaut (pour ne
+pas faire chier le monde) mais <b>activable via une propriété</b> (maven
+nous permet de le faire et c&rsquo;est cool <code>^_^</code>). La propriété utilisée
+sera <code>external.build.root</code>.</li>
+</ol>
+
+<p>
+Le code ci-dessous est repris directement de mon inspiration<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. Il
+s&rsquo;occupe de créer le dossier <code>${groupId}:${artifactId}</code> dans
+<code>external.build.root</code> et de faire le lien dans le dossier courant.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-xml">&lt;project&gt;
+    &lt;!-- […] --&gt;
+    &lt;profiles&gt;
+        &lt;profile&gt;
+            &lt;id&gt;external-build-dir&lt;/id&gt;
+            &lt;activation&gt;
+                &lt;activeByDefault&gt;false&lt;/activeByDefault&gt;
+                &lt;property&gt;
+                    &lt;name&gt;external.build.root&lt;/name&gt;
+                &lt;/property&gt;
+            &lt;/activation&gt;
+            &lt;build&gt;
+                &lt;plugins&gt;
+                    &lt;plugin&gt;
+                        &lt;groupId&gt;com.alexecollins.maven.plugin&lt;/groupId&gt;
+                        &lt;artifactId&gt;script-maven-plugin&lt;/artifactId&gt;
+                        &lt;version&gt;1.0.0&lt;/version&gt;
+                        &lt;executions&gt;
+                            &lt;execution&gt;
+                                &lt;id&gt;prep-work-tree&lt;/id&gt;
+                                &lt;goals&gt;
+                                    &lt;goal&gt;execute&lt;/goal&gt;
+                                &lt;/goals&gt;
+                                &lt;phase&gt;initialize&lt;/phase&gt;
+                                &lt;configuration&gt;
+                                    &lt;script&gt;
+                                        import java.nio.file.*
+                                        def dir =
+                                        "${external.build.root}/${project.groupId}:${project.artifactId}"
+                                        println "using Maven dir ${dir}"
+                                        def dirPath = Paths.get(dir)
+                                        if (!Files.exists(dirPath)) {
+                                        Files.createDirectories(dirPath)
+                                        }
+                                        def target = Paths.get("${project.build.directory}")
+                                        if (!Files.exists(target)) {
+                                        Files.createSymbolicLink(target, dirPath)
+                                        }&lt;/script&gt;
+                                &lt;/configuration&gt;
+                            &lt;/execution&gt;
+                            &lt;execution&gt;
+                                &lt;id&gt;drop-symlink&lt;/id&gt;
+                                &lt;goals&gt;
+                                    &lt;goal&gt;execute&lt;/goal&gt;
+                                &lt;/goals&gt;
+                                &lt;phase&gt;clean&lt;/phase&gt;
+                                &lt;configuration&gt;
+                                    &lt;script&gt;
+                                        import java.nio.file.*
+                                        def target = Paths.get("${project.build.directory}")
+                                        if (Files.isSymbolicLink(target)) {
+                                        Files.delete(target)
+                                        }
+                                    &lt;/script&gt;
+                                &lt;/configuration&gt;
+                            &lt;/execution&gt;
+                        &lt;/executions&gt;
+                        &lt;dependencies&gt;
+                            &lt;dependency&gt;
+                                &lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+                                &lt;artifactId&gt;groovy&lt;/artifactId&gt;
+                                &lt;version&gt;1.8.6&lt;/version&gt;
+                            &lt;/dependency&gt;
+                        &lt;/dependencies&gt;
+                        &lt;configuration&gt;
+                            &lt;language&gt;groovy&lt;/language&gt;
+                        &lt;/configuration&gt;
+                    &lt;/plugin&gt;
+                &lt;/plugins&gt;
+            &lt;/build&gt;
+        &lt;/profile&gt;
+    &lt;/profiles&gt;
+    &lt;!-- […] --&gt;
+&lt;/project&gt;
+</pre>
+</div>
+
+<p>
+Ainsi, il suffit ensuite d&rsquo;avoir quelques choses du genre dans son
+<code>$HOME/.m2/settings.xml</code> pour que les builds qui ont ce profil se
+<i>build</i> dans <code>/tmp/m2/</code>. On peut aussi ne rien avoir dans
+<code>$HOME/.m2/settings.xml</code> et utilise <code>-Dexternal.build.root=/tmp/m2/</code>
+avec la commande <code>mvn</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-xml">&lt;settings&gt;
+    &lt;!-- […] --&gt;
+    &lt;profiles&gt;
+        &lt;profile&gt;
+            &lt;id&gt;build-in-ramfs&lt;/id&gt;
+            &lt;properties&gt;
+                &lt;external.build.root&gt;/tmp/m2/&lt;/external.build.root&gt;
+            &lt;/properties&gt;
+        &lt;/profile&gt;
+    &lt;/profiles&gt;
+    &lt;activeProfiles&gt;
+        &lt;activeProfile&gt;build-in-ramfs&lt;/activeProfile&gt;
+    &lt;/activeProfiles&gt;
+    &lt;!-- […] --&gt;
+&lt;/settings&gt;
+</pre>
+</div>
+</div>
+</section>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<a href="http://elehack.net/writings/programming/maven-target-in-tmpfs">PuttingMaven build directories out-of-tree</a> par <a href="http://elehack.net/">Michal Ekstrand</a>
+</p></div></div>
+
+
+</div>
+</div></main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>

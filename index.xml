@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="utf-8-unix"?>
+<rss version="2.0"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+     xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+     xmlns:georss="http://www.georss.org/georss"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:media="http://search.yahoo.com/mrss/"><channel>
+  <title>(Posts)</title>
+  <atom:link href="https://vincent.demeester.fr/index.xml" rel="self" type="application/rss+xml" />
+  <link>https://vincent.demeester.fr/</link>
+  <description><![CDATA[]]></description>
+  <language>en</language>
+  <pubDate>Fri, 07 Oct 2022 15:52:15 +0200</pubDate>
+  <lastBuildDate>Fri, 07 Oct 2022 15:52:15 +0200</lastBuildDate>
+  <generator>Emacs 29.0 Org-mode 9.5.5</generator>
+  <webMaster>t (Vincent Demeester)</webMaster>
+  <image>
+    <url>http://orgmode.org/img/org-mode-unicorn-logo.png</url>
+    <title>(Posts)</title>
+    <link>https://vincent.demeester.fr/</link>
+  </image>
+
+  <item>
+    <title>Status update, June 2020</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2020-07-08-june-status-update.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2020-07-08-june-status-update.org</guid>
+    <pubDate>Wed, 08 Jul 2020 00:00:00 +0200</pubDate>
+
+    <description><![CDATA[<p>
+    Time for the first new monthly status update! I do like those updates from <a href="https://drewdevault.com/2020/06/15/Status-update.html">Drew DeVault</a>
+    and <a href="https://emersion.fr/blog/2020/status-update-19/">Simon Ser</a>, so I figured, why not trying myself 🙃. I am not sure where to start and
+    where to end, but I guess I'll figure things out as I go.
+    </p>
+
+
+    <p>
+    <a href="legacy/posts/2020-07-08-june-status-update.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>website update</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2020-06-21-website-update.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2020-06-21-website-update.org</guid>
+    <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
+
+    <description><![CDATA[<p>
+    A really small article to talk about small updates on the website (<i>well, maybe not that
+    small</i>). In a gist: a new css and articles changes.
+    </p>
+
+    <ul class="org-ul">
+    <li>Updating the style of the website to something really similar to <a href="https://newcss.net/">new.css</a>. It is way
+    simpler and <i>pleasing</i> (at least for me).</li>
+    <li>My <a href="../articles"><code>/articles</code></a> are now exporting from my <a href="../articles/personal_knowledge_base.html">personal knowledge base</a>, powered by
+    <a href="../articles/org_roam.html"><code>org-roam</code></a>.</li>
+    <li>A new <a href="https://dl.sbr.pm/"><code>/files</code></a> part is available, where I share some random file. See for example the
+    <a href="https://dl.sbr.pm/wallpapers/dynamics/">dynamic wallpaper</a> part.</li>
+    </ul>
+
+    <p>
+    <a href="legacy/posts/2020-06-21-website-update.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Emacs bankruptcy is fun</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2020-04-15-emacs-bankruptcy-is-fun.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2020-04-15-emacs-bankruptcy-is-fun.org</guid>
+    <pubDate>Wed, 15 Apr 2020 00:00:00 +0200</pubDate>
+
+    <description><![CDATA[<p>
+    Since go 1.14 go released, I've had a broken <code>go-mode</code> setup on my Emacs. I was using
+    <code>lsp-mode</code> and <code>gopls</code> and well, the update broke everything. I initally try to fix it but
+    I made it worse. At the same time, I started to get fed up with some performance issue of
+    my configuration and how slow my Emacs starts, about 6s.
+    </p>
+
+    <p>
+    I, thus, declared my third Emacs bankruptcy, <code>:disabled</code> everything and slowly started
+    from scratch, with the following goal:
+    </p>
+
+    <ul class="org-ul">
+    <li>Have it start quick, as less than a second, not too much more than <code>emacs -Q</code> would</li>
+    <li>Disable anything that I don't use often initially</li>
+    <li>Try to use as much built-in as possible (example: using <code>icomplete</code> instead of
+    <code>ivy=/=counsel</code>)</li>
+    </ul>
+
+
+    <p>
+    <a href="legacy/posts/2020-04-15-emacs-bankruptcy-is-fun.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Migrating to an org-mode website</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2020-03-22-org-mode-website.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2020-03-22-org-mode-website.org</guid>
+    <pubDate>Sun, 22 Mar 2020 00:00:00 +0100</pubDate>
+
+    <description><![CDATA[<div class='drawer properties'>
+    <h6>Properties</h6>
+    <p>
+    :ID:       24a765bd-a0ed-42cf-b96c-db667f7d37e2
+    </p>
+    </div>
+
+    <p>
+    This is a story… a story of me changing the way I code and publish my website. In the
+    past, I've switch from <a href="https://vincent.demeester.fr/posts/2012-05-07-reinit-and-jekyll/">Jekyll</a> to <a href="https://vincent.demeester.fr/posts/2015-05-01-orgmode-et-jekyll/">"<code>orgmode</code> and Jekyll"</a> to <a href="https://vincent.demeester.fr/posts/2015-05-09-migration-to-hugo/">Hugo</a> (sorry those are written
+    in french). The past year, I've written and documented myself a little bit about
+    <a href="https://www.theminimalists.com/minimalism/">minimalism</a> and <a href="https://www.goodreads.com/book/show/40672036-digital-minimalism">digital minimalism</a>. Although I don't see myself as a minimalist, it helped
+    me realize some issues I had.
+    </p>
+
+    <p>
+    I also realized if I want to write more, I need to lower the barrier between writing and
+    publishing my content ; <i>if I want it to be published, of course</i>. This <i>post</i> is about
+    what I'm putting in place for this, with a premise : I spend my life in <a href="https://www.gnu.org/software/emacs/">Emacs</a> and thus in
+    <a href="https://orgmode.org/"><code>orgmode</code></a>. And <a href="https://orgmode.org/"><code>orgmode</code></a> is feature-full and has this badass feature : <code>org-publish</code>.
+    </p>
+
+    <p>
+    To build and publish this website, we will <i>try</i> to rely on a reproducible setup, meaning
+    <a href="https://www.gnu.org/software/emacs/">Emacs</a> and <a href="https://orgmode.org/"><code>orgmode</code></a> of course, <a href="https://www.gnu.org/software/make/">GNU Make</a> of course <b>but</b> most importantly, <a href="https://nixos.org/nix/">Nix</a> (in the near
+    future 👼).
+    </p>
+
+    <div class='drawer update'>
+    <h6>Update</h6>
+    <p>
+    There is now an article about it, that uses literate programming: <a href="../articles/meta_publishing_this_website.html">publishing this
+    website</a>. The content of the post might no be up-to-date at some point.
+    </p>
+    </div>
+
+
+
+    <p>
+    <a href="legacy/posts/2020-03-22-org-mode-website.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>On digital minimalism, Linux, NixOS and Emacs</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2020-02-22-digital-minimalism.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2020-02-22-digital-minimalism.org</guid>
+    <pubDate>Sat, 22 Feb 2020 00:00:00 +0100</pubDate>
+
+    <description><![CDATA[<p>
+    I've been reading and listening about Minimalism and Digital Minimalism for a little while
+    now. I've watch some <a href="https://www.youtube.com/channel/UCJ24N4O0bP7LGLBDvye7oCA">Matt D'Avella</a> youtube video (and documentary), read <a href="https://www.goodreads.com/book/show/40672036-digital-minimalism">Digital
+    Minimalism</a> from <a href="https://www.goodreads.com/author/show/147891.Cal_Newport">Cal Newport</a>, and read a bunch of .
+    </p>
+
+    <p>
+    I wouldn't say I am a minimalist, neither am I a digital minimalist <b>but</b> it is something
+    that is a bit appealing and I feel I am slowly taking inspiration from those. I've started
+    reducing to a minimun what my <i>smart</i>-phone does, I've reduced the number of <i>gadgets</i>
+    I've add over time. But in this posts, I am going to focus on my systems and tools — this
+    means Linux distributions, Emacs and other tools.
+    </p>
+
+
+    <p>
+    <a href="legacy/posts/2020-02-22-digital-minimalism.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Golang testing — gotest.tools poll</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2019-03-23-gotest-tools-poll.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2019-03-23-gotest-tools-poll.org</guid>
+    <pubDate>Sat, 23 Mar 2019 00:00:00 +0100</pubDate>
+
+    <description><![CDATA[<p>
+    Let's continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>poll</code> package.
+    </p>
+
+    <blockquote>
+    <p>
+    Package poll provides tools for testing asynchronous code.
+    </p>
+    </blockquote>
+
+    <p>
+    When you write test, you may test a piece of code that work asynchronously, where the
+    state you're expecting is gonna take a bit of time to be achieved. This is especially true
+    when you work on networking or file-system code. And this happens a lot when you write
+    integration (or end-to-end) test, less for unit-tests.
+    </p>
+
+    <p>
+    The package <code>poll</code> is trying to tackle those use cases. We'll first take a look at the
+    main function, <code>WaitOn</code>, then how to write a <code>Check</code>, using the <code>Result</code> type.
+    </p>
+
+
+    <p>
+    <a href="legacy/posts/2019-03-23-gotest-tools-poll.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Nix run aliases</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2019-01-26-nix-run-alias.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2019-01-26-nix-run-alias.org</guid>
+    <pubDate>Sat, 26 Jan 2019 00:00:00 +0100</pubDate>
+
+    <description><![CDATA[<p>
+    I use <a href="https://nixos.org/"><code>NixOS</code></a> each and every day, everywhere. One really cool feature of <code>nix</code> is
+    <code>nix-shell</code> and more recently (with <code>nix</code> &gt;= <code>2.0.0</code>), <code>nix run</code>.
+    </p>
+
+    <div class="org-src-container">
+    <pre class="src src-man">Usage: nix run &lt;FLAGS&gt;... &lt;INSTALLABLES&gt;...
+
+    Summary: run a shell in which the specified packages are available.
+
+    Flags:
+    --arg &lt;NAME&gt; &lt;EXPR&gt;         argument to be passed to Nix functions
+    --argstr &lt;NAME&gt; &lt;STRING&gt;    string-valued argument to be passed to Nix functions
+    -c, --command &lt;COMMAND&gt; &lt;ARGS&gt;  command and arguments to be executed; defaults to 'bash'
+    -f, --file &lt;FILE&gt;               evaluate FILE rather than the default
+    -i, --ignore-environment        clear the entire environment (except those specified with --keep)
+    -I, --include &lt;PATH&gt;            add a path to the list of locations used to look up &lt;...&gt; file names
+    -k, --keep &lt;NAME&gt;               keep specified environment variable
+    -u, --unset &lt;NAME&gt;              unset specified environment variable
+
+    Examples:
+
+    To start a shell providing GNU Hello from NixOS 17.03:
+    $ nix run -f channel:nixos-17.03 hello
+
+    To start a shell providing youtube-dl from your 'nixpkgs' channel:
+    $ nix run nixpkgs.youtube-dl
+
+    To run GNU Hello:
+    $ nix run nixpkgs.hello -c hello --greeting 'Hi everybody!'
+
+    To run GNU Hello in a chroot store:
+    $ nix run --store ~/my-nix nixpkgs.hello -c hello
+
+    Note: this program is EXPERIMENTAL and subject to change.
+    </pre>
+    </div>
+
+    <p>
+    As you can see from the <code>-h</code> summary, it makes it really easy to run a shell or a command
+    with some packages that are not in your main configuration. It will download the
+    package(s) if there are not available in the Nix store (<code>/nix/store/</code>).
+    </p>
+
+    <p>
+    A few month ago I decided it would be a perfect use-case for command I do not run
+    often. My idea was, let's define <code>aliases</code> (in the shell) that would make a simple command
+    call, like <code>ncdu</code>, become <code>nix run nixpkgs.ncdu -c ndcu</code>. My <i>shell of choice</i> is <a href="https://fishshell.com/">fish</a>, so
+    I decided to dig into the <i>language</i> in order to implement that.
+    </p>
+
+    <p>
+    The use case is the following :
+    </p>
+    <ul class="org-ul">
+    <li>When I type <code>foo</code>, I want the command <code>foo</code> in package <code>bar</code> to be executed.</li>
+    <li>I want to be able to pin a channel for the package — I'm using <a href="https://matthewbauer.us/">Matthew Bauer</a> <a href="https://matthewbauer.us/blog/channel-changing.html">Channel
+    Changing with Nix</a> setup for pin-pointing a given channel.</li>
+    </ul>
+
+
+    <p>
+    <a href="legacy/posts/2019-01-26-nix-run-alias.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>2018 year review</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2019-01-20-2018-year-review.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2019-01-20-2018-year-review.org</guid>
+    <pubDate>Sun, 20 Jan 2019 00:00:00 +0100</pubDate>
+
+    <description><![CDATA[<p>
+    Here is my review of 2018, the first of its kind, hopefully not the last 👼. I saw
+    some<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> <i>2018<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> reviews</i><sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup> articles<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> in my Feedly feed and I thought it
+    would be a good idea to write my own too.
+    </p>
+
+    <p>
+    I'll try in the next year — maybe month if I ever want to do monthly reviews — to automate
+    some of it ; using the beloved <code>org-mode</code>.
+    </p>
+
+    <p>
+    <a href="legacy/posts/2019-01-20-2018-year-review.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Golang testing — gotest.tools icmd</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2018-09-18-gotest-tools-icmd.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2018-09-18-gotest-tools-icmd.org</guid>
+    <pubDate>Tue, 18 Sep 2018 00:00:00 +0200</pubDate>
+
+    <description><![CDATA[<p>
+    Let's continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>icmd</code> package.
+    </p>
+
+    <blockquote>
+    <p>
+    Package icmd executes binaries and provides convenient assertions for testing the results.
+    </p>
+    </blockquote>
+
+    <p>
+    After file-system operations (seen in <a href="file:///posts/2018-09-14-gotest-tools-fs/"><code>fs</code></a>), another common use-case in tests is to
+    </p>
+
+    <p>
+    <a href="legacy/posts/2018-09-18-gotest-tools-icmd.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Golang testing — gotest.tools fs</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2018-09-14-gotest-tools-fs.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2018-09-14-gotest-tools-fs.org</guid>
+    <pubDate>Fri, 14 Sep 2018 00:00:00 +0200</pubDate>
+
+    <description><![CDATA[<p>
+    Let's continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>fs</code> package.
+    </p>
+
+    <blockquote>
+    <p>
+    Package fs provides tools for creating temporary files, and testing the contents and structure of a directory.
+    </p>
+    </blockquote>
+
+    <p>
+    This package is heavily using functional arguments (as we saw in <a href="file:///posts/2017-01-01-go-testing-functionnal-builders/">functional arguments for
+    wonderful builders</a>). Functional arguments is, in a nutshell, a combinaison of two Go
+    features : <i>variadic</i> functions (<code>...</code> operation in a function signature) and the fact
+    that <code>func</code> are <i>first class citizen</i>. This looks more or less like that.
+    </p>
+
+    <div class="org-src-container">
+    <pre class="src src-go"><span class="org-keyword">type</span> <span class="org-type">Config</span> <span class="org-keyword">struct</span> {}
+
+    <span class="org-keyword">func</span> <span class="org-function-name">MyFn</span>(<span class="org-variable-name">ops</span> ...<span class="org-keyword">func</span>(*<span class="org-type">Config</span>)) *<span class="org-type">Config</span> {
+    <span class="org-variable-name">c</span> := &amp;<span class="org-type">Config</span>{} <span class="org-comment-delimiter">// </span><span class="org-comment">with default values</span>
+    <span class="org-keyword">for</span> <span class="org-variable-name">_</span>, <span class="org-variable-name">op</span> := <span class="org-keyword">range</span> ops {
+    <span class="org-function-name">op</span>(c)
+    }
+    <span class="org-keyword">return</span> c
+    }
+
+    <span class="org-comment-delimiter">// </span><span class="org-comment">Calling it</span>
+    <span class="org-variable-name">conf</span> := <span class="org-function-name">MyFn</span>(withFoo, <span class="org-function-name">withBar</span>(<span class="org-string">"baz"</span>))
+    </pre>
+    </div>
+
+    <p>
+    The <code>fs</code> package has too <b>main</b> purpose :
+    </p>
+
+    <ol class="org-ol">
+    <li>create folders and files required for testing in a simple manner</li>
+    <li>compare two folders structure (and content)</li>
+    </ol>
+
+
+    <p>
+    <a href="legacy/posts/2018-09-14-gotest-tools-fs.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Golang testing — gotest.tools golden</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2018-09-06-gotest-tools-golden.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2018-09-06-gotest-tools-golden.org</guid>
+    <pubDate>Thu, 06 Sep 2018 00:00:00 +0200</pubDate>
+
+    <description><![CDATA[<p>
+    Let's continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>golden</code> package. This is a
+    <a href="file:///posts/2017-04-22-golang-testing-golden-file/"><i>quick follow-up</i> on a previous <code>golden</code> post</a>, but focused on the <code>gotest.tools</code>
+    implementation. I'm gonna be quicker, please read that one if <code>golden</code> files is a new
+    concept for you.
+    </p>
+
+    <blockquote>
+    <p>
+    Package <code>golden</code> provides tools for comparing large mutli-line strings.
+    </p>
+
+    <p>
+    Golden files are files in the <code>./testdata/</code> sub-directory of the package under test.
+    </p>
+    </blockquote>
+
+    <p>
+    In the previous article, we described the problem, and how to fix it by writing a small
+    helper. Well, that small helper is in <code>gotest.tools/golden</code> now, and it has a tiny bit
+    more features.
+    </p>
+
+    <p>
+    One of the difference between the <code>gotest.tools</code> implementation and the previous post is
+    the flag name. In <code>gotest.tools/golden</code>, the flag is <code>-test.update-golden</code> (was just
+    <code>-test.update</code> before). Just as before, if the <code>-test.update-golden</code> flag is set then the
+    actual content is written to the golden file, before reading it and comparing.
+    </p>
+
+    <p>
+    There is two ways to use the <code>golden</code> package:
+    </p>
+    <ul class="org-ul">
+    <li>on it's own, using <code>golden.Assert</code> or <code>golden.AssertBytes</code></li>
+    <li>as a <code>cmp.Comparison</code>, with <code>golden.String</code> or <code>golden.Bytes</code></li>
+    </ul>
+
+
+    <p>
+    <a href="legacy/posts/2018-09-06-gotest-tools-golden.html">(Read more)</a>
+    </p>
+    ]]></description>
+  </item>
+
+  <item>
+    <title>Golang testing — gotest.tools skip</title>
+    <link>https://vincent.demeester.fr/legacy/posts/2018-09-01-gotest-tools-skip.html</link>
+    <author>Vincent Demeester</author>
+    <guid isPermaLink="false">2018-09-01-gotest-tools-skip.org</guid>
+    <pubDate>Sat, 01 Sep 2018 00:00:00 +0200</pubDate>
+
+    <description><![CDATA[<p>
+    Let's continue the <a href="https://gotest.tools"><code>gotest.tools</code></a> serie, this time with the <code>skip</code> package. This is a
+    really simple one so this should be quick.
+    </p>
+
+    <blockquote>
+    <p>
+    <code>skip</code> provides functions for skipping a test and printing the source code of the
+    condition used to skip the test.
+    </p>
+    </blockquote>
+
+    <p>
+    The package consists of only one function : <code>If</code>. The idea comes mainly from
+    <a href="https://github.com/docker/docker"><code>docker/docker</code></a> integration test suite, where we wanted to skip some test (or test suites)
+    given different context. By context I mean things like the system we are running on
+    (<code>Windows</code>, <code>Linux</code>, …) or the capabilities of the running kernel or node (is <code>apparmor</code>
+    available or not on the current machine).
+    </p>
+
+    <p>
+    This <code>If</code> method takes a <code>testing.T</code> pointer and either a boolean, a function that
+    returns a boolean, <b>or</b> an expression.
+    </p>
+
+    <div class="org-src-container">
+    <pre class="src src-go"><span class="org-comment-delimiter">// </span><span class="org-comment">boolean</span>
+    <span class="org-comment-delimiter">//   </span><span class="org-comment">--- SKIP: TestName (0.00s)</span>
+    <span class="org-comment-delimiter">//           </span><span class="org-comment">skip.go:19: MissingFeature</span>
+    <span class="org-keyword">var</span> <span class="org-variable-name">MissingFeature</span> <span class="org-type">bool</span>
+    skip.<span class="org-function-name">If</span>(t, MissingFeature)
+
+    <span class="org-comment-delimiter">// </span><span class="org-comment">function</span>
+    <span class="org-comment-delimiter">//   </span><span class="org-comment">--- SKIP: TestName (0.00s)</span>
+    <span class="org-comment-delimiter">//           </span><span class="org-comment">skip.go:19: !IsExperimentalDaemon(dockerClient): daemon is not experimental</span>
+    skip.<span class="org-function-name">If</span>(t, <span class="org-function-name">IsExperimentalDaemon</span>(dockerClient), <span class="org-string">"daemon is not experimental"</span>)
+
+    <span class="org-comment-delimiter">// </span><span class="org-comment">expression</span>
+    <span class="org-comment-delimiter">//   </span><span class="org-comment">--- SKIP: TestName (0.00s)</span>
+    <span class="org-comment-delimiter">//           </span><span class="org-comment">skip.go:19: apiVersion &lt; version("v1.24")</span>
+    skip.<span class="org-function-name">If</span>(t, apiVersion &lt; <span class="org-function-name">version</span>(<span class="org-string">"v1.24"</span>))
+    </pre>
+    </div>
+
+    <p>
+    There is few elements to note though :
+    </p>
+
+    <ul class="org-ul">
+    <li>This package (as other parts of the <code>gotest.tools</code> packages), will try to look at source
+    files to display the expression used (same goes for <code>assert</code>). This is usually not a
+    problem because you run tests where the source code is. <b>However</b>, in the cases you
+    generate a test binary to be executed later (à-la <code>kubernetes</code> or other projects), this
+    can display a weird error message if the sources are not available… You shouldn't be
+    worried too much about it, but it's better if you know :)</li>
+    <li>The main reason to use <code>skip.If</code> is mainly for new contributors to get in quickly,
+    <b>reducing potential friction of them running the tests on their environment</b>. The more
+    the tests are written in a way they explicitely declare their requirements (and skipped
+    if the environment does not meet those), the easier it makes contributors run your
+    tests. <b>But</b>, this also means, you should try to measure the skipped tests on your
+    continuous integration system to make sure you run all of them eventually… otherwise
+    it's dead code. <i>But more on that in later posts 😉</i>.</li>
+    </ul>
+
+    <p>
+    That's all for today folks, told you that was going to be quick.
+    </p>
+
+    <p>
+    <a href="legacy/posts/2018-09-01-gotest-tools-skip.html">(Read more)</a>
+    </p>
+    ]]></description>
+</item>
+
+<item>
+  <title>Golang testing — gotest.tools assertions</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2018-08-16-gotest-tools-assertions.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2018-08-16-gotest-tools-assertions.org</guid>
+  <pubDate>Thu, 16 Aug 2018 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  Let's take a closer look at <a href="https://gotest.tools"><code>gotest.tools</code></a> assertions packages. This is mainly about <code>assert</code>, <code>assert/cmp</code> and
+  <code>assert/opt</code>.
+  </p>
+
+  <blockquote>
+  <p>
+  Package assert provides assertions for comparing expected values to actual values. When assertion fails a helpful error
+  message is printed.
+  </p>
+  </blockquote>
+
+  <p>
+  There is two main functions (<code>Assert</code> and <code>Check</code>) and some helpers (like <code>NilError</code>, …). They all take a <code>*testing.T</code> as
+  a first argument, pretty common across testing Go libraries. Let's dive into those !
+  </p>
+
+
+  <p>
+  <a href="legacy/posts/2018-08-16-gotest-tools-assertions.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Golang testing — gotest.tools introduction</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2018-07-28-gotest-tools-intro.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2018-07-28-gotest-tools-intro.org</guid>
+  <pubDate>Sat, 28 Jul 2018 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  I already wrote 2 previous posts about golang and testing. It's something I care deeply
+  about and I wanted to continue writing about it. It took me a bit more time than I
+  thought, but getting back to it. Since the <a href="http://vincent.demeester.fr/posts/2017-04-22-golang-testing-golden-file/">last post</a>, Daniel Nephin and I worked (but
+  mainly Daniel 🤗) on bootstrapping a testing helper library.
+  </p>
+
+  <p>
+  Let me introduce it to you this library : <a href="https://gotest.tools"><code>gotest.tools</code></a>. As described in the <a href="https://godoc.org/gotest.tools">godoc</a> package comment, <code>gotest.tools</code> is a
+  collection of packages to augment <code>testing</code> and support common patterns. It's an enhanced and growing version of the
+  initial helpers we (the docker/moby maintainers) wrote initially in <a href="https://github.com/docker/docker"><code>docker/docker</code></a> repository. We are using in quite some
+  project here at <a href="https://github.com">Docker</a>.
+  </p>
+
+  <p>
+  There is a bunch of packages that will all have their own post (linked here when available) :
+  </p>
+
+  <ul class="org-ul">
+  <li><a href="2018-08-16-gotest-tools-assertions.html"><code>assert</code></a> (with <code>assert/cmp</code> and <code>assert/opt</code>) that provides assertions for comparing expected values to actual values.</li>
+  <li><code>env</code> that provides functions to test code that read environment variable or the current working directory.</li>
+  <li><a href="2018-09-14-gotest-tools-fs.html"><code>fs</code></a> that provides tools for creating temporary files, and testing the contents and structure of a directory.</li>
+  <li><a href="2018-09-06-gotest-tools-golden.html"><code>golden</code></a> that provides tools for comparing large multi-line strings.</li>
+  <li><a href="2018-09-18-gotest-tools-icmd.html"><code>icmd</code></a> that executes binaries and provides convenient assertions for testing the results.</li>
+  <li><a href="2019-03-23-gotest-tools-poll.html"><code>poll</code></a> that provides tools for testing asynchronous code.</li>
+  <li><a href="2018-09-01-gotest-tools-skip.html"><code>skip</code></a> that provides functions for skipping a test and printing the source code of the condition used to skip the test.</li>
+  </ul>
+
+  <p>
+  There is also experimental package, using the <code>x</code> notation (as the golang team uses, for example with <code>golang.org/x/sync</code>) :
+  </p>
+
+  <ul class="org-ul">
+  <li><code>x/subtest</code> that provides a <code>TestContext</code> to subtests which handles cleanup and provides a <code>testing.TB</code> and <code>context.Context</code>.</li>
+  </ul>
+
+  <p>
+  There is already some good <code>testing</code> helpers in the Go ecosystem : <a href="https://github.com/stretchr/testify"><code>testify</code></a>, <a href="http://labix.org/gocheck"><code>gocheck</code></a>, <a href="https://github.com/onsi/ginkgo"><code>ginkgo</code></a> and a lot more — so
+  why create a new one ? There is multiple reason for it, most of them can be seen in the following <a href="https://github.com/gotestyourself/gotest.tools/issues/49#issuecomment-362436026">GitHub issue</a>.
+  </p>
+
+  <p>
+  <a href="https://github.com/dnephin/">Daniel</a> also wrote a very useful converter if your code base is currently using <code>testify</code> : <code>gty-migrate-from-testify</code>.
+  </p>
+
+  <div class="org-src-container">
+  <pre class="src src-sh">$ go get -u gotest.tools/assert/cmd/gty-migrate-from-testify
+  <span class="org-comment-delimiter"># </span><span class="org-comment">[&#8230;]</span>
+  $ go list <span class="org-sh-escaped-newline">\</span>
+  -f <span class="org-string">'{{.ImportPath}} {{if .XTestGoFiles}}{{"\n"}}{{.ImportPath}}_test{{end}}'</span> <span class="org-sh-escaped-newline">\</span>
+  ./... | xargs gty-migrate-from-testify
+  </pre>
+  </div>
+
+  <p>
+  In the next post, let's dig into the assertion part of the library, package <code>assert</code> 👼.
+  </p>
+
+  <p>
+  <a href="legacy/posts/2018-07-28-gotest-tools-intro.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Redesign et Résolutions</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2014-03-24-redesign-et-résolutions.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2014-03-24-redesign-et-résolutions.org</guid>
+  <pubDate>Mon, 24 Mar 2014 00:00:00 +0100</pubDate>
+
+  <description><![CDATA[<p>
+  Un <i>tout petit</i> post pour parler rapidement, entre autre, du redesign de
+  <a href="http://vincent.demeester.fr">vincent.demeester.fr</a> et de mes
+  résolutions.
+  </p>
+
+
+  <p>
+  <a href="legacy/posts/2014-03-24-redesign-et-résolutions.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Podcasts</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2013-10-12-podcasts.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2013-10-12-podcasts.org</guid>
+  <pubDate>Sat, 12 Oct 2013 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<blockquote>
+  <p>
+  Voici un petit billet présentant les différents podcast que j'écoute
+  plus ou moins régulièrement.
+  </p>
+  </blockquote>
+
+  <p>
+  J'écoute énormément de musique et de podcast ; je passe beaucoup de
+  temps avec des écouteurs sur la tête ou la chaine hifi en route. Les
+  podcasts ont une grande place. Voici une liste plus ou moins bien triés
+  de ceux auxquels je suis souscrit et/ou que j'écoute en ce moment. Je
+  tiendrais peut-être ce post à jour ou en créerait un nouveau sinon :-).
+  </p>
+
+
+  <p>
+  <a href="legacy/posts/2013-10-12-podcasts.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Maven Tmpfs</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2013-09-08-maven-tmpfs.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2013-09-08-maven-tmpfs.org</guid>
+  <pubDate>Sun, 08 Sep 2013 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  Je suis un utilisateur convaincu de <a href="http://maven.apache.org/">maven</a>, malgré ces défauts, le
+  moto <b>"Convention over configuration"</b> me va vraiment bien. Que ce soit
+  au boulot ou à la maison, j'ai plus d'ordinateurs équipés de ssd (ou de
+  mémoire flash) que de disque traditionnel (mécanique ?). Pour augmenter
+  un peu la durée de vie de ces disques SSD, j'ai cherché à savoir comment
+  <i>déporter</i> le <i>build</i> de maven (qui, pour rappel, se passe dans le
+  dossier <code>target/</code>) hors du SSD ; ici ce sera dans le dossier <code>/tmp/</code> qui
+  est monté en mémoire (merci <code>tmpfs</code>), mais on peut imaginer déporter ça
+  sur un autre disque, etc.. Après quelques recherches j'ai trouvés
+  quelques inspirations.
+  </p>
+
+  <blockquote>
+  <p>
+  <b>Limitations</b>
+  </p>
+
+  <p>
+  Dans la solution présentée ci-dessous les principales limitations sont
+  les suivantes (que j'essaierais de diminuer au fil du temp ;P) :
+  </p>
+
+  <ol class="org-ol">
+  <li>Il est nécessaire de modifier le pom.xml du projet ; cela ne
+  s'appliquera donc pas à tous les projets maven sans modification du
+  pom.xml.</li>
+  <li>Cela ne fonctionne que sur une plateforme qui support les liens
+  symboliques (Linux, Mac OS X, et autre UNIX).</li>
+  <li>Cela ne fonctionne qu'avec Java 7 ou plus.</li>
+  <li>Si vous utilisez m2e, il va gentillement gueuler et c'est moche ; pour résoudre le
+  problème, il faut faire un tour vers <a href="http://wiki.eclipse.org/M2E_plugin_execution_not_covered">M2E plugin execution not covered</a>.</li>
+  </ol>
+  </blockquote>
+
+  <p>
+  Pour <a href="http://maven.apache.org/">maven</a>, le dossier <code>target/</code> vient de la propriété
+  <code>project.build.directory</code>. Dans la théorie, il suffirait de modifier
+  (dans <code>$HOME/.m2/settings.xml</code>) cette propriété et le tour serait jouer.
+  Malheuresement ce n'est pas possible, <code>project.build.directory</code> est une
+  propriété interne et n'est, à priori, pas modifiable.
+  </p>
+
+  <p>
+  Notre souhait est le suivant :
+  </p>
+
+  <ol class="org-ol">
+  <li>Le build doit se faire dans <code>/tmp/m2/</code>, ce qui pour un projet se
+  traduit par <code>/tmp/m2/${groupId}:${artifactId}</code>.</li>
+  <li>Le dossier <code>target/</code> dans les sources est un lien symbolique vers le
+  dossier dans <code>/tmp/m2/</code></li>
+  <li>On passe par un <b>profile</b> qui n'est <b>pas actif</b> par défaut (pour ne
+  pas faire chier le monde) mais <b>activable via une propriété</b> (maven
+  nous permet de le faire et c'est cool <code>^_^</code>). La propriété utilisée
+  sera <code>external.build.root</code>.</li>
+  </ol>
+
+  <p>
+  Le code ci-dessous est repris directement de mon inspiration<sup><a id="fnr.1.100" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. Il
+  s'occupe de créer le dossier <code>${groupId}:${artifactId}</code> dans
+  <code>external.build.root</code> et de faire le lien dans le dossier courant.
+  </p>
+
+  <div class="org-src-container">
+  <pre class="src src-xml"><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">project</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-comment-delimiter">&lt;!-- </span><span class="org-comment">[&#8230;]</span><span class="org-comment-delimiter"> --&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">profiles</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">profile</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">external-build-dir</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">activation</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">activeByDefault</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">false</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">activeByDefault</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">property</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">name</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">external.build.root</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">name</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">property</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">activation</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">build</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">plugins</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">plugin</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">groupId</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">com.alexecollins.maven.plugin</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">groupId</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">artifactId</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">script-maven-plugin</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">artifactId</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">version</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">1.0.0</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">version</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">executions</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">execution</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">prep-work-tree</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">goals</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">goal</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">execute</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">goal</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">goals</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">phase</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">initialize</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">phase</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">configuration</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">script</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-text">                                        import java.nio.file.*</span>
+  <span class="org-nxml-text">                                        def dir =</span>
+  <span class="org-nxml-text">                                        "${external.build.root}/${project.groupId}:${project.artifactId}"</span>
+  <span class="org-nxml-text">                                        println "using Maven dir ${dir}"</span>
+  <span class="org-nxml-text">                                        def dirPath = Paths.get(dir)</span>
+  <span class="org-nxml-text">                                        if (!Files.exists(dirPath)) {</span>
+  <span class="org-nxml-text">                                        Files.createDirectories(dirPath)</span>
+  <span class="org-nxml-text">                                        }</span>
+  <span class="org-nxml-text">                                        def target = Paths.get("${project.build.directory}")</span>
+  <span class="org-nxml-text">                                        if (!Files.exists(target)) {</span>
+  <span class="org-nxml-text">                                        Files.createSymbolicLink(target, dirPath)</span>
+  <span class="org-nxml-text">                                        }</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">script</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">configuration</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">execution</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">execution</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">drop-symlink</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">goals</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">goal</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">execute</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">goal</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">goals</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">phase</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">clean</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">phase</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">configuration</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">script</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-text">                                        import java.nio.file.*</span>
+  <span class="org-nxml-text">                                        def target = Paths.get("${project.build.directory}")</span>
+  <span class="org-nxml-text">                                        if (Files.isSymbolicLink(target)) {</span>
+  <span class="org-nxml-text">                                        Files.delete(target)</span>
+  <span class="org-nxml-text">                                        }</span>
+  <span class="org-nxml-text">                                    </span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">script</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">configuration</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">execution</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">executions</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">dependencies</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">dependency</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">groupId</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">org.codehaus.groovy</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">groupId</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">artifactId</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">groovy</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">artifactId</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">version</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">1.8.6</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">version</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">dependency</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">dependencies</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">configuration</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">language</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">groovy</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">language</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">configuration</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">plugin</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">plugins</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">build</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">profile</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">profiles</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-comment-delimiter">&lt;!-- </span><span class="org-comment">[&#8230;]</span><span class="org-comment-delimiter"> --&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">project</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  </pre>
+  </div>
+
+  <p>
+  Ainsi, il suffit ensuite d'avoir quelques choses du genre dans son
+  <code>$HOME/.m2/settings.xml</code> pour que les builds qui ont ce profil se
+  <i>build</i> dans <code>/tmp/m2/</code>. On peut aussi ne rien avoir dans
+  <code>$HOME/.m2/settings.xml</code> et utilise <code>-Dexternal.build.root=/tmp/m2/</code>
+  avec la commande <code>mvn</code>.
+  </p>
+
+  <div class="org-src-container">
+  <pre class="src src-xml"><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">settings</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-comment-delimiter">&lt;!-- </span><span class="org-comment">[&#8230;]</span><span class="org-comment-delimiter"> --&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">profiles</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">profile</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">build-in-ramfs</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">id</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">properties</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">external.build.root</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">/tmp/m2/</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">external.build.root</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">properties</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">profile</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">profiles</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">activeProfiles</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">activeProfile</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">build-in-ramfs</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">activeProfile</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">activeProfiles</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-comment-delimiter">&lt;!-- </span><span class="org-comment">[&#8230;]</span><span class="org-comment-delimiter"> --&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">settings</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  </pre>
+  </div>
+  ]]></description>
+</item>
+
+<item>
+  <title>Gollum comme Wiki personnel</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2012-12-16-gollum-comme-wiki-personnel.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2012-12-16-gollum-comme-wiki-personnel.org</guid>
+  <pubDate>Sun, 16 Dec 2012 00:00:00 +0100</pubDate>
+
+  <description><![CDATA[<p>
+  Il y a environ 4 mois j'ai eu un accident de vélo ; un traumatisme
+  crânien, des brulures sur la face, quelques points de sutures, un doigt
+  cassé et une hernie discale m'ont cloué (et me clou encore) plus que
+  d'habitude sur ma chaise de bureau. Le bon côté des choses, c'est que
+  cela m'a permit de me poser et de réfléchir une bonne façon d'être
+  efficace et organiser, au travail et à la maison :-).
+  </p>
+
+  <p>
+  Une des principales <i>action</i> que j'ai pris est d'utiliser un wiki local
+  et synchronisé sur <i>tout</i> mes PCs. Le <i>format</i> wiki est assez adapté à
+  une prise de note et à la création de contenu plus complet (comme des
+  <a href="http://shortbrain.org">articles</a> ou de la documentation pour des
+  projets en cours). Les conditions étaient les suivantes :
+  </p>
+
+  <ul class="org-ul">
+  <li>Facilité de mise en place.</li>
+  <li>Pas de base de données.</li>
+  <li><i>Merging</i> facile (<a href="http://git-scm.com">git</a> <i>rules my world</i>).</li>
+  <li><a href="http://daringfireball.net/projects/markdown/">Markdown</a> comme
+  syntaxe, car utilisé à peu près partout (blogs, articles, READMEs,
+  documentations).</li>
+  <li>Éditable à partir d'une interface web ou de mon éditeur favoris.</li>
+  </ul>
+
+  <p>
+  L'outil qui remplit presque toutes ces conditions s'appelle
+  <a href="https://github.com/github/gollum">gollum</a>. C'est un moteur wiki,
+  écris en ruby, qui se base sur un repository
+  <a href="http://git-scm.com">git</a>. Il est développer par l'équipe de
+  <a href="http://github.com">Github</a> et c'est celui qui est utilisé par les
+  pages wiki là-bas. Il permet d'utiliser à peu près n'importe quel
+  syntaxe (dont
+  <a href="https://github.com/github/github-flavored-markdown">github-markdown</a>
+  qui est assez proche de celle de
+  <a href="http://johnmacfarlane.net/pandoc">pandoc</a>). Par ailleurs, comme il se
+  base sur <a href="http://git-scm.com">git</a>, les points <i>"pas de base de
+  données"</i>, <i>"merging facile"</i> et <i>"éditable également à partir de mon
+  éditeur favoris"</i> sont toutes remplies.
+  </p>
+
+  <p>
+  Avec <a href="https://github.com/github/gollum">Gollum</a> vous avez un wiki
+  markdown décentralisé, éditable via une interface web ou via votre
+  éditeur favoris.
+  </p>
+
+
+  <p>
+  <a href="legacy/posts/2012-12-16-gollum-comme-wiki-personnel.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Maven Release Gitflow</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2012-07-23-maven-release-gitflow.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2012-07-23-maven-release-gitflow.org</guid>
+  <pubDate>Mon, 23 Jul 2012 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  I like a lot the <a href="http://nvie.com/posts/a-successful-git-branching-model/">gitflow</a> way of managing project. When working on maven project, there is
+  few great plugins that helps to get the work done. One of them is <a href="http://maven.apache.org/plugins/maven-release-plugin">maven-release-plugin</a>.
+  </p>
+
+  <p>
+  Inspired on this <a href="https://gist.github.com/1043970">gist</a>, I've come
+  with a cool way of doing things (let say we want to release a 0.1
+  version of an artifact) :
+  </p>
+
+
+  <p>
+  <a href="legacy/posts/2012-07-23-maven-release-gitflow.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Jekyll Forman Guard Bundler</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2012-05-13-jekyll-foreman-guard-bundler.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2012-05-13-jekyll-foreman-guard-bundler.org</guid>
+  <pubDate>Sun, 13 May 2012 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  This post is a quick "How did I setup my Jekyll environnement ?". We are
+  going all the tools that are quite awesome in Ruby.
+  </p>
+
+
+  <p>
+  <a href="legacy/posts/2012-05-13-jekyll-foreman-guard-bundler.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Gitolite quick and dirty mirror</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2012-05-08-gitolite-quick-and-dirty-mirror.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2012-05-08-gitolite-quick-and-dirty-mirror.org</guid>
+  <pubDate>Tue, 08 May 2012 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  I'm running a gitolite <span class="underline">instance</span> on my personal server to manage my repositories
+  (personnal, private or public) ; and I am quickly going to share with you how I setup a
+  <span class="underline">quick and dirty</span> mirror feature.
+  </p>
+
+  <p>
+  First, I am using <b><b>gitolite 3</b></b>. The mirroring we are going to setup is not the
+  <span class="underline">supported</span> <a href="http://sitaramc.github.com/gitolite/mirroring.html">mirroring <b>built-in</b></a>.  We are going to implement a simplier way to set mirror
+  thing :
+  </p>
+
+  <ol class="org-ol">
+  <li>Write a custom gitolite command ; the idea is to be able to write <code>git-config</code> stuff.</li>
+  <li>Write a hook that take a specific <code>git-config</code> (let say <code>mirror.url</code>) and do a simple
+  mirroring.</li>
+  </ol>
+
+
+  <p>
+  <a href="legacy/posts/2012-05-08-gitolite-quick-and-dirty-mirror.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+
+<item>
+  <title>Reinit and Jekyll</title>
+  <link>https://vincent.demeester.fr/legacy/posts/2012-05-07-reinit-and-jekyll.html</link>
+  <author>Vincent Demeester</author>
+  <guid isPermaLink="false">2012-05-07-reinit-and-jekyll.org</guid>
+  <pubDate>Mon, 07 May 2012 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  Two weeks ago, my <i>online</i> personal server has been attacked and,
+  somehow, died. I'm in the process of re-installation of it but I'm going
+  to hardened a bit the security on it. Anyway, this crash meant that
+  every piece of site I maintain has been down. That's why I moved this
+  <i>identity site</i> on the github pages, using a CNAME ; That way I can
+  crash as much as I want my server(s), this page should still be up for a
+  while.
+  </p>
+
+  <p>
+  And I'm switching on Jekyll for this website as It is supported by
+  Github page, easy to use and easy to deploy elsewhere (if one day I want
+  to move from Github).
+  </p>
+
+  <p>
+  The rest of the post is going to be used as a <i>sandbox</i> post to test the
+  site styles.
+  </p>
+
+  <blockquote>
+  <p>
+  This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+  consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+  Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+  </p>
+
+  <p>
+  Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+  id sem consectetuer libero luctus adipiscing.
+  </p>
+  </blockquote>
+
+
+  <p>
+  <a href="legacy/posts/2012-05-07-reinit-and-jekyll.html">(Read more)</a>
+  </p>
+  ]]></description>
+</item>
+<div id="footnotes">
+  <h2 class="footnotes">Footnotes: </h2>
+  <div id="text-footnotes">
+
+    <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+    <a href="https://punchagan.muse-amuse.in/blog/2018-in-review/">2018 in Review - Noetic Nought</a>
+    </p></div></div>
+
+    <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+    <a href="https://medium.com/@buster/42-dig-deeper-e2278d1fe015">42 — Dig deeper – Buster Benson – Medium</a>
+    </p></div></div>
+
+    <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+    <a href="https://jvns.ca/blog/2018/12/23/2018--year-in-review/">2018: Year in review - Julia Evans</a>
+    </p></div></div>
+
+    <div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+    <a href="https://writing.natwelch.com/post/685">Nat? Nat. Nat! | #685 2018 Year in Review</a>
+    </p></div></div>
+
+
+  </div>
+</div></channel>
+</rss>

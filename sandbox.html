@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Sep 03, 2024 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emacs org-mode sandbox</title>
+<meta name="author" content="Vincent Demeester" />
+<meta name="keywords" content="post" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="./css/2022.css" />
+<link rel="stylesheet" type="text/css" href="./css/syntax.css" />
+<link rel='icon' type='image/x-icon' href='./images/favicon.ico'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<main id="content" class="content">
+<header>
+<h1 class="title">Emacs org-mode sandbox</h1>
+<p class="subtitle" role="doc-subtitle">A Clean and Comfort Stylesheet</p>
+</header><div class="abstract" id="org648f347">
+<p>
+
+</p>
+
+<p>
+This article serves as a complete demonstration for my <a href="notes.css">org.css</a>, a simple and
+clean stylesheet for org-exported HTML file.  You may switch between the default
+style provided by Emacs Org mode, i.e., styles specified in the variable
+<code>org-html-style-default</code> and my customized stylesheet using the button at the
+top left corner.
+</p>
+
+</div>
+
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#sec:demo">Demo</a>
+<ul>
+<li><a href="#Title%20with%20TODO">Title with TODO</a></li>
+<li><a href="#Title%20with%20DONE%20%28and%20scheduled%29">Title with DONE (and scheduled)</a></li>
+<li><a href="#Title%20with%20DONE%20%28and%20deadline%29">Title with DONE (and deadline)</a></li>
+<li><a href="#Title%20with%20Priority">Title with Priority</a></li>
+<li><a href="#Title%20with%20Tag">Title with Tag&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tag0">tag0</span>&#xa0;<span class="tag1">tag1</span></span></a></li>
+<li><a href="#Miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+<li><a href="#Org-mode%20links">Org-mode links&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></a>
+<ul>
+<li><a href="#Host%20dependent%20link">Host dependent link</a></li>
+<li><a href="#Github%20links">Github links</a></li>
+<li><a href="#~man~"><code>man</code></a></li>
+<li><a href="#Others">Others</a></li>
+</ul>
+</li>
+<li><a href="#Org-babel">Org-babel</a>
+<ul>
+<li><a href="#~emacs-lisp~"><code>emacs-lisp</code></a></li>
+<li><a href="#~go~"><code>go</code></a></li>
+<li><a href="#~http~"><code>http</code></a></li>
+<li><a href="#~rust~"><code>rust</code></a></li>
+<li><a href="#~typescript~"><code>typescript</code></a></li>
+<li><a href="#Ditaa">Ditaa</a></li>
+<li><a href="#Graphviz">Graphviz</a></li>
+<li><a href="#References%20and%20labels%20%21">References and labels !</a></li>
+</ul>
+</li>
+<li><a href="#Counsel">Counsel</a></li>
+<li><a href="#sec:known-issues">Known Issues</a>
+<ul>
+<li><a href="#sec:dangling-element"><del>Dangling Element</del>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="solved">solved</span></span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+
+<p>
+Hello <code>world</code> vs <code>world</code> 🙃
+</p>
+<section id="outline-container-sec:demo" class="outline-2">
+<h2 id="sec:demo">Demo</h2>
+<div class="outline-text-2" id="text-sec:demo">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2015-11-09 Mon 14:41&gt;</span></span>
+</p>
+
+<blockquote>
+<p>
+
+</p>
+
+<p>
+<a href="http://orgmode.org/">Org mode</a> is for keeping notes, maintaining TODO lists, planning projects,
+and authoring documents with a fast and effective <i>plain-text</i> system
+cite:dominik2003-org.
+</p>
+</blockquote>
+
+
+<p>
+We use <a href="https://en.wikipedia.org/wiki/Lorem_ipsum">Lorem ipsum</a> text to demonstrate all elements you would expect to see in
+the org-exported HTML pages.  Note however that the <code>.title</code>, <code>.subtitle</code> and
+<code>#postamble</code> element are not included in this section.
+</p>
+</div>
+<div id="outline-container-Title%20with%20TODO" class="outline-3">
+<h3 id="Title%20with%20TODO">Title with TODO</h3>
+</div>
+
+<div id="outline-container-Title%20with%20DONE%20%28and%20scheduled%29" class="outline-3">
+<h3 id="Title%20with%20DONE%20%28and%20scheduled%29">Title with DONE (and scheduled)</h3>
+<div class="outline-text-3" id="text-Title%20with%20DONE%20%28and%20scheduled%29">
+</div>
+</div>
+<div id="outline-container-Title%20with%20DONE%20%28and%20deadline%29" class="outline-3">
+<h3 id="Title%20with%20DONE%20%28and%20deadline%29">Title with DONE (and deadline)</h3>
+<div class="outline-text-3" id="text-Title%20with%20DONE%20%28and%20deadline%29">
+<p>
+Some inactive timestamps
+</p>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-02-20 Wed 12:03] </span></span> With time !
+</p>
+
+<p>
+Let&rsquo;s write some stuff between the two !
+</p>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2019-02-20 Wed] </span></span> Without time
+</p>
+
+<p>
+Maybe also some <b>active</b> timestamps
+</p>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2022-05-07 Sat&gt; </span></span> Without time as well
+</p>
+</div>
+</div>
+<div id="outline-container-Title%20with%20Priority" class="outline-3">
+<h3 id="Title%20with%20Priority">Title with Priority</h3>
+</div>
+
+<div id="outline-container-Title%20with%20Tag" class="outline-3">
+<h3 id="Title%20with%20Tag">Title with Tag&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tag0">tag0</span>&#xa0;<span class="tag1">tag1</span></span></h3>
+</div>
+
+<div id="outline-container-Miscellaneous" class="outline-3">
+<h3 id="Miscellaneous">Miscellaneous</h3>
+<div class="outline-text-3" id="text-Miscellaneous">
+<div id="text-table-of-contents-1" role="doc-toc">
+<ul>
+<li><a href="#Table">Table</a></li>
+<li><a href="#List">List</a></li>
+<li><a href="#Picture">Picture</a></li>
+<li><a href="#Math">Math</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-Table" class="outline-4">
+<h4 id="Table">Table</h4>
+<div class="outline-text-4" id="text-Table">
+<table>
+<caption class="t-above"><span class="table-number">Table 1:</span> Table Caption</caption>
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">\(N\)</th>
+<th scope="col" class="org-right">\(N^2\)</th>
+<th scope="col" class="org-right">\(N^3\)</th>
+<th scope="col" class="org-right">\(N^4\)</th>
+<th scope="col" class="org-right">\(\sqrt n\)</th>
+<th scope="col" class="org-right">\(\sqrt[4]N\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">4</td>
+<td class="org-right">8</td>
+<td class="org-right">16</td>
+<td class="org-right">1.4142</td>
+<td class="org-right">1.1892</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">9</td>
+<td class="org-right">27</td>
+<td class="org-right">81</td>
+<td class="org-right">1.7321</td>
+<td class="org-right">1.3161</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-List" class="outline-4">
+<h4 id="List">List</h4>
+<div class="outline-text-4" id="text-List">
+</div>
+<ul class="org-ul">
+<li><a id="The%20ordered%20list"></a>The ordered list<br>
+<div class="outline-text-5" id="text-The%20ordered%20list">
+<ol class="org-ol">
+<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+<li>Donec et massa sit amet ligula maximus feugiat.</li>
+<li>Morbi consequat orci et tincidunt sagittis.</li>
+</ol>
+</div>
+</li>
+<li><a id="Unordered%20list"></a>Unordered list<br>
+<div class="outline-text-5" id="text-Unordered%20list">
+<ul class="org-ul">
+<li>Aliquam non metus nec elit pellentesque scelerisque.</li>
+<li>In accumsan nunc ac orci varius hendrerit.</li>
+<li>Suspendisse non eros eu nisi finibus maximus.</li>
+</ul>
+</div>
+</li>
+<li><a id="Unordered%20checked%20list%20%5B1%2F3%5D"></a>Unordered checked list <code>[1/3]</code><br>
+<div class="outline-text-5" id="text-Unordered%20checked%20list%20%5B1%2F3%5D">
+<ul class="org-ul">
+<li class="on">&#x2611; Aliquam non metus nec elit pellentesque scelerisque.</li>
+<li class="off">&#x2610; In accumsan nunc ac orci varius hendrerit.</li>
+<li class="off">&#x2610; Suspendisse non eros eu nisi finibus maximus.</li>
+</ul>
+</div>
+</li>
+<li><a id="Definition%20list"></a>Definition list<br>
+<div class="outline-text-5" id="text-Definition%20list">
+<aside id="org5754a81">
+<p>
+This is a side note. If collection is a string, item must also be a string, and is
+compared using <code>strings.Contains()</code>. If collection is a Map, contains will succeed if item
+is a key in the map.
+</p>
+</aside>
+
+<dl class="org-dl">
+<dt>Lorem ipsum</dt><dd>dolor sit amet, consectetur adipiscing elit.  Mauris laoreet
+sollicitudin venenatis.  Duis sed consequat dolor.</dd>
+<dt>Etiam feugiat</dt><dd>pharetra sapien et semper.  Nunc ornare lacus sit amet massa
+auctor, vitae aliquam eros interdum.  Mauris arcu ante, imperdiet vel purus
+ac, bibendum faucibus diam.  Ut blandit nec mi at ultricies.  Donec eget
+mattis nisl.  In sed nibh felis.  Cras quis convallis orci.</dd>
+<dt>Sed aliquam</dt><dd>odio sed faucibus aliquam, arcu augue elementum justo, ut
+vulputate ligula sem in augue.  Maecenas ante felis, pellentesque auctor
+semper non, eleifend quis ante.  Fusce enim orci, suscipit ac dapibus et,
+fermentum eu tortor.  Duis in facilisis ante, quis faucibus dolor.  Etiam
+maximus lorem quis accumsan vehicula.</dd>
+</dl>
+</div>
+</li>
+<li><a id="Drawers"></a>Drawers<br>
+<div class="outline-text-5" id="text-Drawers">
+<p>
+Still outside the drawer
+</p>
+
+<div class='drawer generic'>
+<h6>Generic</h6>
+<p>
+This is inside the drawer.
+</p>
+</div>
+
+<p>
+And an update 😉
+</p>
+
+<div class='drawer update'>
+<h6>Update</h6>
+<p>
+This is an update :)
+</p>
+</div>
+
+<p>
+After the drawer.
+</p>
+
+<div class='drawer note'>
+<h6>Note</h6>
+<p>
+This is a note
+</p>
+</div>
+<div class='drawer info'>
+<h6>Info</h6>
+<p>
+This is an info
+</p>
+</div>
+<div class='drawer tip'>
+<h6>Tip</h6>
+<p>
+This is a tip
+</p>
+</div>
+<div class='drawer warning'>
+<h6>Warning</h6>
+<p>
+This is a warning
+</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div id="outline-container-Picture" class="outline-4">
+<h4 id="Picture">Picture</h4>
+<div class="outline-text-4" id="text-Picture">
+
+<figure id="org2eda69b">
+<img src="./images/sandbox/pic-demo.png" alt="pic-demo.png" class="shadow">
+
+<figcaption><span class="figure-number">Figure 1: </span>Demo Picture with Caption</figcaption>
+</figure>
+
+<p>
+And a really wide picture.
+</p>
+
+
+<figure id="orgbba5ba9">
+<img src="./images/sandbox/long-img.png" alt="long-img.png" width="100%">
+
+<figcaption><span class="figure-number">Figure 2: </span>A really long picture</figcaption>
+</figure>
+</div>
+</div>
+<div id="outline-container-Math" class="outline-4">
+<h4 id="Math">Math</h4>
+<div class="outline-text-4" id="text-Math">
+\begin{align}
+\mathcal{F}(a) &= \frac{1}{2\pi i}\oint_\gamma \frac{f(z)}{z - a}\,dz\\
+\int_D (\nabla\cdot \mathcal{F})\,dV &=\int_{\partial D}\mathcal{F}\cdot n\, dS
+\end{align}
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-Org-mode%20links" class="outline-2">
+<h2 id="Org-mode%20links">Org-mode links&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h2>
+<div class="outline-text-2" id="text-Org-mode%20links">
+</div>
+<div id="outline-container-Host%20dependent%20link" class="outline-3">
+<h3 id="Host%20dependent%20link">Host dependent link</h3>
+<div class="outline-text-3" id="text-Host%20dependent%20link">
+<ul class="org-ul">
+<li>grep:foo:~/src/github.com/vdemeester</li>
+<li>rg:foo:~/src/github.com/vdemeester</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-Github%20links" class="outline-3">
+<h3 id="Github%20links">Github links</h3>
+<div class="outline-text-3" id="text-Github%20links">
+<ul class="org-ul">
+<li><a hrefl="_blank" href="https://github.com/vdemeester/ape">vdemeester/ape</a></li>
+<li><a hrefl="_blank" href="https://github.com/knative/build-pipeline/issues/123">A super PR here</a></li>
+<li><a hrefl="_blank" href="https://github.com/knative/build-pipeline/issues/123">knative/build-pipeline#123</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-~man~" class="outline-3">
+<h3 id="~man~"><code>man</code></h3>
+<div class="outline-text-3" id="text-~man~">
+<ul class="org-ul">
+<li><a target="_blank" href="http://man.he.net/?topic=tmux&section=all">tmux</a></li>
+<li><a target="_blank" href="http://man.he.net/?topic=git&section=all">git</a></li>
+
+<li><a target="_blank" href="http://man.he.net/?topic=git-commit&section=all">Manpage for git-commit</a></li>
+<li><a href="https://orgmode.org/manual/store_002dlink-protocol.html">The Org Manual: store-link protocol</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-Others" class="outline-3">
+<h3 id="Others">Others</h3>
+<div class="outline-text-3" id="text-Others">
+<ul class="org-ul">
+<li>tag:foo</li>
+
+<li>orgit:~/src/tektoncd/pipeline</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="outline-container-Org-babel" class="outline-2">
+<h2 id="Org-babel">Org-babel</h2>
+<div class="outline-text-2" id="text-Org-babel">
+</div>
+<div id="outline-container-~emacs-lisp~" class="outline-3">
+<h3 id="~emacs-lisp~"><code>emacs-lisp</code></h3>
+<div class="outline-text-3" id="text-~emacs-lisp~">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(message <span class="org-string">"foo is bar"</span>)
+</pre>
+</div>
+
+<div class='drawer results'>
+<h6>Results</h6>
+<p>
+foo is bar
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-~go~" class="outline-3">
+<h3 id="~go~"><code>go</code></h3>
+<div class="outline-text-3" id="text-~go~">
+<div class="org-src-container">
+<pre class="src src-go">fmt.Println("Hello, 世界")
+</pre>
+</div>
+
+<div class='drawer results'>
+<h6>Results</h6>
+<p>
+Hello, 世界
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-~http~" class="outline-3">
+<h3 id="~http~"><code>http</code></h3>
+<div class="outline-text-3" id="text-~http~">
+<div class="org-src-container">
+<pre class="src src-http">POST http://httpbin.org/post
+Content-Type: application/json
+
+{
+  "key": "value"
+}
+</pre>
+</div>
+
+<div class='drawer results'>
+<h6>Results</h6>
+<p>
+{
+  &ldquo;url&rdquo;: &ldquo;<a href="http://httpbin.org/post">http://httpbin.org/post</a>&rdquo;,
+  &ldquo;json&rdquo;: {
+    &ldquo;key&rdquo;: &ldquo;value&rdquo;
+  },
+  &ldquo;headers&rdquo;: {
+    &ldquo;User-Agent&rdquo;: &ldquo;curl/7.35.0&rdquo;,
+    &ldquo;Host&rdquo;: &ldquo;httpbin.org&rdquo;,
+    &ldquo;Content-Type&rdquo;: &ldquo;application/json&rdquo;,
+    &ldquo;Content-Length&rdquo;: &ldquo;18&rdquo;,
+    &ldquo;Accept&rdquo;: &ldquo;<b>/</b>&rdquo;
+  },
+  &ldquo;form&rdquo;: {},
+  &ldquo;files&rdquo;: {},
+  &ldquo;data&rdquo;: &ldquo;{  \&rdquo;key\&ldquo;: \&rdquo;value\&ldquo;}&rdquo;,
+  &ldquo;args&rdquo;: {}
+}
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-~rust~" class="outline-3">
+<h3 id="~rust~"><code>rust</code></h3>
+<div class="outline-text-3" id="text-~rust~">
+<div class="org-src-container">
+<pre class="src src-rust">fn main() {
+    let greetings = ["Hello", "Hola", "Bonjour",
+                     "Ciao", "こんにちは", "안녕하세요",
+                     "Cześć", "Olá", "Здравствуйте",
+                     "chào bạn", "您好"];
+
+    for (num, greeting) in greetings.iter().enumerate() {
+        print!("{} : ", greeting);
+        match num {
+            0 =&gt;  println!("This code is editable and runnable!"),
+            1 =&gt;  println!("Este código es editable y ejecutable!"),
+            2 =&gt;  println!("Ce code est modifiable et exécutable!"),
+            3 =&gt;  println!("Questo codice è modificabile ed eseguibile!"),
+            4 =&gt;  println!("このコードは編集して実行出来ます！"),
+            5 =&gt;  println!("여기에서 코드를 수정하고 실행할 수 있습니다!"),
+            6 =&gt;  println!("Ten kod można edytować oraz uruchomić!"),
+            7 =&gt;  println!("Esse código é editável e executável!"),
+            8 =&gt;  println!("Этот код можно отредактировать и запустить!"),
+            9 =&gt;  println!("Bạn có thể edit và run code trực tiếp!"),
+            10 =&gt;  println!("这段代码是可以编辑并且能够运行的！"),
+            _ =&gt;  {},
+        }
+    }
+}
+</pre>
+</div>
+
+<div class='drawer results'>
+<h6>Results</h6>
+<p>
+Hello : This code is editable and runnable!
+Hola : Este código es editable y ejecutable!
+Bonjour : Ce code est modifiable et exécutable!
+Ciao : Questo codice è modificabile ed eseguibile!
+こんにちは : このコードは編集して実行出来ます！
+안녕하세요 : 여기에서 코드를 수정하고 실행할 수 있습니다!
+Cześć : Ten kod można edytować oraz uruchomić!
+Olá : Esse código é editável e executável!
+Здравствуйте : Этот код можно отредактировать и запустить!
+chào bạn : Bạn có thể edit và run code trực tiếp!
+您好 : 这段代码是可以编辑并且能够运行的！
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-~typescript~" class="outline-3">
+<h3 id="~typescript~"><code>typescript</code></h3>
+<div class="outline-text-3" id="text-~typescript~">
+</div>
+<div id="outline-container-Execute%20with%20node.js" class="outline-4">
+<h4 id="Execute%20with%20node.js">Execute with node.js</h4>
+<div class="outline-text-4" id="text-Execute%20with%20node.js">
+<div class="org-src-container">
+<pre class="src src-typescript">module Greeting {
+    export class Hello {
+        constructor(private text : string) {
+        }
+        say() :void{
+            console.log(this.text);
+        }
+    }
+}
+
+var hello : Greeting.Hello = new Greeting.Hello("Hello, World!");
+hello.say();
+</pre>
+</div>
+
+<div class='drawer results'>
+<h6>Results</h6>
+<p>
+Hello, World!
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-Transpile" class="outline-4">
+<h4 id="Transpile">Transpile</h4>
+<div class="outline-text-4" id="text-Transpile">
+<p>
+You can see transpile results by specifying &ldquo;:wrap SRC js&rdquo; header argument.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-typescript">module Greeting {
+    export class Hello {
+        constructor(private text : string) {
+        }
+        say() :void{
+            consonle.log(this.text);
+        }
+    }
+}
+
+var hello : Greeting.Hello = new Greeting.Hello("Hello, World!");
+hello.say();
+</pre>
+</div>
+
+<div class='drawer results'>
+<h6>Results</h6>
+<div class="org-src-container">
+<pre class="src src-js"><span class="org-keyword">var</span> <span class="org-variable-name">Greeting</span>;
+(<span class="org-keyword">function</span> (<span class="org-variable-name">Greeting</span>) {
+    <span class="org-keyword">var</span> <span class="org-variable-name">Hello</span> = (<span class="org-keyword">function</span> () {
+        <span class="org-keyword">function</span> <span class="org-function-name">Hello</span>(<span class="org-variable-name">text</span>) {
+            <span class="org-constant">this</span>.text = text;
+        }
+        Hello.<span class="org-constant">prototype</span>.say = <span class="org-keyword">function</span> () {
+            console.log(<span class="org-constant">this</span>.text);
+        };
+        <span class="org-keyword">return</span> Hello;
+    })();
+    Greeting.Hello = Hello;
+})(Greeting || (Greeting = {}));
+<span class="org-keyword">var</span> <span class="org-variable-name">hello</span> = <span class="org-keyword">new</span> <span class="org-type">Greeting.Hello</span>(<span class="org-string">"Hello, World!"</span>);
+hello.say();
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-Ditaa" class="outline-3">
+<h3 id="Ditaa">Ditaa</h3>
+<div class="outline-text-3" id="text-Ditaa">
+<p>
+Let&rsquo;s try something with <code>ditaa</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ditaa">    +-----------+        +---------+
+    |    PLC    |        |         |
+    |  Network  +&lt;------&gt;+   PLC   +&lt;---=---------+
+    |    cRED   |        |  c707   |              |
+    +-----------+        +----+----+              |
+                              ^                   |
+                              |                   |
+                              |  +----------------|-----------------+
+                              |  |                |                 |
+                              v  v                v                 v
+      +----------+       +----+--+--+      +-------+---+      +-----+-----+       Windows clients
+      |          |       |          |      |           |      |           |      +----+      +----+
+      | Database +&lt;-----&gt;+  Shared  +&lt;----&gt;+ Executive +&lt;-=--&gt;+ Operator  +&lt;----&gt;|cYEL| . . .|cYEL|
+      |   c707   |       |  Memory  |      |   c707    |      | Server    |      |    |      |    |
+      +--+----+--+       |{d} cGRE  |      +------+----+      |   c707    |      +----+      +----+
+         ^    ^          +----------+             ^           +-------+---+
+         |    |                                   |
+         |    +--------=--------------------------+
+         v
++--------+--------+
+|                 |
+| Millwide System |            -------- Data ---------
+| cBLU            |            --=----- Signals ---=--
++-----------------+
+</pre>
+</div>
+
+
+<figure id="orgc3f2088">
+<img src="./images/sandbox/some_filename.png" alt="some_filename.png">
+
+</figure>
+</div>
+</div>
+<div id="outline-container-Graphviz" class="outline-3">
+<h3 id="Graphviz">Graphviz</h3>
+</div>
+
+<div id="outline-container-References%20and%20labels%20%21" class="outline-3">
+<h3 id="References%20and%20labels%20%21">References and labels !</h3>
+<div class="outline-text-3" id="text-References%20and%20labels%20%21">
+<p>
+foo is bar
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span id="coderef-foo" class="coderef-off">(<span class="org-keyword">save-excursion</span>                <span class="org-comment-delimiter">;;</span> (foo)</span>
+  (message <span class="org-string">"this is baz"</span>)
+<span id="coderef-bar" class="coderef-off">  (goto-char (point-min))    <span class="org-comment-delimiter">;;</span> (bar)</span>
+</pre>
+</div>
+
+<p>
+In line <a href="#coderef-foo" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-foo');" onmouseout="CodeHighlightOff(this, 'coderef-foo');">foo</a> we remember the current position. <a href="#coderef-bar" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-bar');" onmouseout="CodeHighlightOff(this, 'coderef-bar');">Line bar</a> jumps to
+point-min.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span id="coderef-sc" class="coderef-off"><span class="linenr">1: </span>(<span class="org-keyword">save-excursion</span></span>
+<span class="linenr">2: </span>  (message <span class="org-string">"this is sparta"</span>)
+<span id="coderef-jump" class="coderef-off"><span class="linenr">3: </span>  (goto-char (point-min))</span>
+</pre>
+</div>
+
+<p>
+In line <a href="#coderef-sc" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-sc');" onmouseout="CodeHighlightOff(this, 'coderef-sc');">1</a> we remember the current position. <a href="#coderef-jump" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-jump');" onmouseout="CodeHighlightOff(this, 'coderef-jump');">Line 3</a> jumps to point-min.
+</p>
+</div>
+</div>
+</section>
+<section id="outline-container-Counsel" class="outline-2">
+<h2 id="Counsel">Counsel</h2>
+<div class="outline-text-2" id="text-Counsel">
+<p>
+<i>this is italic</i>
+<span class="underline">this should be underlined</span>
+</p>
+</div>
+</section>
+<section id="outline-container-sec:known-issues" class="outline-2">
+<h2 id="sec:known-issues">Known Issues</h2>
+<div class="outline-text-2" id="text-sec:known-issues">
+<p>
+The citation exporter, <code>ox-bibtex</code>, does NOT work seamlessly.  As of <code>Org-mode
+8.3.2</code>, I have the following issues.
+</p>
+</div>
+<div id="outline-container-sec:dangling-element" class="outline-3">
+<h3 id="sec:dangling-element"><del>Dangling Element</del>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="solved">solved</span></span></h3>
+<div class="outline-text-3" id="text-sec:dangling-element">
+<p>
+The lisp function <code>insert-file-contents</code> used in <code>ox-bibtex</code> does not move point
+and insertion-marker to the end of inserted text (I&rsquo;m not sure it is a bug or an
+intention).  The result is that the citation is a dangling table not included in
+the bibliography div.
+</p>
+
+<p>
+The expected result is
+</p>
+
+<div class="org-src-container">
+<pre class="src src-html">&lt;<span class="org-function-name">div</span> <span class="org-variable-name">id</span>=<span class="org-string">"bibliography"</span>&gt;
+  &lt;<span class="org-function-name">h2</span>&gt;<span class="org-underline"><span class="org-bold-italic">Bibliography</span></span>&lt;/<span class="org-function-name">h2</span>&gt;
+  &lt;<span class="org-function-name">table</span>&gt;
+  <span class="org-comment-delimiter">&lt;!-- </span><span class="org-comment">Citation content goes here</span><span class="org-comment-delimiter"> --&gt;</span>
+  &lt;/<span class="org-function-name">table</span>&gt;
+&lt;/<span class="org-function-name">div</span>&gt;
+</pre>
+</div>
+
+<p>
+But we got
+</p>
+
+<div class="org-src-container">
+<pre class="src src-html">&lt;<span class="org-function-name">div</span> <span class="org-variable-name">id</span>=<span class="org-string">"bibliography"</span>&gt;
+  &lt;<span class="org-function-name">h2</span>&gt;<span class="org-underline"><span class="org-bold-italic">Bibliography</span></span>&lt;/<span class="org-function-name">h2</span>&gt;
+&lt;/<span class="org-function-name">div</span>&gt;
+&lt;<span class="org-function-name">table</span>&gt;
+<span class="org-comment-delimiter">&lt;!-- </span><span class="org-comment">Citation content goes here</span><span class="org-comment-delimiter"> --&gt;</span>
+&lt;/<span class="org-function-name">table</span>&gt;
+</pre>
+</div>
+
+<p>
+Unless a patch is submitted, we may need to manually adjust this weird result.
+</p>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<footer>
+     <small><a href="/" rel="history">Index</a> • <a href="/sitemap.html">Sitemap</a> • <a href="https://dl.sbr.pm/">Files</a></small><br/>
+     <small class='questions'>Questions, comments ? Please use my <a href="https://lists.sr.ht/~vdemeester/public-inbox">public inbox</a> by sending a plain-text email to <a href="mailto:~vdemeester/public-inbox@lists.sr.ht">~vdemeester/public-inbox@lists.sr.ht</a>.</small><br/>
+     <small class='copyright'>
+      Content and design by Vincent Demeester
+      (<a rel='licence' href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Some rights reserved</a>)
+    </small><br />
+</footer>
+</footer>
+</body>
+</html>
